@@ -20,7 +20,8 @@ links:
 
 # Demo Shop
 
-> Fixture system for `specd`. Replace it with the real system when you start.
+> Fixture system for this framework. Replace it with the real system when you
+> start.
 
 ## Context
 

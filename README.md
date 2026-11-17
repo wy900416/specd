@@ -1,101 +1,109 @@
-# Spec-driven workspace
+# specd
 
-A small, runnable spec graph with conversational agents on top. The engine is
-`specd` (Python, in `specd/`); the operating layer is three DSH skills and two
-agent briefs.
+Spec-driven development in **plain Markdown**. No runtime, no build step, no
+parser, no Python. A spec is a file; the graph is a set of typed links; the agent
+is whatever chat or coding agent you already use.
+
+This repository is a small, runnable example of the format plus the instructions
+that make it work: skills for interviewing, context packing, and review, and role
+briefs for a spec writer and an architecture reviewer.
+
+## Why no tooling
+
+- **Portable.** Works with any agent, editor, or human. Nothing to install.
+- **Inspectable.** Front-matter, headings, and links are the interface. No hidden
+  index or generated state.
+- **Reviewable.** The diff is the spec diff; the proposal is a file.
+- **Honest.** Without a linter, validation is a checklist and a review. That is a
+  real tradeoff: it relies on discipline and on agents following the checklist.
+
+If you later want a linter or a viewer, it can be added *on top of* these files
+without changing the format.
 
 ## Quick start
 
-```bash
-./specd.sh validate        # schema, links, requirements
-./specd.sh fitness         # architecture rules
-./specd.sh scan --strict   # injection / secrets / internal endpoints
-./specd.sh index           # build index.json
-./specd.sh build           # static viewer at dist/index.html
-./specd.sh context orders --task "add idempotency" --budget 8000
+Open the repository in any agent and say:
+
+```text
+Read AGENTS.md and follow it.
+Load .agents/skills/spec-interview/SKILL.md and follow agents/spec-writer.md.
+We need a spec for the refund flow. Ask one question at a time.
 ```
 
-`./specd.sh` is a wrapper around `python3 -m specd`; it sets the workspace as the
-project root, so it works from any directory.
+Or, for a review:
+
+```text
+Read AGENTS.md, then agents/architecture.md.
+Task: review the proposed change to orders-api.
+```
+
+DSH discovers the skills in `.agents/skills/` automatically. Claude Code, Cursor,
+Codex, and others can read the same files; if your tool uses a different rules
+directory, copy the folders there. The `AGENTS.md` file is the portable entry
+point.
 
 ## Layout
 
 ```
-specs/                     published and draft specs
-  system/                  L0 system intent
-  domain/                  L1 bounded contexts
-  service/                 L2 services
-  contract/                L2 API / event contracts
-  flow/                    cross-service flows
-  nfr/                     non-functional requirements
-  standard/                cross-cutting standards (pinnable)
-templates/                 skeletons used by `specd new`
-changes/                   change proposals (agent-writable)
-changes/archive/           released proposals
-agents/                    role briefs (architecture, spec-writer)
-.agents/skills/            DSH-discovered skills
-  spec-interview/          conversational drafting
-  spec-context/            bounded context packing
-  spec-review/             review and impact
-specd/                     the engine (CLI + library)
-dist/                      generated static viewer
-index.json                 generated index
+SPEC.md                    the format and lifecycle, normative
+AGENTS.md                  agent entry point and hard rules
+GRAPH.md                   a view (Mermaid graph + table), not the source of truth
+CHANGES.md                 how a proposal is created, reviewed, and released
+checklists/
+  validate.md              mechanical checks before approval
+  context.md               bounded context packing
+  review.md                judgement, severity, bump guide
+templates/                 skeletons for each kind + a change proposal
+specs/                     the graph; only specs live here
+changes/                   open proposals; archive/ for released ones
+.agents/skills/            plain-Markdown skills
+agents/                    role briefs
 ```
 
 ## The loop
 
 ```
-draft ──edit──▶ review ──human approve──▶ published (approved)
-                                           │
-                              agent proposes a change
-                                           ▼
-                                    changes/CHG-...md
-                                           │
-                              human reviews diff + releases
-                                           ▼
-                                  published, version bumped
+draft ──edit──▶ review ──human approves──▶ approved
+                                            │
+                               agent writes a proposal
+                                            ▼
+                                  changes/CHG-...md
+                                            │
+                               human reviews diff + releases
+                                            ▼
+                                  approved, version bumped
 ```
 
 - A **draft** is editable by anyone.
-- A **published** spec is read-only for agents. Changes go through
-  `./specd.sh propose`, which copies the body into `changes/`.
-- `./specd.sh release` applies a proposal, bumps the version, archives the
-  proposal, and records the approval. Only a human runs it.
-- `version` is a release decision, never an edit side effect. `validate` warns
-  when an approved body changes without a release (`W051`) or the version moves
-  outside `release` (`W052`).
+- An **approved** spec is read-only for agents.
+- A change is a **copy** of the target in `changes/`, with the full proposed body.
+- A human approves a draft, and a human releases a proposal. Agents prepare; they
+  do not approve or release.
 
 ## Skills
 
 | Skill | What it does |
 |---|---|
-| `spec-interview` | one-question-at-a-time interview -> draft or proposal -> review packet |
-| `spec-context` | bounded, prioritized context pack with a manifest |
-| `spec-review` | lint + fitness + impact + version hygiene -> review packet |
+| [`spec-interview`](.agents/skills/spec-interview/SKILL.md) | one-question-at-a-time interview -> draft or proposal -> review packet |
+| [`spec-context`](.agents/skills/spec-context/SKILL.md) | bounded, prioritized context pack with a manifest |
+| [`spec-review`](.agents/skills/spec-review/SKILL.md) | checklists + impact + version hygiene -> review packet |
 
-They are discovered from `.agents/skills/` by DSH and appear in the session skill
-catalog. In a chat, ask the agent to load one, or invoke it by name. They can also
-be used outside DSH: the `SKILL.md` files are ordinary instructions.
+Each is a directory with a `SKILL.md` and, where useful, a `references/` folder.
+The body is loaded on demand; the references hold the long question bank.
 
 ## Agents
 
 | Brief | Role |
 |---|---|
-| `agents/spec-writer.md` | interviewer / writer; loads `spec-interview` |
-| `agents/architecture.md` | boundary reviewer; loads `spec-context` + `spec-review` |
+| [`agents/spec-writer.md`](agents/spec-writer.md) | interviewer / writer |
+| [`agents/architecture.md`](agents/architecture.md) | boundary and contract reviewer |
 
-These are role briefs, not DSH presets. Use one as a subagent prompt:
-
-```text
-Read agents/architecture.md and follow it.
-Task: review the proposed change to orders-api.
-```
-
-See `agents/README.md` for details.
+These are role briefs, not presets. Paste one into any agent as its system prompt,
+or point the agent at the file. See [`agents/README.md`](agents/README.md).
 
 ## Demo graph
 
-The fixture is a tiny checkout system:
+A tiny checkout system, used as a fixture:
 
 - `demo-shop` (system) -> `commerce` (domain)
 - `orders` and `payments` (services)
@@ -103,33 +111,48 @@ The fixture is a tiny checkout system:
 - `place-order` (flow)
 - `security-baseline` (pinned standard) and `latency-budget` (NFR)
 
-It passes `validate`, `fitness`, and `scan`. Replace it with the real system.
+See [`GRAPH.md`](GRAPH.md) for the graph view. Replace the demo with the real
+system; keep the shape.
 
-## Spec format
+## Validation
 
-A spec is Markdown with YAML front-matter. Requirements use stable ids:
+There is no linter. Before approval, apply
+[`checklists/validate.md`](checklists/validate.md); before release, apply
+[`checklists/review.md`](checklists/review.md). Every finding cites a file and
+line. A warning is allowed only with a one-line explanation.
 
-```md
-### REQ-ORD-001: Create an order idempotently
+The checks cover front-matter, unique ids, links, requirements, kind-specific
+rules, graph hygiene, version hygiene, security, and view freshness. The security
+checks matter because specs are inputs to agents: treat them as untrusted.
 
-- **Priority:** must
-- **Normative:** true
-- **Given:** a client submits the same `Idempotency-Key` twice
-- **When:** both requests reach the service
-- **Then:** exactly one order is created and both responses carry the same order id
-```
+## Versioning
 
-Key fields: `id`, `kind`, `title`, `version`, `status`, `owner`, `links`
-(typed edges), and for contracts `type` + `path`. See `templates/` for each kind.
+- `version` is semver and changes **only** on release.
+- A new draft starts at `0.1.0`; a first approval is `1.0.0`.
+- Bumps: `none` (editorial), `patch` (clarification), `minor` (additive),
+  `major` (breaking).
+- References use `id@version#REQ-ID`, for example `orders@0.1.0#REQ-ORD-001`.
 
-## What is intentionally missing
+## Adopt it in a real repository
 
-This is the smallest runnable loop, not the full platform. Still absent:
+1. Copy `SPEC.md`, `AGENTS.md`, `checklists/`, `templates/`, `.agents/skills/`,
+   and `agents/` into your repository.
+2. Delete the demo specs, or keep them as an example.
+3. Write **one** system spec and **one** service spec by hand. Do not start with
+   the whole microservice estate.
+4. Give the service spec to an agent and watch where it has to guess. Those gaps
+   are the next requirements.
+5. Add a pinned standard and one contract. Then add a flow.
+6. Only then scale to the rest.
 
-- CI wiring and CODEOWNERS;
-- code/trace reconciliation (`specd` has `trace`, but no runtime import);
-- multi-service change sets and consumer sign-off;
-- a web editor (the viewer is read-only);
-- a `specd approve` command for new drafts (a human edits the front-matter today).
+The framework is deliberately small. The hard part is not the format; it is
+keeping the graph consistent as the system changes.
 
-Those are the next layers, in that order.
+## What this is not
+
+- Not a formal language. Prose is allowed; structure exists to expose gaps.
+- Not a build system. There is no parser, generator, or CI requirement.
+- Not a replacement for tests or contract checks. A spec should lead to them, but
+  this repository only defines the spec layer.
+- Not a guarantee. A checklist can pass on a bad spec; the review has to say what
+  the checklist cannot see.

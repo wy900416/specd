@@ -1,8 +1,7 @@
-__pycache__/
-*.py[cod]
-.venv/
-dist/
-index.json
-.specd/
-*.egg-info/
-build/
+# generated context packs
+.context/
+.spec-cache/
+
+# OS / editor
+.DS_Store
+*.swp

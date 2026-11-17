@@ -16,9 +16,9 @@ links: []
 
 # {{title}}
 
-> Draft. An agent may fill this file; only a human sets `status: approved` and only
-> `specd release` changes `version`. Replace `REQ-SYS-001` with this spec's own
-> prefix and keep IDs stable.
+> Draft. An agent may fill this file; only a human sets `status: approved`, and
+> only a human release step changes `version`. Replace `REQ-SYS-001` with this
+> spec's own prefix and keep ids stable.
 
 ## Context
 

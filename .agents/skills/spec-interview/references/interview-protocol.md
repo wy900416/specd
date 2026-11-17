@@ -115,8 +115,8 @@ A draft is ready for review when:
 - every normative requirement has Given / When / Then;
 - every service links a domain, a contract, and its constraints;
 - open questions have an owner and a "needed before" marker;
-- `specd validate`, `specd fitness`, and `specd scan --strict` pass, or every
-  warning has a one-line explanation;
+- `checklists/validate.md` is applied and every finding has a file, line, and
+  one-line explanation;
 - the user can state the decision this spec enables.
 
 ## Sample exchange

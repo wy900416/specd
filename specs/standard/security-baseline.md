@@ -47,7 +47,8 @@ Applies to every `service` spec in this system.
 
 ## Verification
 
-- `specd scan --strict` in CI for specs and proposals.
+- The injection and secret checklist in `checklists/validate.md`, applied to
+  specs and proposals before approval.
 - A policy check in the service pipeline for workload identity.
 - Review checklist item for credential placeholders.
 
