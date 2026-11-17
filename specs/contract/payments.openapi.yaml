@@ -1,0 +1,13 @@
+openapi: 3.1.0
+info:
+  title: Payments API
+  version: 0.1.0
+paths:
+  /authorizations:
+    post:
+      operationId: authorizePayment
+      responses:
+        "200":
+          description: Authorization result
+        "503":
+          description: Provider timeout, state unknown
