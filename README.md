@@ -96,10 +96,21 @@ The body is loaded on demand; the references hold the long question bank.
 | Brief | Role |
 |---|---|
 | [`agents/spec-writer.md`](agents/spec-writer.md) | interviewer / writer |
+| [`agents/implementer.md`](agents/implementer.md) | implements a task from a context pack |
+| [`agents/verifier.md`](agents/verifier.md) | writes conformance tests from the spec |
 | [`agents/architecture.md`](agents/architecture.md) | boundary and contract reviewer |
 
-These are role briefs, not presets. Paste one into any agent as its system prompt,
-or point the agent at the file. See [`agents/README.md`](agents/README.md).
+The handoff is:
+
+```text
+writer -> implementer -> verifier -> reviewer -> human release
+```
+
+The verifier receives the spec and the test harness, **not** the implementer's
+plan. It writes tests from the spec, so an implementation cannot define its own
+acceptance. These are role briefs, not presets. Paste one into any agent as its
+system prompt, or point the agent at the file. See
+[`agents/README.md`](agents/README.md).
 
 ## Demo graph
 

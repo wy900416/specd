@@ -8,8 +8,31 @@ reading them.
 
 | Brief | Use it for | Reads |
 |---|---|---|
-| `architecture.md` | boundary review, contract impact, cross-service consistency | `SPEC.md`, `checklists/context.md`, `checklists/review.md` |
 | `spec-writer.md` | conversational spec generation, drafting, proposals | `SPEC.md`, `checklists/validate.md`, `templates/` |
+| `implementer.md` | implement a task against a spec, with a bounded context pack | `SPEC.md`, `AGENTS.md`, `.context/<id>.md` |
+| `verifier.md` | independent conformance tests written from the spec | `SPEC.md`, the target spec, the test harness |
+| `architecture.md` | boundary review, contract impact, cross-service consistency | `SPEC.md`, `checklists/context.md`, `checklists/review.md` |
+
+## Handoff
+
+```text
+writer -> implementer -> verifier -> reviewer -> human release
+```
+
+- **writer** produces the draft or proposal.
+- **implementer** gets the context pack, not every spec. If a requirement is
+  ambiguous, it stops and reports a spec gap.
+- **verifier** gets the spec, the acceptance criteria, and the test harness. It
+  does **not** get the implementer's plan or summary. It writes tests from the
+  spec before reading implementation logic.
+- **reviewer** (often `architecture.md`) checks graph consistency, impact, and the
+  bump.
+- **human** approves the draft and releases the proposal. No agent writes
+  `version`, `approved_by`, or `approved_at`.
+
+The verifier is the only role with an explicit information barrier. That is
+deliberate: a verifier that knows how the code was written will test the code, not
+the spec.
 
 ## Run one
 
