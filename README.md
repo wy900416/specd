@@ -1,54 +1,145 @@
 # specd
 
 Spec-driven development in **plain Markdown**. No runtime, no build step, no
-parser, no Python. A spec is a file; the graph is a set of typed links; the agent
-is whatever chat or coding agent you already use.
+parser. A spec is a file; the graph is typed links; the agent is whatever chat or
+coding agent you already use.
 
-This repository is a small, runnable example of the format plus the instructions
-that make it work: skills for interviewing, context packing, and review, and role
-briefs for a spec writer and an architecture reviewer.
+This repository is the framework and a small demo graph. It is deliberately not a
+tool: the format is the product.
 
-## Why no tooling
+## The problem
 
-- **Portable.** Works with any agent, editor, or human. Nothing to install.
-- **Inspectable.** Front-matter, headings, and links are the interface. No hidden
-  index or generated state.
-- **Reviewable.** The diff is the spec diff; the proposal is a file.
-- **Honest.** Without a linter, validation is a checklist and a review. That is a
-  real tradeoff: it relies on discipline and on agents following the checklist.
+Most spec systems fail in one of four ways:
 
-If you later want a linter or a viewer, it can be added *on top of* these files
-without changing the format.
+- the spec is a **document**, not a graph, so nobody knows what depends on what;
+- the **version** is an edit counter, so every typo churns every reference;
+- the agent **grades its own work**, so tests describe the implementation instead
+  of the spec;
+- the **tooling becomes the product**, and the spec format is locked to it.
 
-## Quick start
+This framework is a response to those four failures.
 
-Open the repository in any agent and say:
+## How the framework is used
 
-```text
-Read AGENTS.md and follow it.
-Load .agents/skills/spec-interview/SKILL.md and follow agents/spec-writer.md.
-We need a spec for the refund flow. Ask one question at a time.
+```mermaid
+flowchart TD
+  A["Pick one real service"] --> B["Draft spec<br/>writer + spec-interview"]
+  B --> C{"Spec review<br/>spec-reviewer + validate"}
+  C -- revise --> B
+  C -- approve --> D["Approved spec<br/>human sets status + version"]
+  D --> E["Context pack<br/>spec-context"]
+  E --> F["Implement<br/>implementer"]
+  F --> G{"Verify<br/>verifier + spec-only tests"}
+  G -- fail --> H["Fix code or spec"]
+  H --> F
+  G -- pass --> I["Review change<br/>spec-reviewer + review"]
+  I --> J["Release<br/>human sets version + archives"]
+  J --> K["Change proposal<br/>writer"]
+  K --> C
 ```
 
-Or, for a review:
+| # | Step | Who | Output | Done when |
+|---|---|---|---|---|
+| 0 | Adopt | human | framework files in a real repo | one service selected |
+| 1 | Draft | writer + `spec-interview` | `specs/<kind>/<id>.md` | checklist passes, open questions have owners |
+| 2 | Approve | human | approved spec | `status`, `approved_by`, `approved_at`, `version` set |
+| 3 | Context | `spec-context` | `.context/<id>.md` | manifest lists included, excluded, warnings |
+| 4 | Implement | implementer | code + developer tests | tests pass, `REQ-ID`s cited in the change |
+| 5 | Verify | verifier | conformance report | every in-scope `REQ` is pass, fail, or blocked |
+| 6 | Review | spec-reviewer | review packet | blocking findings resolved, bump checked |
+| 7 | Release | human | new version | base version matches, bump correct, proposal archived |
+| 8 | Change | writer | `changes/CHG-...md` | proposal reviewed and released |
 
-```text
-Read AGENTS.md, then agents/architecture.md.
-Task: review the proposed change to orders-api.
+### Start with one vertical slice
+
+Do not write specs for the whole microservice estate. Start with:
+
+- one **system** page,
+- one **domain**,
+- one **service**,
+- one **contract**,
+- one **standard** or **NFR**.
+
+Add a **flow** only when a behaviour genuinely crosses two services. A flow is the
+only artifact that owns cross-service behaviour; without it, that behaviour falls
+between service specs.
+
+### Keep the three loops separate
+
+- **Spec loop**: draft -> review -> approve.
+- **Implementation loop**: context -> implement -> verify.
+- **Change loop**: proposal -> review -> release.
+
+They share files, but they have different gates. Mixing them is how "the agent
+updated the spec" becomes an unreviewed change.
+
+## Why this design
+
+| Decision | Why | Cost |
+|---|---|---|
+| Plain Markdown + YAML | Portable, diffable, readable by humans and agents; no runtime to install | No automatic validation |
+| Typed links + stable ids | The system is a graph; impact, context, and ownership need edges | Link maintenance |
+| Stable `REQ-` ids | Requirements can be cited by code, tests, and other specs | Id discipline |
+| Draft vs approved | Agents can draft freely; published specs are a contract | Two-step workflow |
+| Version only on release | Version communicates compatibility, not edit history | Human gate |
+| Proposal as a full copy | Diff is derived; no special diff format; works with git | Duplication in `changes/` |
+| Separate verifier | The implementer cannot define its own acceptance | One more handoff |
+| Human release | Accountability for breaking changes | Slower |
+| Pinned standards | Some constraints must always be in context | Budget |
+| Checklists, no linter | Portable; covers judgement, not only syntax | Manual, can drift |
+
+### The spec is a graph, not a document
+
+A microservice system is not a tree. The same service is part of a domain, exposes
+contracts, participates in flows, and is constrained by standards. A single
+document per service cannot express those edges, and a folder cannot answer "who
+consumes this contract?"
+
+So every spec has a stable `id`, and every cross-spec statement is a typed link:
+`implements`, `exposes`, `consumes`, `depends-on`, `constrained-by`, `part-of`.
+The graph is what makes impact analysis, context packing, and orphan detection
+possible without a central tool.
+
+### The version is a release, not an edit
+
+If every edit bumps the version, the version stops meaning anything and every
+`id@version` reference churns. Here:
+
+- an **edit** changes the file;
+- a **release** changes the version;
+- a **proposal** carries the intended change and the suggested bump;
+- a **human** decides when the proposal becomes a release.
+
+That is why agents never write `version`, `status: approved`, `approved_by`, or
+`approved_at`. The proposal is a full copy of the target body, so the diff is
+derived and reviewable with ordinary file tools.
+
+### The verifier is not the implementer
+
+If the same agent writes the code and the acceptance tests, the tests describe the
+code. The verifier gets the spec, the acceptance criteria, and the test harness —
+but not the implementer's plan or summary. It writes tests from the spec first.
+
+This is an **information barrier**, not a different model. A fresh context is often
+enough. The verifier's most valuable output is not "tests pass"; it is "this
+requirement cannot be tested as written."
+
+### The format is portable, not a tool
+
+There is no parser, no index, no build, and no CI requirement. `SPEC.md` is
+normative; `checklists/` is the operational form; `AGENTS.md` is the entry point.
+
+The tradeoff is real: without a linter, validation is a checklist and a review, and
+it can drift. If you later want a deterministic gate, add a read-only linter in CI.
+It consumes the format; the format does not depend on it.
+
+## Repository layout
+
 ```
-
-DSH discovers the skills in `.agents/skills/` automatically. Claude Code, Cursor,
-Codex, and others can read the same files; if your tool uses a different rules
-directory, copy the folders there. The `AGENTS.md` file is the portable entry
-point.
-
-## Layout
-
-```
-SPEC.md                    the format and lifecycle, normative
+SPEC.md                    format, kinds, links, lifecycle, versioning (normative)
 AGENTS.md                  agent entry point and hard rules
-GRAPH.md                   a view (Mermaid graph + table), not the source of truth
-CHANGES.md                 how a proposal is created, reviewed, and released
+GRAPH.md                   a view (Mermaid + table), not the source of truth
+CHANGES.md                 proposal lifecycle
 checklists/
   validate.md              mechanical checks before approval
   context.md               bounded context packing
@@ -60,104 +151,84 @@ changes/                   open proposals; archive/ for released ones
 agents/                    role briefs
 ```
 
-## The loop
+## The spec format in 30 seconds
 
+```yaml
+---
+id: orders
+kind: service
+title: "Orders Service"
+version: 0.1.0
+status: draft
+owner: orders-team
+links:
+  - rel: implements
+    target: commerce
+  - rel: exposes
+    target: orders-api
+---
 ```
-draft ──edit──▶ review ──human approves──▶ approved
-                                            │
-                               agent writes a proposal
-                                            ▼
-                                  changes/CHG-...md
-                                            │
-                               human reviews diff + releases
-                                            ▼
-                                  approved, version bumped
+
+```md
+### REQ-ORD-001: Create an order idempotently
+
+- **Priority:** must
+- **Normative:** true
+- **Given:** a client submits the same `Idempotency-Key` twice
+- **When:** both requests reach the service
+- **Then:** exactly one order is created and both responses carry the same order id
 ```
 
-- A **draft** is editable by anyone.
-- An **approved** spec is read-only for agents.
-- A change is a **copy** of the target in `changes/`, with the full proposed body.
-- A human approves a draft, and a human releases a proposal. Agents prepare; they
-  do not approve or release.
+The rest — kinds, required edges, lifecycle, version rules — is in
+[`SPEC.md`](SPEC.md).
 
-## Skills
-
-| Skill | What it does |
-|---|---|
-| [`spec-interview`](.agents/skills/spec-interview/SKILL.md) | one-question-at-a-time interview -> draft or proposal -> review packet |
-| [`spec-context`](.agents/skills/spec-context/SKILL.md) | bounded, prioritized context pack with a manifest |
-| [`spec-review`](.agents/skills/spec-review/SKILL.md) | checklists + impact + version hygiene -> review packet |
-
-Each is a directory with a `SKILL.md` and, where useful, a `references/` folder.
-The body is loaded on demand; the references hold the long question bank.
-
-## Agents
-
-| Brief | Role |
-|---|---|
-| [`agents/spec-writer.md`](agents/spec-writer.md) | interviewer / writer |
-| [`agents/implementer.md`](agents/implementer.md) | implements a task from a context pack |
-| [`agents/verifier.md`](agents/verifier.md) | writes conformance tests from the spec |
-| [`agents/architecture.md`](agents/architecture.md) | boundary and contract reviewer |
-
-The handoff is:
+## Roles and handoff
 
 ```text
 writer -> implementer -> verifier -> reviewer -> human release
 ```
 
-The verifier receives the spec and the test harness, **not** the implementer's
-plan. It writes tests from the spec, so an implementation cannot define its own
-acceptance. These are role briefs, not presets. Paste one into any agent as its
-system prompt, or point the agent at the file. See
-[`agents/README.md`](agents/README.md).
+| Role | Brief | Job |
+|---|---|---|
+| Writer | [`agents/spec-writer.md`](agents/spec-writer.md) | interview, draft, proposal |
+| Implementer | [`agents/implementer.md`](agents/implementer.md) | code from a context pack |
+| Verifier | [`agents/verifier.md`](agents/verifier.md) | tests from the spec, information barrier |
+| Spec reviewer | [`agents/spec-reviewer.md`](agents/spec-reviewer.md) | consistency, impact, bump |
+| Human | — | approve a draft, release a proposal |
 
-## Demo graph
+The skills — [`spec-interview`](.agents/skills/spec-interview/SKILL.md),
+[`spec-context`](.agents/skills/spec-context/SKILL.md), and
+[`spec-review`](.agents/skills/spec-review/SKILL.md) — are the procedures those
+roles use. They are plain Markdown; DSH discovers them from `.agents/skills/`, and
+other agents can read or copy them.
 
-A tiny checkout system, used as a fixture:
+## Validation and review
 
-- `demo-shop` (system) -> `commerce` (domain)
-- `orders` and `payments` (services)
-- `orders-api` and `payments-api` (contracts)
-- `place-order` (flow)
-- `security-baseline` (pinned standard) and `latency-budget` (NFR)
+Before approval, apply [`checklists/validate.md`](checklists/validate.md). Before
+release, apply [`checklists/review.md`](checklists/review.md). Every finding cites
+a file and line.
 
-See [`GRAPH.md`](GRAPH.md) for the graph view. Replace the demo with the real
-system; keep the shape.
+The checks cover front-matter, unique ids, links, requirements, kind rules, graph
+hygiene, version hygiene, security, and view freshness. Security matters because
+specs are inputs to agents: treat them as untrusted.
 
-## Validation
-
-There is no linter. Before approval, apply
-[`checklists/validate.md`](checklists/validate.md); before release, apply
-[`checklists/review.md`](checklists/review.md). Every finding cites a file and
-line. A warning is allowed only with a one-line explanation.
-
-The checks cover front-matter, unique ids, links, requirements, kind-specific
-rules, graph hygiene, version hygiene, security, and view freshness. The security
-checks matter because specs are inputs to agents: treat them as untrusted.
-
-## Versioning
-
-- `version` is semver and changes **only** on release.
-- A new draft starts at `0.1.0`; a first approval is `1.0.0`.
-- Bumps: `none` (editorial), `patch` (clarification), `minor` (additive),
-  `major` (breaking).
-- References use `id@version#REQ-ID`, for example `orders@0.1.0#REQ-ORD-001`.
+A passing checklist is not an approval. It cannot see ambiguity, a missing failure
+mode, or an unowned requirement. That is what the reviewer adds.
 
 ## Adopt it in a real repository
 
 1. Copy `SPEC.md`, `AGENTS.md`, `checklists/`, `templates/`, `.agents/skills/`,
    and `agents/` into your repository.
 2. Delete the demo specs, or keep them as an example.
-3. Write **one** system spec and **one** service spec by hand. Do not start with
-   the whole microservice estate.
+3. Write **one** system spec and **one** service spec by hand.
 4. Give the service spec to an agent and watch where it has to guess. Those gaps
    are the next requirements.
-5. Add a pinned standard and one contract. Then add a flow.
+5. Add a contract and one pinned standard. Then add a flow only if a behaviour
+   crosses two services.
 6. Only then scale to the rest.
 
-The framework is deliberately small. The hard part is not the format; it is
-keeping the graph consistent as the system changes.
+The hard part is not the format. It is keeping the graph consistent as the system
+changes.
 
 ## What this is not
 

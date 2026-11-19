@@ -22,7 +22,7 @@ folders into their own rules directory.
 | Spec interviewer / writer | `agents/spec-writer.md` |
 | Implementer | `agents/implementer.md` |
 | Verifier | `agents/verifier.md` |
-| Architecture reviewer | `agents/architecture.md` |
+| Spec reviewer | `agents/spec-reviewer.md` |
 
 Handoff: writer -> implementer -> verifier -> reviewer -> human release. The
 verifier gets the spec, not the implementer's plan.

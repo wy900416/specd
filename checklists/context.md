@@ -36,7 +36,7 @@ Follow transitive `depends-on` to depth 2 by default.
 |---|---|
 | Narrow change to one service | 8000 characters |
 | Normal implementation task | 12000 characters |
-| Architecture review or multi-service change | 20000 characters |
+| Cross-service review or multi-service change | 20000 characters |
 
 Pinned and target content is never truncated. If non-required entries are cut,
 mark them `TRUNCATED` with the full path. If pinned content alone exceeds the

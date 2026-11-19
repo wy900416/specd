@@ -11,7 +11,7 @@ reading them.
 | `spec-writer.md` | conversational spec generation, drafting, proposals | `SPEC.md`, `checklists/validate.md`, `templates/` |
 | `implementer.md` | implement a task against a spec, with a bounded context pack | `SPEC.md`, `AGENTS.md`, `.context/<id>.md` |
 | `verifier.md` | independent conformance tests written from the spec | `SPEC.md`, the target spec, the test harness |
-| `architecture.md` | boundary review, contract impact, cross-service consistency | `SPEC.md`, `checklists/context.md`, `checklists/review.md` |
+| `spec-reviewer.md` | boundary review, contract impact, cross-service consistency | `SPEC.md`, `checklists/context.md`, `checklists/review.md` |
 
 ## Handoff
 
@@ -25,8 +25,8 @@ writer -> implementer -> verifier -> reviewer -> human release
 - **verifier** gets the spec, the acceptance criteria, and the test harness. It
   does **not** get the implementer's plan or summary. It writes tests from the
   spec before reading implementation logic.
-- **reviewer** (often `architecture.md`) checks graph consistency, impact, and the
-  bump.
+- **reviewer** (often `spec-reviewer.md`) checks graph consistency, impact, and
+  the bump.
 - **human** approves the draft and releases the proposal. No agent writes
   `version`, `approved_by`, or `approved_at`.
 
@@ -39,7 +39,7 @@ the spec.
 Use the brief as the agent's system prompt or as the first message:
 
 ```text
-Read agents/architecture.md and follow it. Task: review the proposed change to
+Read agents/spec-reviewer.md and follow it. Task: review the proposed change to
 orders-api. The current spec is specs/contract/orders-api.md.
 ```
 
