@@ -11,6 +11,7 @@ level: "{{level}}"
 created: {{date}}
 updated: {{date}}
 tags: []
+decision_mode: human
 links: []
 ---
 
@@ -64,3 +65,10 @@ Link ADRs with `decided-by`.
 ## Open Questions
 
 - [ ] <question that must be answered before approval>
+
+## Agent Decisions
+
+<!-- Optional. Remove this section if every decision is human. One row per decision. -->
+| # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
+|---|---|---|---|---|---|---|
+| | | | | | | |

@@ -50,7 +50,18 @@ choose. Do not silently change the bump.
 - [ ] A deprecated spec has a `superseded-by` target, and incoming links are
       updated.
 
-## 5. Review packet
+## 5. Decision provenance
+
+- [ ] Every agent decision is marked inline and listed in `## Agent Decisions`.
+- [ ] Each is reversible, or the cost of reversal is stated.
+- [ ] None covers security, privacy, compliance, data ownership, pricing, legal,
+      or a breaking public contract without human sign-off.
+- [ ] Each has a revisit trigger; a POC decision without one is a hidden
+      requirement.
+- [ ] The human accepting the draft explicitly accepts or overrides the agent
+      decisions.
+
+## 6. Review packet
 
 ```md
 ## Review
@@ -60,6 +71,7 @@ choose. Do not silently change the bump.
 - non-blocking findings <n>
 - impact: <direct consumers and affected versions>
 - recommended bump: none | patch | minor | major
+- agent decisions: <count, high-risk ones, accepted or overridden>
 - open questions: <list>
 - recommendation: approve | revise | reject
 
@@ -73,7 +85,7 @@ choose. Do not silently change the bump.
 Every finding cites a file and line or `id@version#REQ-ID`. Do not restate the
 whole spec.
 
-## 6. What a passing checklist does not prove
+## 7. What a passing checklist does not prove
 
 - That the requirement is the right requirement.
 - That the behaviour is testable in the real system.

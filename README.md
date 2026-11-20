@@ -9,15 +9,17 @@ tool: the format is the product.
 
 ## The problem
 
-Most spec systems fail in one of four ways:
+Most spec systems fail in one of five ways:
 
 - the spec is a **document**, not a graph, so nobody knows what depends on what;
 - the **version** is an edit counter, so every typo churns every reference;
 - the agent **grades its own work**, so tests describe the implementation instead
   of the spec;
+- the agent **invents answers silently**, so nobody knows which decisions were
+  human;
 - the **tooling becomes the product**, and the spec format is locked to it.
 
-This framework is a response to those four failures.
+This framework is a response to those five failures.
 
 ## How the framework is used
 
@@ -40,9 +42,9 @@ flowchart TD
 
 | # | Step | Who | Output | Done when |
 |---|---|---|---|---|
-| 0 | Adopt | human | framework files in a real repo | one service selected |
-| 1 | Draft | writer + `spec-interview` | `specs/<kind>/<id>.md` | checklist passes, open questions have owners |
-| 2 | Approve | human | approved spec | `status`, `approved_by`, `approved_at`, `version` set |
+| 0 | Adopt | human | framework files in a real repo | one product boundary selected |
+| 1 | Draft | writer + `spec-interview` | `specs/system/<id>.md` (POC) or a small set | checklist passes, agent decisions recorded, open questions have owners |
+| 2 | Approve | human | approved spec | `status`, `approved_by`, `approved_at`, `version` set; agent decisions accepted or overridden |
 | 3 | Context | `spec-context` | `.context/<id>.md` | manifest lists included, excluded, warnings |
 | 4 | Implement | implementer | code + developer tests | tests pass, `REQ-ID`s cited in the change |
 | 5 | Verify | verifier | conformance report | every in-scope `REQ` is pass, fail, or blocked |
@@ -50,19 +52,20 @@ flowchart TD
 | 7 | Release | human | new version | base version matches, bump correct, proposal archived |
 | 8 | Change | writer | `changes/CHG-...md` | proposal reviewed and released |
 
-### Start with one vertical slice
+### Start with one big spec, split on evidence
 
-Do not write specs for the whole microservice estate. Start with:
+For a POC, write **one `system` spec** for the whole product: problem, actors, main
+flow, non-goals, requirements. If there is one deployable unit, add one `service`
+spec. Do not create one spec per service on day one.
 
-- one **system** page,
-- one **domain**,
-- one **service**,
-- one **contract**,
-- one **standard** or **NFR**.
+Why: at POC stage the boundaries are hypotheses. Splitting now freezes a guess into
+a contract and multiplies the places to be inconsistent. See
+[`docs/one-big-spec.md`](docs/one-big-spec.md).
 
-Add a **flow** only when a behaviour genuinely crosses two services. A flow is the
-only artifact that owns cross-service behaviour; without it, that behaviour falls
-between service specs.
+Split when a seam is real: two teams, independent deploy, an external consumer, a
+different change cadence, or a boundary that survived two changes. Add a **flow**
+when a behaviour genuinely crosses two services; it is the only artifact that owns
+cross-service behaviour.
 
 ### Keep the three loops separate
 
@@ -84,13 +87,27 @@ updated the spec" becomes an unreviewed change.
 | Version only on release | Version communicates compatibility, not edit history | Human gate |
 | Proposal as a full copy | Diff is derived; no special diff format; works with git | Duplication in `changes/` |
 | Separate verifier | The implementer cannot define its own acceptance | One more handoff |
+| One coarse spec first | Boundaries are hypotheses at POC stage; splitting freezes guesses | Must split later on evidence |
+| Agent decisions recorded | POC speed without silent invention | Requires review; high-risk stays human |
 | Human release | Accountability for breaking changes | Slower |
 | Pinned standards | Some constraints must always be in context | Budget |
 | Checklists, no linter | Portable; covers judgement, not only syntax | Manual, can drift |
 
+### The graph is the end state
+
+The graph is the **end state**, not day one. At POC stage, one `system` spec is
+faster to write, fits one context, and is cheaper to change when user feedback
+moves the product boundary.
+
+A big spec is still written to be split: clear sections, stable `REQ-` ids, and
+explicit non-goals. When a seam proves stable — two teams, independent deploy, an
+external consumer — extract that section into its own spec and keep the ids. The
+full rationale and split triggers are in
+[`docs/one-big-spec.md`](docs/one-big-spec.md).
+
 ### The spec is a graph, not a document
 
-A microservice system is not a tree. The same service is part of a domain, exposes
+At scale, a microservice system is not a tree. The same service is part of a domain, exposes
 contracts, participates in flows, and is constrained by standards. A single
 document per service cannot express those edges, and a folder cannot answer "who
 consumes this contract?"
@@ -124,6 +141,23 @@ This is an **information barrier**, not a different model. A fresh context is of
 enough. The verifier's most valuable output is not "tests pass"; it is "this
 requirement cannot be tested as written."
 
+### Agent decisions are recorded, not hidden
+
+A POC often stalls on a question the user has not decided. POC mode lets the agent
+choose a reversible, low-risk default and keep moving. It does not let the agent
+invent silently:
+
+- the decision goes in `## Agent Decisions` with rationale, alternatives,
+  reversibility, and a revisit trigger;
+- the affected requirement is marked `**Decided by:** agent (POC)`;
+- the review packet lists every agent decision;
+- security, privacy, compliance, data ownership, pricing, legal, and breaking
+  contracts stay human decisions.
+
+Human approval accepts the draft, not the provenance. The next reader can still
+see which decisions were human. The full rule is in
+[`docs/poc-mode.md`](docs/poc-mode.md).
+
 ### The format is portable, not a tool
 
 There is no parser, no index, no build, and no CI requirement. `SPEC.md` is
@@ -140,6 +174,9 @@ SPEC.md                    format, kinds, links, lifecycle, versioning (normativ
 AGENTS.md                  agent entry point and hard rules
 GRAPH.md                   a view (Mermaid + table), not the source of truth
 CHANGES.md                 proposal lifecycle
+docs/
+  one-big-spec.md          why one coarse spec first, when to split
+  poc-mode.md              agent decisions, provenance, guardrails
 checklists/
   validate.md              mechanical checks before approval
   context.md               bounded context packing
@@ -217,15 +254,17 @@ mode, or an unowned requirement. That is what the reviewer adds.
 
 ## Adopt it in a real repository
 
-1. Copy `SPEC.md`, `AGENTS.md`, `checklists/`, `templates/`, `.agents/skills/`,
-   and `agents/` into your repository.
+1. Copy `SPEC.md`, `AGENTS.md`, `CHANGES.md`, `checklists/`, `templates/`,
+   `docs/`, `.agents/skills/`, and `agents/` into your repository.
 2. Delete the demo specs, or keep them as an example.
-3. Write **one** system spec and **one** service spec by hand.
-4. Give the service spec to an agent and watch where it has to guess. Those gaps
-   are the next requirements.
+3. Write **one `system` spec** for the POC. Add a `service` spec only when you
+   have a deployable unit and a contract.
+4. Give the spec to an agent and watch where it has to guess. Those gaps are the
+   next requirements.
 5. Add a contract and one pinned standard. Then add a flow only if a behaviour
    crosses two services.
-6. Only then scale to the rest.
+6. Only then scale to the rest, splitting specs on evidence
+   ([`docs/one-big-spec.md`](docs/one-big-spec.md)).
 
 The hard part is not the format. It is keeping the graph consistent as the system
 changes.

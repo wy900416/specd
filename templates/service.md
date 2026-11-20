@@ -11,6 +11,7 @@ level: "{{level}}"
 created: {{date}}
 updated: {{date}}
 tags: []
+decision_mode: human
 links: []
 ---
 
@@ -59,3 +60,10 @@ Link standards and NFRs with `constrained-by`.
 ## Open Questions
 
 - [ ] <question>
+
+## Agent Decisions
+
+<!-- Optional. Remove this section if every decision is human. One row per decision. -->
+| # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
+|---|---|---|---|---|---|---|
+| | | | | | | |

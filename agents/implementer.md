@@ -57,6 +57,8 @@ Do not read every spec. The context pack is the boundary.
 - Do not change `version`, `status`, `approved_by`, or `approved_at`.
 - Do not approve or release.
 - Do not hide a failing test or a skipped requirement.
+- Treat `**Decided by:** agent (POC)` as provisional: implement it, but list it
+  under assumptions. It may change after user feedback.
 - Do not store credentials, private addresses, or internal endpoints.
 - Do not read every spec to compensate for a weak context pack; ask for a better
   pack instead.

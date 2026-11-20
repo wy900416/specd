@@ -48,7 +48,23 @@ finding.
 - [ ] The requirement describes one behaviour, not a bundle.
 - [ ] A `Traces` path, when present, exists in the implementation repo.
 
-## 5. Kind rules
+## 5. Decision provenance
+
+- [ ] `decision_mode` is `human` or `agent-assisted`; missing means `human`.
+- [ ] `agent-assisted` has a `## Agent Decisions` section and at least one inline
+      marker.
+- [ ] `human` has no `## Agent Decisions` rows and no inline markers.
+- [ ] Every requirement is either human-decided or marked
+      `**Decided by:** agent (POC)`.
+- [ ] Every agent decision appears in `## Agent Decisions` with question, chosen,
+      why, alternatives, reversible, and revisit trigger.
+- [ ] No agent decision covers security, privacy, compliance, data ownership,
+      pricing, legal, or a breaking public contract.
+- [ ] An approved spec with agent decisions has a review note accepting them.
+- [ ] A requirement with no provenance and no human answer is an error; do not
+      infer that the agent decided it.
+
+## 6. Kind rules
 
 | Kind | Check |
 |---|---|
@@ -61,7 +77,7 @@ finding.
 | standard | `applies_to`; verification method; exception process; `pinned` only when mandatory |
 | adr | context, decision, rejected alternatives, consequences |
 
-## 6. Graph hygiene
+## 7. Graph hygiene
 
 - [ ] No dependency cycle among services (`depends-on`).
 - [ ] Every contract has at least one service that exposes, publishes, or consumes
@@ -73,7 +89,7 @@ finding.
 - [ ] No orphan spec: something links to every spec except `system` and
       `standard`.
 
-## 7. Version hygiene
+## 8. Version hygiene
 
 - [ ] An approved spec's body matches its released version.
 - [ ] Any change to an approved spec has a proposal in `changes/` with a
@@ -84,7 +100,7 @@ finding.
 - [ ] If git history is available, compare the current file with the last release
       commit; otherwise record that drift could not be checked.
 
-## 8. Security and hygiene
+## 9. Security and hygiene
 
 Search the spec and proposal text for:
 
@@ -98,7 +114,7 @@ Search the spec and proposal text for:
 - [ ] unresolved placeholders in approved specs: `TODO`, `TBD`, `FIXME`;
 - [ ] pipe-to-shell commands (`curl ... | sh`).
 
-## 9. View freshness
+## 10. View freshness
 
 - [ ] `GRAPH.md` matches the current ids, statuses, and versions, or is
       explicitly marked as stale.

@@ -96,7 +96,30 @@ Use these instead of "tell me more":
 
 ## Handling unknowns
 
-Never fill a gap with a plausible guess. Write it down:
+Never fill a gap silently. There are two legitimate paths.
+
+### POC mode: record an agent default
+
+If the decision is reversible and low-risk, choose the lowest-regret default and
+record it:
+
+```md
+## Agent Decisions
+
+| # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
+|---|---|---|---|---|---|---|
+| 1 | Order id source | service-generated UUID | conventional; avoids client collisions | client-supplied id | yes | first user feedback |
+```
+
+Then mark the affected requirement:
+
+```md
+- **Decided by:** agent (POC) — revisit after first user feedback
+```
+
+### Otherwise: open question
+
+If the decision is high-risk, irreversible, or the user wants to decide, write:
 
 ```md
 ## Open Questions
@@ -104,8 +127,9 @@ Never fill a gap with a plausible guess. Write it down:
 - [ ] <question> — owner: <team> — needed before: approval
 ```
 
-Then move on. A draft with honest open questions is more useful than a fluent
-draft with invented answers.
+A draft with honest open questions is more useful than a fluent draft with
+invented answers. An agent decision is not an open question; it is a recorded
+default. Do not confuse the two.
 
 ## Stopping conditions
 
@@ -114,6 +138,7 @@ A draft is ready for review when:
 - every required front-matter field is present;
 - every normative requirement has Given / When / Then;
 - every service links a domain, a contract, and its constraints;
+- every agent decision is recorded in `## Agent Decisions` and marked inline;
 - open questions have an owner and a "needed before" marker;
 - `checklists/validate.md` is applied and every finding has a file, line, and
   one-line explanation;

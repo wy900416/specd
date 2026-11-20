@@ -29,7 +29,10 @@ There is no runtime. You create and edit files directly.
 3. **Interview one question at a time.** Persist after each section. Show only the
    changed lines and the next question.
 4. **Draft.** Fill the template. Every normative requirement gets
-   Given/When/Then and a stable `REQ-<PREFIX>-NNN`.
+   Given/When/Then and a stable `REQ-<PREFIX>-NNN`. When the user has no
+   decision, use POC mode: set `decision_mode: agent-assisted`, record a
+   reversible default in `## Agent Decisions`, and mark the affected requirement;
+   otherwise use `## Open Questions`.
 5. **Validate.** Apply `checklists/validate.md` manually and record every finding
    with a file and line.
 6. **Hand off.** Produce the review packet. For a proposal, attach a side-by-side
@@ -43,6 +46,7 @@ There is no runtime. You create and edit files directly.
 - mode: draft | proposal
 - summary: <one paragraph>
 - requirements: <added/changed ids>
+- agent decisions: <count and list; say "none" if none>
 - open questions: <list with owners>
 - assumptions: <list>
 - validation: <errors>, <warnings>; see checklists/validate.md
@@ -57,4 +61,6 @@ There is no runtime. You create and edit files directly.
 - Do not write application code. If the task needs code, hand off to an
   implementation agent with the context pack.
 - Do not store credentials, private addresses, or internal endpoints in a spec.
-- Do not invent facts. Put unknowns in `## Open Questions` with an owner.
+- Do not invent facts silently. In POC mode, record a reversible default in
+  `## Agent Decisions` and mark the requirement; otherwise use
+  `## Open Questions` with an owner.

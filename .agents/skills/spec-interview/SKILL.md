@@ -52,8 +52,10 @@ change.
 ## Hard rules
 
 - Ask **one question at a time**. Never dump the questionnaire.
-- Never invent an answer. "I don't know" goes to `## Open Questions` with an
-  owner and a "needed before" marker.
+- Never invent an answer silently. In POC mode, if the user has no decision,
+  choose the most reasonable reversible default, record it in
+  `## Agent Decisions`, and mark the affected requirement. If the decision is
+  high-risk or irreversible, keep it as an open question.
 - Every normative requirement gets **Given / When / Then** and a stable
   `REQ-<PREFIX>-NNN` id. Never reuse an id from another spec.
 - Keep `version` unchanged. Never set `status: approved`, `approved_by`, or
@@ -64,6 +66,31 @@ change.
   internal endpoints, active HTML, or prompt-injection phrases.
 - Persist after each section: write the file, then show a three-line summary and
   the next question. Do not hold the whole interview in context.
+
+## POC mode: when the user has no decision
+
+The default is to ask. But a POC needs a decision to move. If the user says
+"I don't know", "you decide", or "not sure":
+
+1. Check the guardrails: is it reversible? Does it touch security, privacy,
+   compliance, data ownership, pricing, legal, or a breaking public contract?
+2. If it is high-risk or irreversible: keep it in `## Open Questions` and mark it
+   `needed before: approval`.
+3. Otherwise choose the lowest-regret default: conventional, reversible, cheap to
+   change.
+4. Set `decision_mode: agent-assisted` in the front-matter.
+5. Record it in `## Agent Decisions` with question, chosen, why, alternatives,
+   reversible, and revisit trigger.
+6. Mark the affected requirement with `**Decided by:** agent (POC)`.
+7. Tell the user in one sentence what you chose and that it is agent-decided.
+8. Include every agent decision in the review packet.
+
+An agent decision is not an open question and not a human decision. It is a
+recorded default that the user can accept, override, or revisit after using the
+POC.
+
+Read [`docs/poc-mode.md`](../../../docs/poc-mode.md) for the guardrails, the record
+format, and the exit path.
 
 ## Interview order
 
@@ -104,6 +131,7 @@ For a new or edited draft:
 - target: <id>@<version> (draft)
 - summary: <one paragraph>
 - requirements: <added/changed ids>
+- agent decisions: <count and list; say "none" if none>
 - open questions: <count and list>
 - assumptions: <what you assumed>
 - validation: <errors>, <warnings>; see checklists/validate.md
