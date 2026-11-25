@@ -1,5 +1,9 @@
 # One big spec first, split later
 
+> In the POC stage, a split is a normal edit: move the requirements, keep the ids,
+> and re-validate. The proposal and version steps described below apply at
+> contract stage.
+
 This framework can represent a graph of small, service-level specs. It does **not**
 require you to start there. For a POC, the better default is often one coarse spec
 for the whole product.

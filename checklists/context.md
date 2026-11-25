@@ -1,14 +1,15 @@
 # Context checklist
 
-The goal is the **smallest sufficient context**, not every spec. A large graph
-does not fit in a context window, and a context without a manifest is not
-auditable.
+The goal is the **smallest sufficient context**, not every spec. A large graph does
+not fit in a context window, and a context without a manifest is not auditable.
 
 ## 1. Resolve the target
 
 - [ ] The task names a spec id, a service, or a contract. Use it.
 - [ ] If not, search `specs/**/*.md` front-matter for ids, titles, domains, and
       summaries.
+- [ ] If `specs/INDEX.md` exists and is fresh, use it as a shortcut. Never treat
+      it as the source of truth; the spec wins.
 - [ ] If two or more candidates are genuinely plausible, ask one question with the
       candidates.
 - [ ] Do not use `GRAPH.md` as the source of truth; it is a view.
@@ -49,7 +50,7 @@ Write the pack to `.context/<target>.md`:
 ```md
 # Context pack: orders
 
-- target: `orders` v0.1.0 (draft)
+- target: `orders` (validated), stage: poc
 - task: add idempotency to order creation
 - budget: 12000 chars, used: 7412
 
@@ -57,7 +58,7 @@ Write the pack to `.context/<target>.md`:
 
 ## [security-baseline] Security Baseline
 
-- kind: `standard` | version: `1.0.0` | status: `approved`
+- kind: `standard` | stage: contract | status: approved
 - included because: pinned constraint
 
 <body>
@@ -66,9 +67,9 @@ Write the pack to `.context/<target>.md`:
 
 ## [orders] Orders Service
 
-- kind: `service` | version: `0.1.0` | status: `draft`
+- kind: `service` | stage: poc | status: validated
 - included because: target
-- **PENDING**: not approved; treat as a proposal.
+- **VALIDATED**: current truth for the POC; hash recorded in the spec.
 
 <body>
 
@@ -78,33 +79,35 @@ Write the pack to `.context/<target>.md`:
 
 ```yaml
 target: orders
-target_version: 0.1.0
-target_status: draft
+target_stage: poc
+target_status: validated
 included:
   - id: security-baseline
-    version: 1.0.0
+    stage: contract
     status: approved
     reason: pinned constraint
     required: true
   - id: orders
-    version: 0.1.0
-    status: draft
+    stage: poc
+    status: validated
     reason: target
     required: true
 excluded:
   - id: payments-api
     reason: over budget
 warnings:
-  - open proposal CHG-... exists for orders
+  - fenced high-risk assumption in orders (retention policy)
 ```
 ```
 
 ## 5. Use the pack
 
-- [ ] Cite `id@version#REQ-ID` in every claim.
+- [ ] Cite `id#REQ-ID` in the POC stage, `id@version#REQ-ID` in the contract stage.
 - [ ] Treat pinned constraints as mandatory even if the task did not mention them.
-- [ ] Treat an unapproved spec as a proposal, not truth.
-- [ ] Note a pending proposal before relying on the current body.
+- [ ] Treat a `draft` spec as a hypothesis: buildable, but it may change.
+- [ ] Treat a `validated` spec as the current truth for the POC.
+- [ ] Note a `needs-human` (user-reserved) fact, a fenced high-risk assumption, or
+      an open conflict before relying on the affected requirement.
 - [ ] Do not silently use a `TRUNCATED` body as if it were complete.
 - [ ] State what the pack does not answer.
 
@@ -116,11 +119,13 @@ warnings:
 - A missing constraint: check whether a pinned standard exists but does not apply
   to the target kind.
 - A missing dependency: follow `depends-on` one more level.
+- A missing fact: open the `repo:<path>:<line>` evidence the spec cites.
 
 ## Anti-patterns
 
 - Reading every spec.
 - Ignoring pinned constraints.
-- Treating a draft as truth.
-- Citing without a version.
+- Treating a `draft` as validated.
+- Citing without a spec id and requirement id.
 - Assuming omission means irrelevance.
+- Using a stale index as evidence that a spec changed.

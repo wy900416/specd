@@ -1,20 +1,22 @@
 ---
 name: spec-review
-description: "Review a spec or change proposal for completeness, consistency, impact, and version hygiene before approval or release."
-whenToUse: "A draft is about to be approved, a proposal is about to be released, or a contract change needs cross-service impact review."
+description: "Contract-stage review of a spec or change proposal: cross-service consistency, impact, and version hygiene. Not the POC validation gate."
+whenToUse: "A spec is being promoted to contract stage, a contract change needs cross-service impact review, or a change proposal is about to be released."
 ---
 
 # Spec review
 
-Review the **graph**, not just the file. A spec can be well written and still be
-wrong: it can contradict a contract, miss a pinned standard, or bump the wrong
-version. There is no runtime: apply the checklists and record evidence.
+Use this at **contract stage**, when a spec is no longer a POC hypothesis. For the
+POC gate, use `spec-validate` instead. Review the **graph**, not just the file: a
+spec can be well written and still contradict a contract, miss a pinned standard,
+or bump the wrong version.
 
 ## Read first
 
 - `SPEC.md` — the normative rules.
 - `checklists/validate.md` — the mechanical checks.
 - `checklists/review.md` — the judgement checks, severity, and bump guide.
+- `docs/contract-mode.md` — promotion, proposals, and release.
 
 ## Procedure
 

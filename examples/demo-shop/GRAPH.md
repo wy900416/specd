@@ -2,7 +2,7 @@
 
 This is a **view**, not the source of truth. The source of truth is the
 front-matter and body of each spec. Update this file when a spec is added,
-approved, released, or deprecated; if it is stale, say so.
+validated, promoted, released, or deprecated; if it is stale, say so.
 
 ## Demo graph
 

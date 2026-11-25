@@ -1,127 +1,110 @@
-# POC mode: agent decisions
+# POC mode: infer, label, escalate
 
-A POC often stalls on questions the user has not decided yet. Waiting for every
-answer is slower than building a default and letting the user react to it.
-
-POC mode lets an agent choose a default. It does **not** let the agent invent
-silently. Every agent decision is recorded, marked, and reversible.
+A POC stalls when every unknown becomes a question. The alternative is not silent
+invention: it is **aggressive, labelled inference**. The agent chooses a default,
+writes down why, and moves on. The user reacts to the product instead of
+pre-answering it.
 
 ## The rule
 
-An agent may decide when all of these hold:
+The agent MAY infer when:
 
-1. the user said "I don't know", "you decide", or "not sure";
-2. the decision is reversible, or cheap to reverse;
-3. it does not change security, privacy, compliance, data ownership, pricing,
-   legal terms, or the breaking behaviour of a public contract;
-4. the decision is recorded in `## Agent Decisions`;
-5. the affected requirement is marked `**Decided by:** agent (POC)`.
+1. the repository, the description, or a user-installed global skill answers it;
+2. the choice follows a convention;
+3. the choice is cheap to reverse;
+4. the choice is recorded in `## Assumptions` or `## Agent Decisions`;
+5. the affected requirement's `Source` names the basis.
 
-If any condition fails, the question stays in `## Open Questions`.
-
-## Why
-
-- **Speed.** A POC needs a decision to test the product; a blank question block
-  does not produce feedback.
-- **Feedback beats speculation.** The user often cannot answer abstractly but can
-  react to a working default.
-- **Reversibility.** A recorded, low-cost default is cheaper to change than a
-  delayed POC.
-- **Provenance.** The next reader must know which decisions were human and which
-  were agent defaults. Silent invention destroys trust in the spec.
+The agent MUST ask only when the user reserved the fact, a conflict exists, or
+there is no reasonable default. A high-risk fact is inferred, fenced, and
+confirmed before production.
 
 ## What the agent may decide
 
-- naming, ids, and internal structure that do not leak into a public contract;
-- a conventional default where alternatives are close (UUID vs sequential id,
-  cursor vs offset pagination);
-- a POC-only simplification that is easy to replace (in-memory store, fake
-  provider, single-tenant);
-- the order of steps in a flow when the user has no preference.
+- language, framework, package manager, test runner, deployment shape;
+- naming, ids, directory structure, module boundaries;
+- internal data shapes, default values, pagination, error envelope, logging;
+- POC simplifications: in-memory store, fake provider, single tenant, seed data;
+- UI copy, empty states, and ordering.
 
-## What the agent must not decide
+## What the agent may infer but must fence
 
 - authentication, authorization, encryption, or data retention;
-- who owns a piece of data, or who may write it;
+- who owns a piece of data, who may read or write it, or PII handling;
 - pricing, billing, or legal terms;
+- compliance obligations;
 - a breaking change to a public contract;
-- an irreversible migration or a one-way data conversion;
-- anything the user explicitly said they want to decide.
+- an irreversible migration or a one-way data conversion.
 
-When in doubt, ask once. If the user still has no answer and the decision is
-high-risk, record it as an open question, not an agent decision.
+For a POC, mark these `Risk: high`, `Confirmed: agent (POC)`, and
+`Revisit: before production`. Build against them only with fake data, a local
+provider, and no real users, money, or PII. The validator records them as warnings;
+they do not block validation, and contract promotion confirms them.
+
+A fact the user explicitly reserved is different: `Confirmed: needs-human` blocks
+validation until the user answers. This is a factual question, not an approval of
+the spec.
 
 ## Record format
 
-Set the front-matter flag:
+`decision_mode: agent-assisted` is set when either table has a row.
 
-```yaml
-decision_mode: agent-assisted
+Product or external guesses:
+
+```md
+## Assumptions
+
+| # | Assumption | Basis | Risk | Confirmed | Revisit |
+|---|---|---|---|---|---|
+| 1 | Links are internal-only | no public sharing in the description | medium | no | first user feedback |
+| 2 | Users sign in with the company SSO | company convention | high | agent (POC) | before production |
 ```
 
-Add this section to the spec:
+Implementation choices:
 
 ```md
 ## Agent Decisions
 
 | # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
 |---|---|---|---|---|---|---|
-| 1 | Order id source | service-generated UUID | conventional; avoids client collisions | client-supplied id | yes | first user feedback |
+| 1 | Code generation | random base62 | simple; enough collision space | hash of URL | yes | 10k links |
 | 2 | Payment provider | fake provider behind an adapter | POC does not need a real charge | real provider | yes | before any real charge |
 ```
+
+One row per fact. A row without a revisit trigger is a hidden requirement.
 
 Mark the affected requirement:
 
 ```md
-### REQ-ORD-001: Create an order idempotently
+### REQ-SYS-001: Shorten a valid URL
 
 - **Priority:** must
 - **Normative:** true
-- **Decided by:** agent (POC) — revisit after first user feedback
+- **Source:** assumption
 - **Given:** ...
 ```
 
-One decision per row. Do not bundle three choices into one rationale. A decision
-without a revisit trigger is a hidden requirement.
+## Inference ladder
 
-## Lifecycle
+1. **Observed** — the repository or the description answers it. Cite the evidence.
+2. **Conventional** — the ecosystem has a dominant default. Name it.
+3. **Assumed** — a reversible product guess. Record basis, risk, revisit.
+4. **Ask** — only when the user reserved the fact, or there is no reasonable
+   default. A high-risk fact is inferred and fenced. Ask once, batched.
 
-```text
-user: "I don't know"
-  -> agent picks a reversible default
-  -> records it in ## Agent Decisions
-  -> marks the requirement
-  -> user tries the POC
-  -> user reacts: accept / override / change the product
-  -> revise the spec (proposal if approved)
-```
+## No approval
 
-The agent decision is expected to change. That is the point. It is a **default**,
-not a commitment.
-
-## Review
-
-The spec reviewer checks:
-
-- every agent decision is marked inline and listed in `## Agent Decisions`;
-- each is reversible, or the cost of reversal is stated;
-- none touches the high-risk list;
-- each has a revisit trigger;
-- the human accepting the draft explicitly accepts or overrides the decisions.
-
-Human approval accepts the draft. It does not turn an agent decision into a human
-decision; the provenance stays. If the user later decides, change the spec through
-a proposal and keep the history.
+There is no human approval step in the POC stage. The `spec-validator` agent sets
+`status: validated` when the checklist passes. The user can still change anything
+by saying so; the spec returns to `draft` and is re-validated.
 
 ## Leaving POC mode
 
-When the product has real users and the decisions start to matter:
+When the spec is promoted to contract stage:
 
-1. Ask the user to accept, override, or defer each `## Agent Decisions` row.
-2. Move accepted rows to the body as normal requirements; keep the provenance in
-   the review history.
-3. Move deferred rows to `## Open Questions`.
-4. Remove the `**Decided by:** agent (POC)` marker only when a human has explicitly
-   decided that requirement. Set `decision_mode: human` when no agent decisions
-   remain.
-5. Version the spec as a release.
+1. Ask the user to confirm every high-risk assumption and every agent decision
+   that survived.
+2. Turn accepted assumptions into requirements; keep the provenance.
+3. Move the rest to `## Open Questions` with an owner.
+4. Set `stage: contract`, start semver, and use the proposal flow in
+   [`contract-mode.md`](contract-mode.md).

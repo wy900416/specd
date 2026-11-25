@@ -1,5 +1,9 @@
 # Change proposals
 
+> **Contract stage only.** A POC-stage spec is a draft: edit it directly and
+> re-validate. Do not create a proposal for a `stage: poc` spec. Use this flow
+> only after promotion to `stage: contract`.
+
 An approved spec is read-only for agents. A change is a **copy** of the target in
 this directory, with a proposal front-matter and the full proposed body.
 

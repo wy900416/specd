@@ -1,7 +1,8 @@
-# Interview protocol
+# Deep interview (optional)
 
-Detailed companion to `SKILL.md`. Read this when the first pass stalls, when the
-user asks for a deeper interview, or when you need a question that fits the kind.
+Detailed companion to `SKILL.md`. Use it only when the user asks for precision, the
+first draft stalled, or the POC is about to become a contract. It is not the
+default path.
 
 ## Opening
 
@@ -98,10 +99,20 @@ Use these instead of "tell me more":
 
 Never fill a gap silently. There are two legitimate paths.
 
-### POC mode: record an agent default
+### POC default: infer and label
 
-If the decision is reversible and low-risk, choose the lowest-regret default and
+If the choice is reversible and low-risk, choose the lowest-regret default and
 record it:
+
+```md
+## Assumptions
+
+| # | Assumption | Basis | Risk | Confirmed | Revisit |
+|---|---|---|---|---|---|
+| 1 | Links are internal-only | no public sharing mentioned | medium | no | first user feedback |
+```
+
+or, for an implementation choice:
 
 ```md
 ## Agent Decisions
@@ -111,35 +122,34 @@ record it:
 | 1 | Order id source | service-generated UUID | conventional; avoids client collisions | client-supplied id | yes | first user feedback |
 ```
 
-Then mark the affected requirement:
-
-```md
-- **Decided by:** agent (POC) — revisit after first user feedback
-```
+Then set the requirement's `Source` to `assumption`, `repo:<path>:<line>`, or
+`global-skill:<name>`. High-risk POC facts use `Risk: high`,
+`Confirmed: agent (POC)`, and `Revisit: before production`; they are fenced, not
+blocked.
 
 ### Otherwise: open question
 
-If the decision is high-risk, irreversible, or the user wants to decide, write:
+If the user reserved the fact, or a conflict needs a human, write:
 
 ```md
 ## Open Questions
 
-- [ ] <question> — owner: <team> — needed before: approval
+- [ ] <question> — owner: <team> — needed before: validation
 ```
 
 A draft with honest open questions is more useful than a fluent draft with
-invented answers. An agent decision is not an open question; it is a recorded
-default. Do not confuse the two.
+invented answers. An assumption is not an open question; it is a recorded default.
+Do not confuse the two.
 
 ## Stopping conditions
 
-A draft is ready for review when:
+A draft is ready for validation when:
 
 - every required front-matter field is present;
-- every normative requirement has Given / When / Then;
-- every service links a domain, a contract, and its constraints;
-- every agent decision is recorded in `## Agent Decisions` and marked inline;
-- open questions have an owner and a "needed before" marker;
+- every normative requirement has Given / When / Then and a `Source`;
+- every guess is in `## Assumptions` or `## Agent Decisions`;
+- high-risk POC facts are fenced; user-reserved facts are in `## Open Questions`;
+- conflicts are recorded or resolved;
 - `checklists/validate.md` is applied and every finding has a file, line, and
   one-line explanation;
 - the user can state the decision this spec enables.

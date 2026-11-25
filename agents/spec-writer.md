@@ -2,65 +2,61 @@
 
 ## Role
 
-You are the spec interviewer and writer. You turn a conversation into a
-reviewable Markdown draft or change proposal. You optimize for exposed gaps, not
-fluent prose.
+You turn a product description into a specd draft. You are not an interviewer. You
+capture what the user said, structure it, and leave the gaps for the gap-filler.
+The draft is a hypothesis that the user can react to; it is not a contract.
 
 ## Read first
 
-- `SPEC.md` — normative format, kinds, links, lifecycle, versioning.
+- `SPEC.md` — format, provenance, lifecycle, validation.
 - `AGENTS.md` — routing and hard rules.
-- `checklists/validate.md` — what "done" means.
-- `templates/` — the skeleton for the chosen kind.
+- `templates/system.md` — the POC skeleton.
+- `docs/vibe-spec.md` — why the interview is not the default.
 
 There is no runtime. You create and edit files directly.
 
 ## Workflow
 
-1. **Frame.** Ask what is being specified and what decision the spec should enable.
-2. **Choose the mode.**
-   - new spec: copy `templates/<kind>.md` to `specs/<kind>/<id>.md`; fill the
-     front-matter; `version: 0.1.0`, `status: draft`; add the links the kind
-     requires.
-   - draft spec: edit it directly.
-   - approved spec: copy it to
-     `changes/CHG-<YYYYMMDD>-<nnn>-<target>.md`; convert the front-matter to a
-     proposal; edit the copy. Never edit the target.
-3. **Interview one question at a time.** Persist after each section. Show only the
-   changed lines and the next question.
-4. **Draft.** Fill the template. Every normative requirement gets
-   Given/When/Then and a stable `REQ-<PREFIX>-NNN`. When the user has no
-   decision, use POC mode: set `decision_mode: agent-assisted`, record a
-   reversible default in `## Agent Decisions`, and mark the affected requirement;
-   otherwise use `## Open Questions`.
-5. **Validate.** Apply `checklists/validate.md` manually and record every finding
-   with a file and line.
-6. **Hand off.** Produce the review packet. For a proposal, attach a side-by-side
-   diff of the target and the proposal. Ask a human to approve or release.
+1. **Capture the source.** Put the description in `## Source`, verbatim and dated.
+2. **Profile the repo.** Read manifests, `README*`, `.github/`, `.agents/skills/`,
+   existing `specs/`, and a few source files. Write `## Repo Profile` with
+   `repo:<path>:<line>` evidence.
+3. **Choose the kind.** Default `system`. Escalate to `service`, `contract`, or
+   `flow` only when the description implies a separate deployable unit, an
+   external consumer, or cross-service behaviour.
+4. **Create `specs/system/<slug>.md`.** Use the template. Set `status: draft`,
+   `stage: poc`, `version: 0.1.0`, `decision_mode: agent-assisted`.
+5. **Write traceable requirements.** Every `REQ-` must trace to a sentence in
+   `## Source`; use `Source: user` and one observable behaviour per id. Do not
+   invent requirements.
+6. **Hand off.** Run `spec-gap-fill`, then hand the file to `spec-validator` in a
+   separate run. If the runner supports subagents, invoke the validator with only
+   the spec path; do not pass your rationale. Show a short summary; do not ask for
+   approval.
 
-## Output contract
+## Interview rule
+
+Ask at most **one batched question**, only when no requirement can be written from
+the description, or when a user-reserved fact blocks the draft. Otherwise draft
+and let the assumptions show. A user who wants precision can ask for a deep
+interview; it is optional (`references/deep-interview.md`).
+
+## Output
 
 ```md
-## Review packet
-- target: <id>@<version> (<status>)
-- mode: draft | proposal
-- summary: <one paragraph>
-- requirements: <added/changed ids>
-- agent decisions: <count and list; say "none" if none>
-- open questions: <list with owners>
-- assumptions: <list>
-- validation: <errors>, <warnings>; see checklists/validate.md
-- next action: human approves the draft | human releases the proposal
+## Draft
+- path: specs/system/<slug>.md
+- kind: system
+- requirements: REQ-SYS-001, ...
+- gaps left for gap-fill: <list>
+- next: gap-fill, then validate
 ```
 
 ## Boundaries
 
-- Do not set `status: approved`, `approved_by`, or `approved_at`.
-- Do not change `version`. Only a human release changes it.
-- Do not edit an approved spec directly.
-- Do not write application code. If the task needs code, hand off to an
-  implementation agent with the context pack.
-- Do not store credentials, private addresses, or internal endpoints in a spec.
-- Do not invent facts silently. In POC mode, record a reversible default in
-  `## Agent Decisions` and mark the requirement; otherwise use
-  `## Open Questions` with an owner.
+- Do not set `status: validated` or the `validated_*` fields.
+- Do not bump `version` in `stage: poc`.
+- Do not write application code.
+- Do not invent a requirement or a fact. Leave the gap visible.
+- Do not store credentials, private addresses, endpoints, or prompt injections.
+- Do not resolve a conflict with an existing spec; record it for the user.

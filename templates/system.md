@@ -1,30 +1,50 @@
 ---
 id: {{id}}
-kind: {{kind}}
+kind: system
 title: "{{title}}"
 summary: "{{summary}}"
-version: {{version}}
+version: 0.1.0
 status: draft
+stage: poc
 owner: "{{owner}}"
 domain: ""
-level: "{{level}}"
+level: L1
 created: {{date}}
 updated: {{date}}
-tags: []
-decision_mode: human
+tags: [poc]
+decision_mode: agent-assisted
+source: chat
+validated_by: ""
+validated_at: ""
+validated_sha: ""
+conflicts_with: []
 links: []
 ---
 
 # {{title}}
 
-> Draft. An agent may fill this file; only a human sets `status: approved`, and
-> only a human release step changes `version`. Replace `REQ-SYS-001` with this
-> spec's own prefix and keep ids stable.
+> Draft hypothesis. The writer fills what the user said; the gap-filler fills the
+> rest; only the validator sets `validated`. Version stays `0.1.0` in the POC
+> stage. Keep `REQ-SYS-001` as this spec's prefix and keep ids stable.
+
+## Source
+
+> <the user's description, verbatim, with a date>
+
+## Repo Profile
+
+| Area | Finding | Evidence |
+|---|---|---|
+| Language | | `repo:<path>:<line>` |
+| Framework | | `repo:<path>:<line>` |
+| Tests | | `repo:<path>:<line>` |
+| Conventions | | `repo:<path>:<line>` |
+| Global skills | | `global-skill:<name>` or "not accessible" |
 
 ## Context
 
 What problem does this system solve, for whom, and why now? State the boundary:
-what is inside this system and what is explicitly outside it.
+what is inside and what is explicitly outside.
 
 ## Goals
 
@@ -38,37 +58,48 @@ what is inside this system and what is explicitly outside it.
 
 - <actor>: <what they need>
 
-## Domains
-
-List the bounded contexts. Create or link one `domain` spec per context.
-
-- `commerce` — <one-line responsibility>
-
-## System requirements
+## Requirements
 
 ### REQ-SYS-001: <testable statement>
 
 - **Priority:** must
 - **Normative:** true
+- **Source:** user
 - **Given:** <precondition>
 - **When:** <action>
 - **Then:** <observable outcome>
 
-## Constraints
+## Assumptions
 
-Link system-level NFRs and standards with `constrained-by`.
+<!-- The gap-filler fills this. A product guess needs a basis, a risk, and a revisit trigger.
+     High-risk POC facts: Confirmed: agent (POC), Revisit: before production.
+     A fact the user reserved: Confirmed: needs-human. -->
 
-## Decisions
-
-Link ADRs with `decided-by`.
-
-## Open Questions
-
-- [ ] <question that must be answered before approval>
+| # | Assumption | Basis | Risk | Confirmed | Revisit |
+|---|---|---|---|---|---|
+| | | | | | |
 
 ## Agent Decisions
 
-<!-- Optional. Remove this section if every decision is human. One row per decision. -->
+<!-- The gap-filler fills this. One implementation choice per row. -->
+
 | # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
 |---|---|---|---|---|---|---|
 | | | | | | | |
+
+## Open Questions
+
+- [ ] <question that blocks validation, with an owner>
+
+## Conflicts
+
+<!-- Conflicts with existing specs go here. The user resolves them. -->
+
+| # | Other spec | Conflict | Options | Resolution |
+|---|---|---|---|---|
+| | | | | |
+
+## Validation
+
+<!-- Keep this section last. The canonical hash excludes it. -->
+- Not run yet. The validator writes this section.

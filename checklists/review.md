@@ -1,5 +1,10 @@
 # Review checklist
 
+> **Contract stage only.** In the POC stage the gate is
+> [`spec-validate`](../.agents/skills/spec-validate/SKILL.md) and
+> `checklists/validate.md`. Use this checklist when a spec is being promoted, a
+> contract changes, or a proposal is about to be released.
+
 Use this before approving a draft or releasing a proposal. Review the **graph**,
 not just the file: a spec can be well written and still contradict a contract,
 miss a pinned standard, or bump the wrong version.
