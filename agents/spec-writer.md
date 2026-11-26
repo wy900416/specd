@@ -34,6 +34,13 @@ There is no runtime. You create and edit files directly.
    the spec path; do not pass your rationale. Show a short summary; do not ask for
    approval.
 
+## Manual mature baseline
+
+For a mature project with no specs, use the same flow with `stage: mature`,
+`status: draft`, `version: 0.1.0`; validate the draft; a human approves it as the
+`1.0.0` baseline and clears the `validated_*` fields. Do not set `approved`
+yourself. See `docs/adoption.md`.
+
 ## Interview rule
 
 Ask at most **one batched question**, only when no requirement can be written from

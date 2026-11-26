@@ -19,6 +19,6 @@ Follow `agents/spike.md`, `docs/spike.md`, `templates/spike.md`, and
 5. Smoke test the one path.
 6. At the timebox (90 minutes by default), stop and demo what exists.
 7. Ask the three feedback questions and record the answers.
-8. Decide: kill, iterate once, or graduate to the spec lane.
+8. Decide: kill, iterate once, or graduate to the bootstrap lane.
 
 Do not write a full spec, run the validator, run the architect, or start a fleet.

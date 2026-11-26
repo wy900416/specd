@@ -18,11 +18,18 @@ Mark every item `pass`, `warning`, or `block`.
       `url-shortener`). **block**
 - [ ] `kind` is one of `system`, `domain`, `service`, `contract`, `flow`, `nfr`,
       `adr`, `standard`. **block**
-- [ ] `stage` is absent, `poc`, or `contract`. Missing means `poc`. **block**
+- [ ] `stage` is absent, `poc`, or `mature`. Missing means `poc`. **block**
 - [ ] In `stage: poc`, `version` is exactly `0.1.0`. **block**
 - [ ] In `stage: poc`, `status` is `draft`, `validated`, or `deprecated`.
       **block**
+- [ ] In `stage: mature`, `status` is `draft`, `validated`, `approved`, or
+      `deprecated`. **block**
+- [ ] In `stage: mature`, `version` is semver; a draft may be `0.1.0`, an
+      approved baseline is at least `1.0.0`. **block**
 - [ ] `draft` and `validated` have no `approved_by` or `approved_at`. **block**
+- [ ] `status: approved` has `approved_by` and `approved_at`. **block**
+- [ ] `status: approved` has no `validated_by`, `validated_at`, or
+      `validated_sha`; approval clears the bootstrap validation. **block**
 - [ ] `validated` has `validated_by`, `validated_at`, and `validated_sha`.
       **block**
 - [ ] `decision_mode` is `human` or `agent-assisted`. If either `## Assumptions`
@@ -146,15 +153,19 @@ Only when `specs/INDEX.md` exists:
 - [ ] `spec_count` matches the number of spec files. **warning**
 - [ ] Every index row has a matching spec. **warning**
 
-## 12. Contract stage
+## 12. Mature stage
 
-Only when `stage: contract`:
+Only when `stage: mature`:
 
+- [ ] `status` is `draft`, `validated`, `approved`, or `deprecated`. **block**
 - [ ] `status: approved` has `approved_by` and `approved_at`. **block**
-- [ ] `version` is semver and is not `0.1.0` for a released spec. **block**
-- [ ] An edit is a proposal in `changes/` with `base_version` equal to the
-      target's current version. **block**
-- [ ] The proposed `bump` matches the semantic change. **block**
+- [ ] `status: approved` has no `validated_by`, `validated_at`, or
+      `validated_sha`; approval clears the bootstrap validation. **block**
+- [ ] `version` is semver; an approved baseline is at least `1.0.0`. **block**
+- [ ] A draft or validated baseline has no `approved_by` or `approved_at`.
+      **block**
+- [ ] For a change, `checklists/change.md` passes and the target spec is not
+      edited in place. **block**
 - [ ] The service or contract kind rules in `SPEC.md` are satisfied. **block**
 
 ## Output
@@ -183,7 +194,7 @@ Write this into the spec:
 | 9 | Scope | pass | |
 | 10 | Freshness | pass | hash matches |
 | 11 | Index | pass | absent |
-| 12 | Contract stage | n/a | stage: poc |
+| 12 | Mature stage | n/a | stage: poc |
 ```
 
 Blocking findings go in a short list under the table:

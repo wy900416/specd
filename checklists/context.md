@@ -58,7 +58,7 @@ Write the pack to `.context/<target>.md`:
 
 ## [security-baseline] Security Baseline
 
-- kind: `standard` | stage: contract | status: approved
+- kind: `standard` | stage: mature | status: approved
 - included because: pinned constraint
 
 <body>
@@ -83,7 +83,7 @@ target_stage: poc
 target_status: validated
 included:
   - id: security-baseline
-    stage: contract
+    stage: mature
     status: approved
     reason: pinned constraint
     required: true
@@ -102,10 +102,12 @@ warnings:
 
 ## 5. Use the pack
 
-- [ ] Cite `id#REQ-ID` in the POC stage, `id@version#REQ-ID` in the contract stage.
+- [ ] Cite `id#REQ-ID` in the POC stage, `id@version#REQ-ID` in the mature stage.
 - [ ] Treat pinned constraints as mandatory even if the task did not mention them.
 - [ ] Treat a `draft` spec as a hypothesis: buildable, but it may change.
 - [ ] Treat a `validated` spec as the current truth for the POC.
+- [ ] Treat an `approved` `stage: mature` spec as the baseline; a pending `CHG`
+      means the baseline is about to change.
 - [ ] Note a `needs-human` (user-reserved) fact, a fenced high-risk assumption, or
       an open conflict before relying on the affected requirement.
 - [ ] Do not silently use a `TRUNCATED` body as if it were complete.

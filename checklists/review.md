@@ -1,19 +1,21 @@
 # Review checklist
 
-> **Contract stage only.** In the POC stage the gate is
+> **Mature stage only.** In the bootstrap stage the gate is
 > [`spec-validate`](../.agents/skills/spec-validate/SKILL.md) and
-> `checklists/validate.md`. Use this checklist when a spec is being promoted, a
-> contract changes, or a proposal is about to be released.
+> `checklists/validate.md`. Use this checklist when a baseline is being promoted,
+> a mature change is being reviewed, or a proposal is about to be released.
 
-Use this before approving a draft or releasing a proposal. Review the **graph**,
-not just the file: a spec can be well written and still contradict a contract,
-miss a pinned standard, or bump the wrong version.
+Use this before releasing a change. Review the **graph and the consumers**, not
+just the file: a spec can be well written and still break a consumer, miss a
+pinned standard, or bump the wrong version.
 
 ## 1. Dimensions
 
 | Dimension | Question | Blocking when |
 |---|---|---|
 | Intent | Is the problem, scope, and non-goal clear? | A reader cannot tell what decision the spec enables |
+| Impact | Are all consumers, tests, docs, data, and ops named? | A consumer or migration is missing |
+| Compatibility | Is the change backward, additive, or breaking? | A breaking change has no consumer impact or migration plan |
 | Behaviour | Are the main path, failure path, and edge cases covered? | A normative requirement has no observable outcome |
 | Contract | Are boundaries, errors, and compatibility stated? | A breaking change has no consumer impact or migration plan |
 | Data | Is ownership and write authority explicit? | Two specs claim to own the same data |
@@ -21,6 +23,8 @@ miss a pinned standard, or bump the wrong version.
 | Traceability | Does every requirement have a stable id and a verification path? | Requirements cannot be traced to a test, check, or review |
 | Security | Are secrets, internal endpoints, and injection risks absent? | The security section of `checklists/validate.md` finds critical/high issues |
 | Versioning | Does the bump match the semantic change? | A breaking change is labelled patch/minor |
+| Approval | Does the tier match the bump and risk? | A major/high-risk change lacks the required sign-off |
+| Rollout | Is there a flag/canary, rollback, and owner? | A stateful or user-visible change has no rollback |
 | Consistency | Do linked specs agree? | Two specs contradict each other, or a consumer is missing |
 
 ## 2. Severity
@@ -45,6 +49,10 @@ choose. Do not silently change the bump.
 
 ## 4. Consistency checks that lint cannot do
 
+- [ ] Every direct consumer of the target is named with its owner.
+- [ ] Contract tests exist or are updated for every consumer.
+- [ ] The data migration is reversible, or the rollback is a restore.
+- [ ] The rollout flag/canary has an owner and a first check.
 - [ ] Two services do not claim ownership of the same entity.
 - [ ] A flow references a service that actually exposes the contract it calls.
 - [ ] A standard applies to a service that links it with `constrained-by`.
@@ -71,14 +79,19 @@ choose. Do not silently change the bump.
 ```md
 ## Review
 - target: <id>@<version> (<status>)
+- change: <CHG id or "promotion">
 - validation: <errors>, <warnings>
 - blocking findings <n>
 - non-blocking findings <n>
 - impact: <direct consumers and affected versions>
+- compatibility: backward | additive | breaking
+- risk: low | medium | high
+- approvals: owner / consumers / security-data
+- rollout: direct | flag | canary; rollback: <yes/no>
 - recommended bump: none | patch | minor | major
 - agent decisions: <count, high-risk ones, accepted or overridden>
 - open questions: <list>
-- recommendation: approve | revise | reject
+- recommendation: ready to release | revise | reject
 
 ### Blocking
 - <file>:<line> — <finding>

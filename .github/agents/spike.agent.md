@@ -17,4 +17,4 @@ Default behavior:
   fleet.
 - Stop at the timebox and demo, even if broken.
 - Ask the three feedback questions; record the decision.
-- Graduate through the spec lane, not by promoting the spike code.
+- Graduate through the bootstrap lane, not by promoting the spike code.

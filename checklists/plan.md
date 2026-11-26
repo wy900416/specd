@@ -8,9 +8,11 @@ Mark every item `pass`, `warning`, or `block`.
 
 ## 1. Preconditions
 
-- [ ] The target spec is `status: validated`. **block**
+- [ ] The target spec is `status: validated`, or `status: approved` with a
+      released `CHG`. **block**
 - [ ] `spec_sha` matches the spec's canonical hash (`SPEC.md` §9). **block**
 - [ ] The plan has `plan`, `spec`, `status`, `created`, `updated`. **block**
+- [ ] For a mature change, `change` names the released `CHG`. **block**
 - [ ] `status` is `draft` while checking. **block**
 
 ## 2. Scope and decision

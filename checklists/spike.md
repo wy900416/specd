@@ -33,7 +33,7 @@ It does not need to be complete.
 - [ ] The answers are recorded in `spikes/<id>.md`.
 - [ ] The decision is kill, iterate, or graduate.
 - [ ] If iterate: exactly one change, same timebox.
-- [ ] If graduate: the spec lane is next; the spike code is not promoted.
+- [ ] If graduate: the bootstrap lane is next; the spike code is not promoted.
 
 ## Blocked
 

@@ -7,7 +7,7 @@ rules.
 
 The default flow is **describe -> draft -> infer -> validate**. The user spends
 time describing the product, not answering a questionnaire. An agent fills the
-gaps; a different agent validates the result. Human approval is a **contract-stage**
+gaps; a different agent validates the result. Human approval is a **mature-stage**
 action, not a POC step.
 
 ## 1. Principles
@@ -23,7 +23,7 @@ action, not a POC step.
    required in the POC stage.
 5. **Inference is visible.** Every guessed fact carries a source, a basis, a risk,
    and a revisit trigger. Silent invention is still forbidden.
-6. **Version is a contract-stage decision.** In the POC stage the version stays
+6. **Version is a mature-stage decision.** In the POC stage the version stays
    `0.1.0`; git history is the change log.
 7. **The graph is readable without tooling.** Front-matter, headings, and links
    are the interface.
@@ -48,7 +48,7 @@ checklists/                       validation, context, review, plan
 templates/                        skeletons
 docs/                             rationale and operating notes
 examples/                         reference specs; not validated
-changes/                          contract-stage proposals only
+changes/                          mature-stage proposals only
 ```
 
 `specs/` contains only active specs. `examples/` contains reference material and
@@ -90,9 +90,9 @@ links: []
 | `kind` | yes | `system`, `domain`, `service`, `contract`, `flow`, `nfr`, `adr`, `standard` |
 | `title` | yes | human title |
 | `summary` | recommended | one line; the cheapest way to scan the graph before an index exists |
-| `version` | yes | `0.1.0` in `stage: poc`; semver in `stage: contract` |
-| `status` | yes | `draft`, `validated`, `deprecated` in POC; `approved`, `deprecated` in contract |
-| `stage` | recommended | `poc` (default) or `contract` |
+| `version` | yes | `0.1.0` in `stage: poc`; semver in `stage: mature` |
+| `status` | yes | `draft`, `validated`, `deprecated` in POC; `draft`, `validated`, `approved`, `deprecated` in mature |
+| `stage` | recommended | `poc` (default) or `mature` |
 | `owner` | yes | team or person |
 | `domain` | recommended | owning domain id |
 | `level` | optional | `L0` / `L1` / `L2` |
@@ -105,7 +105,7 @@ links: []
 | `validated_sha` | when `validated` | canonical content hash (see §9) |
 | `conflicts_with` | optional | list of spec ids with an open or resolved conflict |
 | `links` | optional | typed edges |
-| `approved_by`, `approved_at` | contract only | human approval |
+| `approved_by`, `approved_at` | mature only | human approval |
 
 Kind-specific fields:
 
@@ -114,12 +114,20 @@ Kind-specific fields:
 | contract | `type` (openapi / asyncapi / schema / proto / graphql / grpc / other), `path` |
 | nfr | `applies_to` (kinds and/or tags) |
 | standard | `pinned` (boolean), `applies_to` |
-| proposal | `target`, `base_version`, `bump`, `author`, `spec` |
+| proposal | `target`, `base_version`, `bump`, `risk`, `compatibility`, `owner`, `consumers`, `approvals`, `spec`, `released_as`, `released_at` |
 
 Rules:
 
-- In `stage: poc`, `version` MUST be `0.1.0`. Only a contract-stage release
+- In `stage: poc`, `version` MUST be `0.1.0`. Only a mature-stage release
   changes it.
+- In `stage: mature`, `version` is semver. A backfilled or promoted baseline
+  starts at `0.1.0` while it is a draft, and becomes `1.0.0` on approval.
+- `status: approved` requires `stage: mature`, `approved_by`, and `approved_at`.
+  In `stage: poc`, `approved` is invalid. Approval clears `validated_by`,
+  `validated_at`, and `validated_sha`: validation is the bootstrap gate, approval
+  is the baseline.
+- In `stage: mature`, `draft` and `validated` are allowed for a backfill or a
+  promotion candidate.
 - `draft` and `validated` MUST NOT carry `approved_by` or `approved_at`.
 - `status: validated` requires `validated_by`, `validated_at`, `validated_sha`,
   and a `## Validation` section whose `Result` is `pass`.
@@ -420,19 +428,78 @@ the same files.
 Set `status: deprecated`; add `superseded-by` where applicable; update incoming
 links. A deprecated spec remains readable for history.
 
-### Contract stage
+### Mature stage: evolution
 
-When the POC becomes something other people depend on, promote the spec to
-`stage: contract`. From that point:
+A mature spec is an **approved baseline**. Other specs, teams, and consumers depend
+on it. Changes are proposals, not edits.
 
-- `version` is semver and changes only on release;
-- `status: approved` requires a human `approved_by` and `approved_at`;
-- edits go through a proposal in `changes/`;
-- references use `id@version#REQ-ID`.
+Promote a spec when any of these is true: another team depends on it, it deploys
+independently, an external consumer uses its contract, it handles real money or
+PII, a reversal would be expensive, or the interface has survived two changes.
 
-Promotion triggers: an external consumer, a second team, real money or PII, a
-long-lived interface, or a change whose reversal is expensive. The contract flow
-is in [`docs/contract-mode.md`](docs/contract-mode.md).
+Promotion steps:
+
+1. Confirm every high-risk assumption and every agent decision with the user.
+2. Resolve conflicts and open questions.
+3. Set `stage: mature`, `status: approved`, `approved_by`, `approved_at`, and
+   `version: 1.0.0`; clear `validated_by`, `validated_at`, and `validated_sha`.
+4. Add the links the kind requires.
+5. Keep the `id` and `REQ-` ids stable.
+
+From that point:
+
+- the approved spec is read-only for agents;
+- `version` is semver and only a release changes it;
+- references use `id@version#REQ-ID`;
+- a change is a `CHG` in `changes/` with `base_version`, `bump`, `risk`,
+  `compatibility`, impact, rollout, rollback, and approvals;
+- release is a human action.
+
+The change loop:
+
+1. **Request.** A `CHG` names the target, `base_version`, bump, risk, motivation,
+   consumers, and proposed compatibility.
+2. **Impact.** Name every consumer, contract, test, doc, data change, and ops step
+   with a path or spec id.
+3. **Proposal.** Copy the full target body between the markers and apply only the
+   intended change. Keep `REQ-` ids stable. Remove or mark stale the old
+   `## Validation` section; an approved baseline does not carry a current bootstrap
+   validation.
+4. **Review.** Agent validation plus the tiered approval below.
+5. **Release.** A human applies the body, bumps the version, approves, and archives
+   the change.
+6. **Implement.** A single-track change goes straight to the implementer; a
+   multi-track change uses an architect plan and the fleet.
+7. **Verify.** Regression, conformance for changed `REQ-` ids, and contract
+   compatibility for every consumer.
+8. **Rollout.** Flag, canary, migration, deprecation window, and a tested rollback.
+
+Approval tiers:
+
+| Bump | Risk | Required approval |
+|---|---|---|
+| `patch` / `none` | low | owner |
+| `minor` | low / medium | owner, affected consumers notified |
+| `major` | any | owner + affected consumers; migration and rollback required |
+| any | high (security, privacy, data ownership, payments) | owner + security/data owner |
+
+Agents prepare the request, impact, proposal, and checklist. They never approve or
+release. Approvals are recorded in `approvals` with role, name, and date.
+
+Release steps:
+
+1. Verify `base_version` equals the target's current `version`.
+2. Apply the proposed body and the `spec` overrides.
+3. Set the new `version` according to `bump`.
+4. Set `status: approved`, `approved_by`, `approved_at`, `updated`; clear
+   `validated_by`, `validated_at`, and `validated_sha`.
+5. Move the change to `changes/archive/` with `status: released`,
+   `released_as`, `released_at`.
+6. Update the index and any graph view.
+
+A mature project usually starts without specs. Backfill a baseline from code,
+contracts, and tests, then use this mode. See
+[`docs/adoption.md`](docs/adoption.md) and [`docs/change-mode.md`](docs/change-mode.md).
 
 ## 9. Validation
 
@@ -451,6 +518,9 @@ is in [`docs/contract-mode.md`](docs/contract-mode.md).
 - **Independence.** The validator may read the `## Source`, the spec, the
   repository, and the checklists. It must not read the writer's chat summary or
   rationale; it judges the file.
+- **Mature change.** Validate the proposed body mechanically as a review. Do not
+  set an approved target to `status: validated`. Release readiness is
+  `checklists/change.md` plus the reviewer and the approval tier.
 
 A `## Validation` section looks like this:
 
@@ -475,7 +545,7 @@ A `## Validation` section looks like this:
 | 9 | Scope | pass | |
 | 10 | Freshness | pass | canonical hash matches |
 | 11 | Index | pass | absent |
-| 12 | Contract stage | n/a | stage: poc |
+| 12 | Mature stage | n/a | stage: poc |
 
 ### POC risks
 
@@ -490,7 +560,7 @@ A `## Validation` section looks like this:
 `## Change log` section, when present, are the record. A "version" that increments
 on every edit communicates nothing and churns every reference.
 
-### Contract stage
+### Mature stage
 
 Semver `MAJOR.MINOR.PATCH`:
 

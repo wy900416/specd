@@ -7,7 +7,7 @@ They are still useful for:
 
 - seeing the link vocabulary (`implements`, `exposes`, `consumes`, `part-of`);
 - seeing a service, a contract, a flow, an NFR, and a standard in context;
-- testing the contract-stage review without touching `specs/`.
+- testing the mature-stage review without touching `specs/`.
 
 The graph view is in [`GRAPH.md`](GRAPH.md).
 

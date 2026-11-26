@@ -100,11 +100,11 @@ by saying so; the spec returns to `draft` and is re-validated.
 
 ## Leaving POC mode
 
-When the spec is promoted to contract stage:
+When the spec is promoted to mature stage:
 
 1. Ask the user to confirm every high-risk assumption and every agent decision
    that survived.
 2. Turn accepted assumptions into requirements; keep the provenance.
 3. Move the rest to `## Open Questions` with an owner.
-4. Set `stage: contract`, start semver, and use the proposal flow in
-   [`contract-mode.md`](contract-mode.md).
+4. Set `stage: mature`, start semver, and use the proposal flow in
+   [`change-mode.md`](change-mode.md).

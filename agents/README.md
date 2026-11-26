@@ -13,27 +13,35 @@ reading them.
 | `spec-writer.md` | description -> draft | `SPEC.md`, `templates/system.md`, `docs/vibe-spec.md` |
 | `gap-filler.md` | infer, assume, escalate, conflict scan | `SPEC.md`, `.agents/skills/spec-gap-fill/` |
 | `spec-validator.md` | independent gate; sets `status: validated` | `SPEC.md`, `checklists/validate.md` |
+| `change-analyst.md` | mature change -> impact + proposal | `SPEC.md`, `docs/change-mode.md`, `checklists/change.md` |
+| `backfiller.md` | existing boundary -> draft baseline | `SPEC.md`, `docs/adoption.md` |
 | `architect.md` | validated spec -> fleet-ready plan | `SPEC.md`, `templates/plan.md`, `checklists/plan.md` |
 | `implementer.md` | implement a planned track | `SPEC.md`, `plans/<id>.md`, `.context/<id>.md` |
 | `verifier.md` | conformance tests written from the spec | `SPEC.md`, the target spec, the test strategy |
-| `spec-reviewer.md` | contract-stage consistency and impact | `SPEC.md`, `checklists/review.md` |
+| `spec-reviewer.md` | mature-stage consistency and impact | `SPEC.md`, `checklists/review.md` |
 
 ## Handoff
 
 ```text
 quick feedback:  spike -> demo -> feedback -> kill | iterate | graduate
-spec delivery:   orchestrator -> writer -> gap-filler -> validator -> architect
-                                                              |
-                                                              v
-                                            implementer + verifier (fleet)
-                                                              |
-                                             contract stage -> spec-reviewer
+bootstrap:       orchestrator -> writer -> gap-filler -> validator
+                                                          |
+                                                          v
+                                        architect -> implementer + verifier (fleet)
+evolution:       change-analyst -> validator + spec-reviewer -> human release
+                                                          |
+                                                          v
+                                        implementer / architect+fleet -> verifier
 ```
 
 - **spike** is the fast lane: one hypothesis, one demo path, fake boundaries, no
   validator/architect/fleet. It ends with a decision.
-- **orchestrator** is the spec-lane entry: it delegates one spec sequentially, then
+- **orchestrator** is the bootstrap entry: it delegates one spec sequentially, then
   plans before implementing.
+- **change-analyst** prepares a mature change: impact, compatibility, rollout,
+  rollback, approvals, proposed body.
+- **backfiller** reconstructs one existing boundary into a draft baseline; a human
+  approves it.
 - **writer** captures the description and writes the traceable draft.
 - **gap-filler** reads the repo and the user's global skills, infers, labels, and
   surfaces conflicts.
@@ -45,7 +53,7 @@ spec delivery:   orchestrator -> writer -> gap-filler -> validator -> architect
   requirement is ambiguous, it stops and reports a spec gap.
 - **verifier** gets the spec, the `## Test Strategy`, and the test harness. It
   does **not** get the architecture notes, file map, or the implementer's summary.
-- **spec-reviewer** is contract-stage only: cross-service consistency, impact, and
+- **spec-reviewer** is mature-stage only: cross-service consistency, impact, and
   version hygiene.
 
 The validator and the verifier are separate roles with explicit information

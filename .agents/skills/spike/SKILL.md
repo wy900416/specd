@@ -44,7 +44,7 @@ no fleet, no conformance suite.
 - No full spec, no validator, no architect, no fleet.
 - No design system, settings page, or edge cases.
 - One change per iteration; same timebox.
-- Graduating means the spec lane, not promoting the spike code.
+- Graduating means the bootstrap lane, not promoting the spike code.
 
 ## Output
 

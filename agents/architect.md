@@ -19,16 +19,20 @@ parallel".
 
 ## Preconditions
 
-- The target spec is `status: validated`. If it is `draft`, stop and send it back
-  to the validator. Do not design against a hypothesis.
+- The target spec is `status: validated`, or `status: approved` with a released
+  `CHG`. If it is a draft, stop and send it back to the validator. Do not design
+  against a hypothesis.
 - Record the spec's canonical hash in the plan (`spec_sha`). If the spec changes,
   the plan becomes `stale`.
 - Carry every fenced high-risk fact from the spec. Do not quietly turn it into a
   real integration.
+- A plan is for a new build or a multi-track change. A single-track mature change
+  skips the plan and goes to the implementer plus regression tests.
 
 ## Workflow
 
-1. **Scope.** List the in-scope `REQ-` ids and the explicit non-goals.
+1. **Scope.** List the in-scope `REQ-` ids and the explicit non-goals. For a
+   mature change, read the released `CHG` and use its scope.
 2. **Decide.** State a recommendation (build, build a slice, or wait), the
    smallest slice that answers the product question, and what would change the
    decision.

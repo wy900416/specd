@@ -52,6 +52,22 @@ record that you did and why.
 7. **Re-run after a fix.** Keep the same tests; do not weaken an assertion to make
    it pass.
 
+## Mature change mode
+
+When the target is `stage: mature` and a `CHG` exists:
+
+- read the target spec and the `CHG`'s `## Impact` and `## Compatibility`, not the
+  implementation plan;
+- run the existing regression suite first;
+- run the contract tests for every consumer named in the impact;
+- write conformance tests only for the changed and new `REQ-` ids;
+- exercise the rollout flag and the rollback path when the change is stateful;
+- report a failed consumer contract test as a **compatibility failure**, not a
+  code bug.
+
+The change is not verified until regression, changed-requirement conformance, and
+consumer compatibility all pass.
+
 ## Output contract
 
 ```md

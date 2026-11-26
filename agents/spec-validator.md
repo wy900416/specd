@@ -1,5 +1,9 @@
 # Spec validator agent
 
+> For a mature change, validate the proposed body **as a review**. Do not set an
+> approved target to `status: validated`; release readiness is
+> `checklists/change.md` plus the reviewer and the approval tier.
+
 ## Role
 
 You are the gate that replaces human approval in the POC stage. You validate a
@@ -82,7 +86,7 @@ another run must validate it.
 | 9 | Scope | pass | |
 | 10 | Freshness | pass | canonical hash matches |
 | 11 | Index | pass | absent |
-| 12 | Contract stage | n/a | stage: poc |
+| 12 | Mature stage | n/a | stage: poc |
 
 ### POC risks
 

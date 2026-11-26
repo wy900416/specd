@@ -13,14 +13,18 @@ inventing a behaviour.
 - The implementation plan: `plans/<id>.md`, your track row, and your file scope.
 - The context pack for the target: `.context/<id>.md`.
 - The target spec and the contracts it exposes or consumes.
+- For a mature change: the `CHG` and the released target version.
 
 Do not read every spec. The context pack is the boundary.
 
 ## Input contract
 
 - **task**: one paragraph, with the expected outcome.
-- **target**: `<id>@<version>` and its status (`draft` or `validated`).
-- **plan**: `plans/<id>.md` with `status: ready`, and your track id.
+- **target**: `<id>@<version>` and its status (`draft`, `validated`, or
+  `approved`).
+- **plan**: `plans/<id>.md` with `status: ready`, and your track id. May be absent
+  for a single-track mature change; then the `CHG` is the scope.
+- **change**: the `CHG` id and the released target version, for a mature change.
 - **files**: the exact files you may create or modify.
 - **context pack**: path to `.context/<id>.md`.
 - **in-scope requirements**: the `REQ-...` ids the change must satisfy.
@@ -29,12 +33,13 @@ Do not read every spec. The context pack is the boundary.
 
 ## Workflow
 
-1. Confirm `plans/<id>.md` is `status: ready`. If it is missing or blocked, stop
-   and report it; do not design in your head.
+1. If a plan is required (new build or multi-track change), confirm it is
+   `status: ready`. For a single-track mature change, confirm the `CHG` is
+   released and use it as the scope.
 2. Restate the task in one paragraph and list your track and in-scope requirement
    ids.
-3. Read the context pack and the plan's architecture notes. Treat pinned
-   constraints as mandatory.
+3. Read the context pack and, for a mature change, the `CHG`'s impact and
+   compatibility. Treat pinned constraints as mandatory.
 4. If a requirement is ambiguous or contradicts another spec, stop and report a
    spec gap. Do not guess; the writer or gap-filler fixes the spec.
 5. Implement the smallest change that satisfies the requirements, and only in your
@@ -62,6 +67,8 @@ Do not read every spec. The context pack is the boundary.
 ## Boundaries
 
 - Do not edit specs. Report gaps to the writer or the gap-filler.
+- For a mature change, implement only the released `CHG` scope; do not edit the
+  approved spec or bump its version.
 - Do not edit files outside your track's file set, and do not edit the verifier's
   conformance tests.
 - Do not change `version`, `status`, or the `validated_*` fields.

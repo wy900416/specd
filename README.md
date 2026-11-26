@@ -1,9 +1,8 @@
 # specd
 
-**Vibe spec for POCs.** Describe what you want; an agent drafts the spec, a second
-fills the gaps, a third validates it. An architect then plans the build, and a
-fleet implements it and writes the conformance tests. No interview, no approval
-meeting, no runtime.
+**Spec-driven development for new and mature projects.** Start with a spike when
+you need feedback; bootstrap a spec when you know what to build; evolve an approved
+baseline when the project is mature. No interview, no ceremony, no runtime.
 
 Specs are plain Markdown. There is no runtime, build step, or parser. The seed
 works with GitHub Copilot out of the box, and with any agent that reads
@@ -19,15 +18,17 @@ in the places that matter.
 A POC needs the opposite: a short description, a quick demo, and feedback before
 the spec gets heavy.
 
-## Two lanes
+## Three lanes
 
-| Lane | Question | Flow | Time |
+| Lane | Question | Flow | When |
 |---|---|---|---|
-| **Spike** | Would this be useful? | hypothesis -> demo -> feedback -> decide | 90 minutes |
-| **Spec** | What exactly to build, durably? | describe -> draft -> validate -> plan -> fleet | hours to days |
+| **Spike** | Would this be useful? | hypothesis -> demo -> feedback -> decide | 90 minutes, before a baseline |
+| **Bootstrap** | What exactly to build? | describe -> draft -> validate -> plan -> fleet | new product or POC |
+| **Evolution** | How do we change this safely? | change -> impact -> proposal -> tiered approval -> release -> verify | an approved baseline exists |
 
-Start in the spike lane when you need feedback. Graduate to the spec lane when the
-spike says keep going.
+Start with a spike when you are unsure. Bootstrap creates the first baseline.
+Evolution changes an approved baseline; it is the default once the project is
+mature.
 
 ## The spike lane (90 minutes)
 
@@ -55,14 +56,15 @@ Rules:
 - no real users, money, PII, or secrets;
 - no spec validation, architect plan, fleet, or conformance suite;
 - log on main, code on `spike/<id>`, throwaway by default;
-- graduating means the spec lane, not promoting the spike code.
+- graduating means the bootstrap lane, not promoting the spike code.
 
 Full method: [`docs/spike.md`](docs/spike.md).
 
-## The spec lane
+## The bootstrap lane
 
-The spike answered "would this be useful?". The spec lane answers "what exactly
-are we building, and how do we keep it correct?".
+The spike answered "would this be useful?". The bootstrap lane builds the first
+spec and the first implementation. When the spec is approved as a baseline, the
+project moves to evolution.
 
 ```mermaid
 flowchart LR
@@ -98,7 +100,8 @@ flowchart LR
 - **A shell** for the validator's canonical hash. Without one, the validator
   cannot bind a validation to the file.
 - **A repository to build in.** The seed is the starting point; clone it or copy
-  the files into an existing repo.
+  the files into an existing repo. For a mature project, start with
+  [`docs/adoption.md`](docs/adoption.md).
 
 Specs are inputs to agents. Do not paste credentials, private endpoints, or
 untrusted instructions into a spec.
@@ -112,7 +115,7 @@ untrusted instructions into a spec.
 ```
 
 The agent writes `spikes/<id>.md`, builds one fake path on a `spike/<id>` branch,
-and demos at the timebox. Then decide: kill, iterate, or graduate to the spec lane
+and demos at the timebox. Then decide: kill, iterate, or graduate to the bootstrap lane
 below.
 
 ### 1. Get the seed
@@ -166,6 +169,18 @@ then:
 /implement specs/system/url-shortener.md
 ```
 
+### 6. If the project is mature
+
+Do not edit an approved spec. Run:
+
+```text
+/change specs/service/orders.md "Add idempotent order creation"
+```
+
+Review the impact, compatibility, rollout, rollback, and the approvals needed. A
+human releases; a small change goes straight to the implementer, a multi-track
+change uses the architect plan and fleet.
+
 ## What a spec looks like
 
 ```md
@@ -200,17 +215,17 @@ SPEC.md                   format and lifecycle, normative
   agents/                 specd orchestrator + role specialists
   prompts/                spike, new-spec, fill-gaps, validate-spec,
                           check-conflicts, plan-implementation, implement,
-                          build-index
+                          build-index, change, backfill
 agents/                   role briefs (source of truth)
 .agents/skills/           spec-draft, spec-gap-fill, spec-validate, spec-context, spike
-checklists/               validate, context, review, plan, spike
-templates/                system + plan + spike + contract-stage kinds
-docs/                     vibe-spec, index, POC mode, contract mode, fleet, spike
+checklists/               validate, context, review, plan, change, spike
+templates/                system + plan + spike + change + mature-stage kinds
+docs/                     vibe-spec, index, POC mode, change mode, adoption, fleet, spike
 specs/                    empty; your specs land here
 spikes/                   timeboxed spike logs
 plans/                    implementation plans from the architect
 examples/demo-shop/       reference graph, outside validation
-changes/                  contract-stage proposals only
+changes/                  mature-stage proposals only
 ```
 
 ## Aggressive inference: one brake, one fence
@@ -229,7 +244,7 @@ fenced: `Risk: high`, `Confirmed: agent (POC)`, `Revisit: before production`, fa
 data, no real users, money, or PII. The validator reports them as warnings; they
 do not block the POC, and they must be confirmed before promotion.
 
-## Validation, not approval
+## Validation first, approval when mature
 
 There is no human approval step in the POC stage. The `spec-validator` agent
 applies [`checklists/validate.md`](checklists/validate.md) and is the only role
@@ -242,6 +257,10 @@ allowed to set `status: validated`.
 - Any semantic edit demotes the spec to `draft` and clears the hash.
 
 That is a stricter gate than "looks good to me", without a meeting.
+
+A mature change adds **tiered human approval** on top: owner for patch/minor,
+consumers for major, security/data for high risk. The validator still runs; the
+agent still never approves or releases.
 
 ## Copilot and other agents
 
@@ -274,7 +293,9 @@ loop.
 | Plan implementation | `architect` | architecture, file map, tracks, test strategy |
 | Implement a planned track | `implementer` | one disjoint file set |
 | Conformance tests | `verifier` | tests from the spec, not the code |
-| Contract-stage review | `spec-reviewer` | graph consistency and version hygiene |
+| Change a mature spec | `change-analyst` | impact, compatibility, proposal, approvals |
+| Adopt a mature project | `backfiller` | draft baseline from code and tests |
+| Change review | `spec-reviewer` | graph consistency, impact, version hygiene |
 | Several independent specs | `/fleet` + `specd` or `spec-writer` per file | disjoint files only |
 | Implementation + tests | `/fleet` + `implementer` / `verifier` per track | plan must be ready first |
 
@@ -292,6 +313,8 @@ the agent.
 |---|---|---|
 | `/spike` | a description | 90-minute demo, feedback, decision |
 | `/new-spec` | a description | draft, gap-fill, validate |
+| `/change` | target + change | impact, proposal, approvals for a mature spec |
+| `/backfill` | a boundary | draft baseline from existing code |
 | `/fill-gaps` | spec path | repo profile, assumptions, decisions, conflicts |
 | `/validate-spec` | spec path | `## Validation`, sets `status: validated` |
 | `/check-conflicts` | spec path | writes `## Conflicts` for the user to resolve |
@@ -313,8 +336,9 @@ spec.
 
 ## Implementation: plan → fleet
 
-A validated spec is not an implementation plan. The architect designs the
-architecture and the parallel work first.
+A validated spec (or an approved target with a released `CHG`) is not an
+implementation plan. The architect designs the architecture and the parallel work
+first.
 
 ### 1. Produce the plan
 
@@ -375,6 +399,10 @@ issue**. The plan is `done` only when every in-scope `REQ-` passes.
 If the plan has only one track total, run the implementer, then the verifier.
 Fleet is for disjoint work, not for a single file.
 
+For a **mature single-track change**, skip the plan and the fleet: run the
+implementer, then regression plus contract tests. The plan is for new builds and
+multi-track changes.
+
 Full rules and prompt patterns: [`docs/fleet.md`](docs/fleet.md).
 
 ## No index by default
@@ -391,56 +419,111 @@ A fresh seed has one to ten specs; reading them all is cheap. Add
 The index is derived from front-matter and never the source of truth. Full policy:
 [`docs/index.md`](docs/index.md).
 
-## Contract stage
+## Evolution lane: changing a mature project
 
-When another team, an external consumer, or real money/PII depends on the spec,
-promote it to `stage: contract`. Then version, human approval, and proposals start
-to pay for themselves. See [`docs/contract-mode.md`](docs/contract-mode.md).
+A mature project has an approved baseline. You do not edit it; you propose a
+change.
+
+### The loop
+
+```text
+CHG          change request: target, base_version, bump, risk, motivation
+  → impact   consumers, contracts, tests, docs, data, ops
+  → proposal full target body between markers
+  → review   agent validation + spec-reviewer + tiered approvals
+  → release  human applies, bumps version, approves, archives
+  → implement small direct / large plan + fleet
+  → verify   regression + conformance + contract compatibility
+  → rollout  flag, canary, migration, deprecation, rollback
+```
+
+### What a change contains
+
+- **Front-matter:** `target`, `base_version`, `bump`, `risk`, `compatibility`,
+  `owner`, `consumers`, `approvals`.
+- **Record:** motivation, impact (consumers, contracts, tests, docs, data, ops),
+  compatibility, rollout, rollback, migration/deprecation.
+- **Proposed body:** the full target body between
+  `<!-- BEGIN PROPOSED BODY -->` and `<!-- END PROPOSED BODY -->`.
+
+Release applies only the proposed body.
+
+### Tiered approval
+
+| Bump | Risk | Human approval |
+|---|---|---|
+| `patch` / `none` | low | owner |
+| `minor` | low / medium | owner; affected consumers notified |
+| `major` | any | owner + affected consumers; migration and rollback |
+| any | high (security, privacy, data, payments) | owner + security/data owner |
+
+Agents prepare the request, impact, proposal, and checklist. They never approve or
+release. The agent validator and `spec-reviewer` are still required.
+
+### Small vs large changes
+
+| Change | Path |
+|---|---|
+| One file / one track | implementer + regression tests |
+| Several disjoint tracks | architect plan + fleet + conformance tests |
+| Contract or data migration | migration plan, rollout, rollback |
+
+### Adopting a mature project
+
+If the project has no specs, backfill a baseline first: `/backfill` for one
+boundary, or the manual baseline in [`docs/adoption.md`](docs/adoption.md). A human
+approves the `1.0.0` baseline; then every change uses this lane.
+
+Full method: [`docs/change-mode.md`](docs/change-mode.md).
 
 ## Adopt in an existing repository
 
 1. Copy `AGENTS.md`, `SPEC.md`, `.github/`, `agents/`, `.agents/skills/`,
    `checklists/`, `templates/`, and `docs/` into your repository.
-2. Create `specs/` and `plans/`; empty directories are fine.
+2. Create `specs/`, `plans/`, and `changes/archive/`; empty directories are fine.
 3. **Merge, do not overwrite.** Keep your existing `README`, `AGENTS.md`,
    `.github/copilot-instructions.md`, CI, and test config. Add the specd sections
    to them instead of replacing them.
-4. Describe the change in the new repo. The writer profiles your stack,
-   conventions, and existing specs.
-5. Run `/check-conflicts` if you already have specs; the user resolves any
-   conflict.
-6. Validate, plan, implement.
+4. **No specs yet?** Backfill one boundary: run `/backfill <boundary>` and let a
+   human approve the `1.0.0` baseline, or write it manually with the bootstrap
+   flow. Start with the highest-churn or highest-blast-radius boundary.
+5. **Existing specs?** Import them, normalize ids and links, validate, and approve
+   the baseline. Do not let an agent approve it.
+6. From then on, every change is a `CHG` in the evolution lane: `/change`.
 
-If the repository already has specs, keep them. The writer scans front-matter for
-ids and the gap-filler scans for conflicts.
+Do not backfill the whole system. A baseline that is never read is documentation,
+not a spec. Full path: [`docs/adoption.md`](docs/adoption.md).
 
-## Change a validated spec
+## Change a spec
 
-1. Say what changed, in one message.
-2. The writer or gap-filler edits the spec and sets `status: draft`; the
-   `validated_*` fields are cleared.
-3. The validator re-runs and records a new canonical hash.
-4. The plan becomes `stale`; re-run `/plan-implementation` before more code.
-5. The user reacts to the running product; repeat.
+**Bootstrap (`draft` / `validated`):** edit the spec, set `status: draft`, clear
+the `validated_*` fields, and re-run the validator. The plan becomes `stale`; re-run
+`/plan-implementation` before more code.
 
-In the POC stage, do not route an edit through a proposal. Proposals and semver
-start at contract stage.
+**Mature (`approved`):** never edit the spec. Run `/change`, review the impact,
+compatibility, rollout, and approvals, then let a human release it. A small
+single-track change goes straight to the implementer; a multi-track change uses
+the architect plan and fleet.
 
 ## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
-| The delivery flow feels slow | That is the spec lane. Use `/spike` for a 90-minute demo first; graduate only after the feedback. |
+| The delivery flow feels slow | That is the bootstrap lane. Use `/spike` for a 90-minute demo first. In a mature project, small changes skip the plan and fleet. |
 | `specd` is not in the agent picker | Reload the window. Confirm `.github/agents/specd.agent.md` exists. Use `/new-spec` as a fallback. |
 | `/fleet` is missing | `/fleet` is a Copilot CLI/app command. In VS Code, use the custom agents and subagents, or run `/plan-implementation` then `/implement`. |
 | Prompt files do not appear on github.com | Prompt files are an IDE surface. Use the custom agents there, or describe the step. |
 | The gap-filler found no global skills | Normal. It records "not accessible" in `## Repo Profile` and continues. |
 | Validation is blocked | Read `## Validation`; the blocking list names the fix. Common: a requirement has no `Source`; a user-reserved fact is still `needs-human`; a conflict is open; the hash is stale. |
-| The version is still `0.1.0` | Intentional in `stage: poc`. Semver starts at contract promotion. |
+| The version is still `0.1.0` | Intentional in `stage: poc`. Semver starts when the spec is approved as a mature baseline. |
+| I need to change an approved spec | Never edit it. Run `/change`, review impact and approvals, and let a human release. |
+| A mature project has no specs | Backfill one boundary with `/backfill`, or write the manual baseline in `docs/adoption.md`. |
+| A mature change is blocked | Check `checklists/change.md`: missing consumer, major without sign-off, no migration/rollback, or a high-risk change without the security/data owner. |
 | The plan says `stale` | The spec changed. Re-run `/plan-implementation`; do not reuse the old file map. |
 | Two agents overwrote each other | The plan assigned one file to two tracks. Fix the file map, then re-run. |
 | The spec is too large | Keep one system spec; split only on evidence. See [`docs/one-big-spec.md`](docs/one-big-spec.md). |
-| I want a human approval gate | The seed has none by design. Add your own review step; the validator and the plan are the built-in gates. |
+| I want no human approval | Bootstrap is agent-validated. Mature changes are tiered by design; a major change needs consumers. |
+| I want a human approval gate on bootstrap | Add your own review step; the validator is the built-in gate. |
 
 ## Design decisions
 
@@ -448,11 +531,14 @@ start at contract stage.
 |---|---|---|
 | Spike before spec | A POC needs feedback before precision | Spike code is throwaway |
 | Describe, don't interview | The first useful answers come from a running product | The draft may be thin; labels expose it |
-| Agent validation instead of human approval | Speed without silent invention | A checklist can miss a product mistake |
+| Agent validation + tiered human approval | Speed in bootstrap, safety in evolution | More approval steps for major changes |
+| Mature changes are proposals | An approved baseline is read-only; consumers need impact | A change record to write |
+| Backfill before evolution | A mature project needs a baseline before changes | Time to reconstruct current behaviour |
+| Small changes skip fleet | A one-file change does not need a plan or coordination | Large changes still need one |
 | Plan before fleet | Parallel agents need disjoint files and a complete test map | One architect step |
 | Aggressive, labelled inference | The user reacts to a default faster than to a question | More assumptions to review |
 | High-risk facts are fenced | A POC can test with fake data without guessing production policy | Must be confirmed before promotion |
-| `version` stays `0.1.0` in POC | A version that changes on every edit means nothing | Contract stage must start semver |
+| `version` stays `0.1.0` in POC | A version that changes on every edit means nothing | Mature stage must start semver |
 | One `system` spec first | Boundaries are hypotheses at POC stage | Split later on evidence |
 | Separate validator | The writer cannot grade its own work | One more run |
 | Global skills read-only | Preferences inform the stack; they are not requirements | Fewer personal details copied |
@@ -466,6 +552,10 @@ start at contract stage.
   and graduation.
 - [`docs/poc-mode.md`](docs/poc-mode.md) — inference, assumptions, and high-risk
   facts.
+- [`docs/change-mode.md`](docs/change-mode.md) — evolution, impact, tiered
+  approval, release, rollout.
+- [`docs/adoption.md`](docs/adoption.md) — backfill and manual baseline for a
+  mature project.
 - [`docs/index.md`](docs/index.md) — when an index earns its keep.
 - [`docs/fleet.md`](docs/fleet.md) — when parallel subagents help, and when they
   corrupt the work.
@@ -480,5 +570,7 @@ start at contract stage.
   product is worth building.
 - Not an interview. The user describes once; the agent infers until a
   user-reserved fact or a conflict forces a question.
-- Not a delivery pipeline for a POC. Use the spike lane to learn; use the spec
-  lane to deliver.
+- Not POC-only. The evolution lane is the long-term mode: approved baselines,
+  changes, impact, release, rollout.
+- Not a delivery pipeline for a POC. Use the spike lane to learn; use bootstrap to
+  establish the baseline; use evolution to change it.

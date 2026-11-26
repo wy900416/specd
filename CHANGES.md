@@ -1,60 +1,84 @@
 # Change proposals
 
-> **Contract stage only.** A POC-stage spec is a draft: edit it directly and
-> re-validate. Do not create a proposal for a `stage: poc` spec. Use this flow
-> only after promotion to `stage: contract`.
+> **Mature stage only.** A bootstrap spec (`stage: poc`) is a draft: edit it
+> directly and re-validate. A proposal is for an `approved` baseline.
 
-An approved spec is read-only for agents. A change is a **copy** of the target in
-this directory, with a proposal front-matter and the full proposed body.
+A mature change is a **change record plus a proposed target body**, stored in
+`changes/`. The record explains why, who is affected, and how it rolls out; the
+proposed body is the full replacement for the target.
 
 ## Create one
 
-1. Copy `specs/<kind>/<target>.md` to
-   `changes/CHG-<YYYYMMDD>-<nnn>-<target>.md`.
-2. Convert the front-matter to:
+Use `/change` or the `change-analyst` agent. It:
 
-   ```yaml
-   ---
-   id: CHG-20261117-001-orders
-   kind: change
-   title: "Add idempotent order creation"
-   target: orders
-   base_version: 0.1.0
-   bump: minor
-   status: proposed
-   author: "agent"
-   created: 2026-11-17
-   summary: "Make order creation idempotent."
-   spec: {}
-   ---
-   ```
+1. reads the approved target and its consumers;
+2. writes the impact, compatibility, rollout, and rollback sections;
+3. copies the target body between the markers;
+4. proposes `bump`, `risk`, and `compatibility`;
+5. records the approvals needed.
 
-3. Keep the target body, then edit it as the proposed replacement.
-4. Put front-matter changes in `spec:`; leave it `{}` when only the body changes.
+## Format
+
+`changes/CHG-<YYYYMMDD>-<nnn>-<target>.md`:
+
+```yaml
+---
+id: CHG-20261126-001-orders
+kind: change
+title: "Add idempotent order creation"
+target: orders
+base_version: 1.4.2
+bump: minor
+risk: medium
+compatibility: additive
+status: proposed
+author: "agent"
+owner: "orders-team"
+consumers: [checkout, admin]
+approvals: []
+created: 2026-11-26
+updated: 2026-11-26
+summary: "Make order creation idempotent."
+spec: {}
+---
+```
+
+The body has the change record, then:
+
+```md
+<!-- BEGIN PROPOSED BODY -->
+<the full proposed body of the target spec>
+<!-- END PROPOSED BODY -->
+```
+
+Release applies only the section between the markers.
 
 ## Review
 
-- Compare the target and the proposal side by side. The diff is derived, not
-  stored.
-- Apply `checklists/validate.md` and `checklists/review.md`.
+- Apply [`checklists/change.md`](checklists/change.md).
+- Compare the target and the proposed body side by side; the diff is derived.
 - Confirm `base_version` equals the target's current `version`.
-- Confirm the `bump` matches the semantic change.
+- Confirm `bump`, `risk`, and `compatibility` agree.
+- Confirm the approval tier: owner, consumers for major, security/data for high
+  risk.
+- Confirm regression and contract tests are identified.
 
 ## Release
 
-A human releases the proposal:
+A human releases:
 
-1. Apply the proposal body to the target file.
-2. Apply the `spec` overrides.
+1. Verify `base_version`.
+2. Apply the proposed body and the `spec` overrides.
 3. Set the new `version` according to `bump`.
-4. Set `status: approved`, `approved_by`, `approved_at`, `updated`.
-5. Move the proposal to `changes/archive/` with `status: released` and
-   `released_as: <version>`.
+4. Set `status: approved`, `approved_by`, `approved_at`, `updated`; clear
+   `validated_by`, `validated_at`, and `validated_sha`.
+5. Move the change to `changes/archive/` with `status: released`,
+   `released_as`, `released_at`.
+6. Update the index and any graph view.
 
-An agent may prepare the diff and the edited target, but must not perform steps
-3-5.
+An agent may prepare 1-3 and present the diff. It must not execute 4-6.
 
 ## Naming
 
-`CHG-<YYYYMMDD>-<nnn>-<target>.md`, for example
-`CHG-20261117-001-orders.md`. The number is sequential within the day.
+`CHG-<YYYYMMDD>-<nnn>-<target>.md`. The number is sequential within the day. Keep
+the file name even after archiving; the id is the stable reference.

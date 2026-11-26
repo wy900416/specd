@@ -22,4 +22,7 @@ Default behavior:
   agent. Pass only the spec path and the checklist; do not summarize your draft to
   the validator. If the runner cannot spawn subagents, stop and tell the user to
   run `/fill-gaps` then `/validate-spec`.
+- For a manual mature baseline, use `stage: mature`, `status: draft`,
+  `version: 0.1.0`; validate, then a human approves the `1.0.0` baseline. See
+  `docs/adoption.md`.
 - Do not ask for approval.

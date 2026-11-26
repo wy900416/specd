@@ -2,6 +2,7 @@
 plan: "plan-{{spec_id}}"
 spec: "{{spec_id}}"
 spec_sha: "{{spec_sha}}"
+change: ""
 status: draft
 created: {{date}}
 updated: {{date}}

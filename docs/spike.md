@@ -1,11 +1,11 @@
 # Spike lane: quick feedback
 
-A POC is a **learning loop**, not a delivery pipeline. The spec lane is for
+A POC is a **learning loop**, not a delivery pipeline. The bootstrap lane is for
 building the right thing durably. The spike lane is for learning what the right
 thing is.
 
 Use a spike when the question is "would this be useful?" and you need to see
-something today. Use the spec lane when the spike says "keep going".
+something today. Use the bootstrap lane when the spike says "keep going".
 
 ## The 90-minute loop
 
@@ -77,7 +77,7 @@ Record the answers in `spikes/<id>.md`. Do not defend the demo; listen.
 |---|---|---|
 | **Kill** | The signal was not there | Archive the branch; keep the learnings |
 | **Iterate** | The signal is promising, one thing is wrong | One change, one new demo, same timebox |
-| **Graduate** | This should become real | Enter the spec lane |
+| **Graduate** | This should become real | Enter the bootstrap lane |
 
 ## Rules
 
@@ -88,10 +88,10 @@ Record the answers in `spikes/<id>.md`. Do not defend the demo; listen.
 - **Fake everything external:** auth, payments, email, third-party APIs, PII.
 - **No real users, money, or private data.**
 - **No spec validation, no architect plan, no fleet, no conformance suite.**
-- **No promotion of spike code.** Graduating means the spec lane, then a clean
+- **No promotion of spike code.** Graduating means the bootstrap lane, then a clean
   implementation. The spike is a reference, not the base.
 
-## Graduate to the spec lane
+## Graduate to the bootstrap lane
 
 1. Write the spec from what the demo taught you: `/new-spec` with the hypothesis,
    the demo path, and the feedback.
@@ -115,4 +115,4 @@ Record the answers in `spikes/<id>.md`. Do not defend the demo; listen.
 - The user already knows exactly what to build and needs it durable.
 - You cannot fake the external dependency and the real one is slow to obtain.
 
-For those, use the spec lane.
+For those, use the bootstrap lane.

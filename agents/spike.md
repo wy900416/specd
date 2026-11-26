@@ -25,7 +25,7 @@ or a conformance suite.
 6. **Demo.** At the timebox, stop and show it, even if broken. Use the four-line
    demo script.
 7. **Feedback.** Ask the three questions; record the answers.
-8. **Decide.** Kill, iterate once, or graduate to the spec lane.
+8. **Decide.** Kill, iterate once, or graduate to the bootstrap lane.
 
 ## Output
 
@@ -51,4 +51,4 @@ or a conformance suite.
 - Do not use real users, money, PII, or production credentials.
 - Do not extend the timebox without the user's explicit yes.
 - Do not polish; the demo is for learning.
-- Do not present spike code as production code. Graduating means the spec lane.
+- Do not present spike code as production code. Graduating means the bootstrap lane.

@@ -11,10 +11,11 @@ and the merge; you do not write every section yourself.
 - `AGENTS.md` — routing and hard rules.
 - `SPEC.md` — the format and lifecycle.
 - `docs/fleet.md` — when parallel subagents help and when they corrupt the work.
+- `docs/change-mode.md` — mature changes, impact, approval tiers, release.
 - `agents/spec-writer.md`, `agents/gap-filler.md`, `agents/spec-validator.md`,
-  `agents/architect.md`.
+  `agents/architect.md`, `agents/change-analyst.md`, `agents/spec-reviewer.md`.
 
-## Four paths
+## Five paths
 
 ### Spike (quick feedback)
 
@@ -27,6 +28,22 @@ demo:
 4. Kill -> archive the branch; iterate -> one change; graduate -> the spec path.
 
 A spike is not a spec and not a plan. Its code is throwaway.
+
+### Mature change (evolution)
+
+When the target is `stage: mature`, `status: approved`, and the user asks for a
+change:
+
+1. Hand the target and the request to the `change-analyst` agent.
+2. It writes `changes/CHG-...-<target>.md` with impact, compatibility, rollout,
+   rollback, and the proposed body.
+3. The `spec-validator` checks the proposed body; the `spec-reviewer` checks the
+   graph, consumers, and bump.
+4. Report the approvals needed by tier. A human approves and releases.
+5. After release, a single-track change goes to the implementer plus regression; a
+   multi-track change uses the architect plan and fleet.
+
+Do not edit the approved target. Do not let an agent approve or release.
 
 ### One spec (default)
 
@@ -97,27 +114,29 @@ When the user says implement, build, or code it:
 - A subagent's prompt must be self-contained: it cannot see this conversation.
 - If the runner cannot invoke subagents, stop and tell the user which prompt to run
   next (`/new-spec`, `/fill-gaps`, `/validate-spec`, `/plan-implementation`,
-  `/implement`).
+  `/implement`, `/change`, `/backfill`).
 
 ## Output
 
 ```md
 ## Specd run
 - spec: specs/system/<id>.md
-- mode: spike | single | fleet
-- delegated: writer, gap-filler, validator, architect, implementer, verifier, ...
+- mode: spike | bootstrap | change | fleet
+- delegated: writer, gap-filler, validator, architect, change-analyst, reviewer, implementer, verifier, ...
 - plan: plans/<id>.md (ready | draft | stale | none)
+- change: changes/CHG-...-<target>.md (none for a new build)
 - requirements: REQ-...
 - fenced high-risk: <n>
 - validation: pass | blocked
 - open conflicts: <n>
-- next: build | fix findings | ask the user
+- next: build | release | fix findings | ask the user
 ```
 
 ## Boundaries
 
 - Do not set `status: validated` yourself; only the validator does.
-- Do not let a spike become the implementation. Graduating means the spec lane.
+- Do not edit an approved spec; a mature change is a `CHG`.
+- Do not let a spike become the implementation. Graduating means the bootstrap lane.
 - Do not start implementation without a `status: ready` plan.
 - Do not let the verifier read the architecture notes or the implementation plan's
   file map.
