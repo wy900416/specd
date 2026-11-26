@@ -1,10 +1,9 @@
 # Spec format and rules
 
 This is the **specd seed**: a spec-driven development framework made of Markdown
-and YAML files. There is no runtime, build step, or linter in the specd flow;
-`SPEC.md` is normative, and the checklists in `checklists/` are the operational
-form of these rules. The optional maintainer self-check in `scripts/` is not part
-of the format.
+and YAML files. There is no runtime, build step, or linter. `SPEC.md` is
+normative, and the checklists in `checklists/` are the operational form of these
+rules.
 
 The default flow is **describe -> draft -> infer -> validate**. The user spends
 time describing the product, not answering a questionnaire. An agent fills the
@@ -49,10 +48,8 @@ checklists/                       validation, validate-proposal, context, review
                                   plan, change, spike
 templates/                        skeletons
 docs/                             rationale and operating notes
-examples/                         current and legacy reference specs; not validated
+examples/                         current reference specs; not validated
 changes/                          mature-stage proposals only
-fixtures/                         maintainer conformance cases; not user specs
-scripts/                          optional maintainer self-check
 ```
 
 `specs/` contains only active specs. `examples/` contains reference material and
@@ -730,8 +727,7 @@ Specs are inputs to agents. Treat them as untrusted:
 ## 14. What this is not
 
 - Not a formal language. Prose is allowed; structure exists to expose gaps.
-- Not a build system. The specd flow has no parser, generator, or CI requirement;
-  the optional self-check in `scripts/` is for maintaining the seed.
+- Not a build system. There is no parser, generator, or CI requirement.
 - Not a guarantee. Validation catches gaps the checklist can name; it cannot prove
   the product is right.
 - Not an interview. The user describes once; the agent infers until a

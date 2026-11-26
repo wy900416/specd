@@ -1,7 +1,7 @@
 # Validation checklist
 
 The `spec-validator` agent applies this checklist before setting
-`status: validated`. There is no required linter: read the files, open the evidence, and
+`status: validated`. There is no linter: read the files, open the evidence, and
 record findings. A finding without a file and line is not a finding.
 
 Mark every item `pass`, `warning`, or `block`.

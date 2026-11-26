@@ -4,8 +4,7 @@
 you need feedback; bootstrap a spec when you know what to build; evolve an approved
 baseline when the project is mature. No interview, no ceremony, no runtime.
 
-Specs are plain Markdown. There is no runtime, build step, or parser in the specd
-flow. The optional maintainer self-check in `scripts/` is not part of it. The seed
+Specs are plain Markdown. There is no runtime, build step, or parser. The seed
 works with GitHub Copilot out of the box, and with any agent that reads
 [`AGENTS.md`](AGENTS.md).
 
@@ -128,9 +127,6 @@ spikes/                   timeboxed demo logs
 plans/                    implementation plans from the architect
 changes/                  mature-stage proposals only
 examples/poc-url-shortener/ current POC example, outside validation
-examples/legacy-v1/       frozen v1 reference graph
-scripts/                  framework self-check (maintainers)
-fixtures/                 framework conformance cases (maintainers)
 ```
 
 Annotated layout, including what to copy into an existing repo:
@@ -140,18 +136,6 @@ Annotated layout, including what to copy into an existing repo:
 
 The full index is [`docs/README.md`](docs/README.md). It has reading paths for a
 demo, a new project, a mature change, an adoption, and reference work.
-
-## Maintaining this seed
-
-The framework's own mechanical rules have fixtures:
-
-```bash
-node scripts/framework-check.mjs
-```
-
-It checks the canonical hash boundary, approval and validation records, the change
-review artifacts, and wrapper/brief drift. See
-[`fixtures/README.md`](fixtures/README.md). It is not needed to use specd.
 
 ## Normative references
 
@@ -165,8 +149,7 @@ review artifacts, and wrapper/brief drift. See
 ## What this is not
 
 - Not a formal language. Prose is allowed; structure exists to expose gaps.
-- Not a build system. The specd flow has no parser, generator, or CI requirement;
-  the optional self-check in `scripts/` is for maintaining the seed.
+- Not a build system. There is no parser, generator, or CI requirement.
 - Not a guarantee. Validation catches what the checklist can name, not whether the
   product is worth building.
 - Not an interview. The user describes once; the agent infers until a

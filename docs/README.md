@@ -72,8 +72,7 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 | Document | What it covers |
 |---|---|
 | [`troubleshooting.md`](troubleshooting.md) | Symptom → fix for the common stalls |
-| [`../examples/README.md`](../examples/README.md) | Current and legacy example specs |
-| [`../fixtures/README.md`](../fixtures/README.md) | Framework conformance cases and the self-check |
+| [`../examples/README.md`](../examples/README.md) | Current example specs |
 | [`../SPEC.md`](../SPEC.md) | Normative format and lifecycle |
 | [`../AGENTS.md`](../AGENTS.md) | Agent entry point and hard rules |
 | [`../checklists/validate.md`](../checklists/validate.md) | The bootstrap validation gate |

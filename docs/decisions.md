@@ -22,7 +22,7 @@ stops paying for itself, this table is where the argument starts.
 | Separate validator | The writer cannot grade its own work | One more run |
 | Global skills read-only | Preferences inform the stack; they are not requirements | Fewer personal details copied |
 | No index until scale | A second list drifts | Agents read all specs while small |
-| Plain Markdown | Portable, diffable, no runtime | Optional self-check; no enforced lint |
+| Plain Markdown | Portable, diffable, no runtime | No automated lint |
 
 ## Related reading
 

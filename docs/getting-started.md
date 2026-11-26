@@ -13,8 +13,6 @@ From an empty seed to a validated spec, then to code. For the reasoning, see
   - any agent that reads [`AGENTS.md`](../AGENTS.md) (DSH, Claude Code, Cursor).
 - **A shell** for the validator's canonical hash. Without one, the validator
   cannot bind a validation to the file.
-- **Node 20+ (optional).** Only needed to run the seed's own fixtures:
-  `node scripts/framework-check.mjs`. It is not part of the specd user flow.
 - **A repository to build in.** The seed is the starting point; clone it or copy
   the files into an existing repo. For a mature project, start with
   [`adoption.md`](adoption.md).

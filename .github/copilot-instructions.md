@@ -1,7 +1,6 @@
 # specd seed
 
-This repository is a **specd seed**: Markdown specs, no runtime or build step
-in the specd flow. The optional maintainer self-check lives in `scripts/`.
+This repository is a **specd seed**: Markdown specs, no runtime, no build step.
 Use it for a new project (bootstrap), a quick spike, or a change to a mature
 project (evolution).
 

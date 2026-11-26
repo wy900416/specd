@@ -13,6 +13,5 @@ Try it:
 /validate-spec examples/poc-url-shortener/specs/system/url-shortener.md
 ```
 
-Unlike [`../legacy-v1/demo-shop/`](../legacy-v1/demo-shop/), this file uses the
-current `## Source`, `## Repo Profile`, `## Assumptions`, `## Agent Decisions`, and
-marker-delimited `## Validation` sections.
+This file uses the current `## Source`, `## Repo Profile`, `## Assumptions`,
+`## Agent Decisions`, and marker-delimited `## Validation` sections.

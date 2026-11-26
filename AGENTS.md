@@ -160,7 +160,6 @@ specs/                active specs; empty in a fresh seed
 spikes/               timeboxed spike logs
 plans/                implementation plans (architect)
 examples/             reference specs, outside validation
-fixtures/, scripts/   framework self-check; not user specs
 changes/              mature-stage proposals only
 ```
 
