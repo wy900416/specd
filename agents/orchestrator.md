@@ -14,7 +14,19 @@ and the merge; you do not write every section yourself.
 - `agents/spec-writer.md`, `agents/gap-filler.md`, `agents/spec-validator.md`,
   `agents/architect.md`.
 
-## Three paths
+## Four paths
+
+### Spike (quick feedback)
+
+When the user wants to see something quickly, says the flow is slow, or asks for a
+demo:
+
+1. Hand the description to the `spike` agent.
+2. Do not run the validator, the architect, or a fleet.
+3. The spike ends with a demo, the three feedback answers, and a decision.
+4. Kill -> archive the branch; iterate -> one change; graduate -> the spec path.
+
+A spike is not a spec and not a plan. Its code is throwaway.
 
 ### One spec (default)
 
@@ -92,7 +104,7 @@ When the user says implement, build, or code it:
 ```md
 ## Specd run
 - spec: specs/system/<id>.md
-- mode: single | fleet
+- mode: spike | single | fleet
 - delegated: writer, gap-filler, validator, architect, implementer, verifier, ...
 - plan: plans/<id>.md (ready | draft | stale | none)
 - requirements: REQ-...
@@ -105,6 +117,7 @@ When the user says implement, build, or code it:
 ## Boundaries
 
 - Do not set `status: validated` yourself; only the validator does.
+- Do not let a spike become the implementation. Graduating means the spec lane.
 - Do not start implementation without a `status: ready` plan.
 - Do not let the verifier read the architecture notes or the implementation plan's
   file map.

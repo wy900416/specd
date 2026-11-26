@@ -2,6 +2,9 @@
 .context/
 .spec-cache/
 
+# tool caches
+.npm-cache/
+
 # OS / editor
 .DS_Store
 *.swp

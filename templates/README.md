@@ -5,6 +5,7 @@ The seed starts with **one kind**: `system`.
 | Template | Use |
 |---|---|
 | `system.md` | The POC default. One per product; describes the boundary, actors, and requirements. |
+| `spike.md` | Timeboxed demo log: hypothesis, demo contract, feedback, decision. |
 | `plan.md` | Implementation plan from the architect: architecture, file map, tracks, test strategy. |
 | `service.md` | Contract stage. A deployable unit that owns one domain and at least one contract. |
 | `contract.md` | Contract stage. A wire interface plus its compatibility policy. |

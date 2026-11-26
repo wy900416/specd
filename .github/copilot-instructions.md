@@ -8,6 +8,14 @@ delegate to `spec-writer`, `gap-filler`, and `spec-validator`. Use `/fleet` or
 parallel subagents only for disjoint files; parallelize reads and serialize
 writes. See `docs/fleet.md`.
 
+## When the user wants quick feedback
+
+Use the `spike` agent and `docs/spike.md`. One hypothesis, one demo path, fake
+boundaries, a 90-minute timebox. Skip the validator, the architect, and the fleet.
+Record `spikes/<id>.md` on main; put the code on a `spike/<id>` branch. End with
+kill, iterate, or graduate. Graduating enters the spec lane; the spike code is not
+promoted.
+
 ## When the user describes something to build
 
 1. **Do not interview.** Read the repository first: manifests, `README*`,

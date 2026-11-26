@@ -41,6 +41,7 @@ SPEC.md                           this file, normative
 specs/<kind>/<id>.md              active specs; empty in a fresh seed
 specs/INDEX.md                    generated on demand; never the source of truth
 plans/<spec-id>.md                implementation plans from the architect
+spikes/<id>.md                    timeboxed spike logs; never validated
 agents/                           role briefs
 .agents/skills/                   skills (Copilot auto-discovers this path)
 checklists/                       validation, context, review, plan
@@ -51,7 +52,9 @@ changes/                          contract-stage proposals only
 ```
 
 `specs/` contains only active specs. `examples/` contains reference material and
-is outside validation. `GRAPH.md` is a view, not the source of truth.
+is outside validation. `spikes/` contains timeboxed spike logs: a spike is not a
+spec, is never validated, and is throwaway unless it graduates. `GRAPH.md` is a
+view, not the source of truth.
 
 ## 3. Front-matter
 

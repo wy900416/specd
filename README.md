@@ -16,10 +16,53 @@ abstract questions before there is anything to react to, then treat the answers 
 a contract. The user spends an hour on a questionnaire and the spec is still wrong
 in the places that matter.
 
-A POC needs the opposite: a short description, a fast draft, labelled guesses, and
-a gate that catches the dangerous ones.
+A POC needs the opposite: a short description, a quick demo, and feedback before
+the spec gets heavy.
 
-## The loop
+## Two lanes
+
+| Lane | Question | Flow | Time |
+|---|---|---|---|
+| **Spike** | Would this be useful? | hypothesis -> demo -> feedback -> decide | 90 minutes |
+| **Spec** | What exactly to build, durably? | describe -> draft -> validate -> plan -> fleet | hours to days |
+
+Start in the spike lane when you need feedback. Graduate to the spec lane when the
+spike says keep going.
+
+## The spike lane (90 minutes)
+
+A spike is a timeboxed demo, not a spec. No validator, no architect, no fleet, no
+conformance suite.
+
+1. **Hypothesis.** One sentence: we believe `<user>` will `<action>` because
+   `<reason>`; we will know it worked if `<signal>`.
+2. **Demo contract.** One path, fake boundaries, one run command, one artifact.
+   Write it in `spikes/<id>.md`.
+3. **Build.** One agent, one vertical slice, the simplest stack that runs. Fake
+   auth, data, payments, and integrations.
+4. **Demo at the timebox.** 90 minutes by default; stop and show it, even if
+   broken.
+5. **Feedback.** Ask: what did you expect, what surprised you, would you use it
+   again?
+6. **Decide.** Kill, iterate once, or graduate.
+
+```text
+/spike Build a URL shortener for a small internal team...
+```
+
+Rules:
+
+- no real users, money, PII, or secrets;
+- no spec validation, architect plan, fleet, or conformance suite;
+- log on main, code on `spike/<id>`, throwaway by default;
+- graduating means the spec lane, not promoting the spike code.
+
+Full method: [`docs/spike.md`](docs/spike.md).
+
+## The spec lane
+
+The spike answered "would this be useful?". The spec lane answers "what exactly
+are we building, and how do we keep it correct?".
 
 ```mermaid
 flowchart LR
@@ -61,6 +104,16 @@ Specs are inputs to agents. Do not paste credentials, private endpoints, or
 untrusted instructions into a spec.
 
 ## Quick start
+
+### 0. Want a demo first?
+
+```text
+/spike Build a URL shortener for a small internal team. Links expire after 30 days.
+```
+
+The agent writes `spikes/<id>.md`, builds one fake path on a `spike/<id>` branch,
+and demos at the timebox. Then decide: kill, iterate, or graduate to the spec lane
+below.
 
 ### 1. Get the seed
 
@@ -145,14 +198,16 @@ SPEC.md                   format and lifecycle, normative
   copilot-instructions.md always-on rules
   instructions/           path-scoped rules (specs/**)
   agents/                 specd orchestrator + role specialists
-  prompts/                new-spec, fill-gaps, validate-spec, check-conflicts,
-                          plan-implementation, implement, build-index
+  prompts/                spike, new-spec, fill-gaps, validate-spec,
+                          check-conflicts, plan-implementation, implement,
+                          build-index
 agents/                   role briefs (source of truth)
-.agents/skills/           spec-draft, spec-gap-fill, spec-validate, spec-context
-checklists/               validate, context, review, plan
-templates/                system + plan + contract-stage kinds
-docs/                     vibe-spec, index, POC mode, contract mode, fleet
+.agents/skills/           spec-draft, spec-gap-fill, spec-validate, spec-context, spike
+checklists/               validate, context, review, plan, spike
+templates/                system + plan + spike + contract-stage kinds
+docs/                     vibe-spec, index, POC mode, contract mode, fleet, spike
 specs/                    empty; your specs land here
+spikes/                   timeboxed spike logs
 plans/                    implementation plans from the architect
 examples/demo-shop/       reference graph, outside validation
 changes/                  contract-stage proposals only
@@ -211,6 +266,7 @@ loop.
 
 | Task | Agent | Why |
 |---|---|---|
+| Quick feedback / a demo | `spike` | one path, fake data, 90 minutes |
 | New spec, end to end | `specd` | routes writer -> gap-filler -> validator |
 | Draft only | `spec-writer` | no gap-fill or validation |
 | Fill gaps on an existing draft | `gap-filler` | repo + global-skill inference |
@@ -234,6 +290,7 @@ the agent.
 
 | Command | Input | What it does |
 |---|---|---|
+| `/spike` | a description | 90-minute demo, feedback, decision |
 | `/new-spec` | a description | draft, gap-fill, validate |
 | `/fill-gaps` | spec path | repo profile, assumptions, decisions, conflicts |
 | `/validate-spec` | spec path | `## Validation`, sets `status: validated` |
@@ -373,6 +430,7 @@ start at contract stage.
 
 | Symptom | Fix |
 |---|---|
+| The delivery flow feels slow | That is the spec lane. Use `/spike` for a 90-minute demo first; graduate only after the feedback. |
 | `specd` is not in the agent picker | Reload the window. Confirm `.github/agents/specd.agent.md` exists. Use `/new-spec` as a fallback. |
 | `/fleet` is missing | `/fleet` is a Copilot CLI/app command. In VS Code, use the custom agents and subagents, or run `/plan-implementation` then `/implement`. |
 | Prompt files do not appear on github.com | Prompt files are an IDE surface. Use the custom agents there, or describe the step. |
@@ -388,6 +446,7 @@ start at contract stage.
 
 | Decision | Why | Cost |
 |---|---|---|
+| Spike before spec | A POC needs feedback before precision | Spike code is throwaway |
 | Describe, don't interview | The first useful answers come from a running product | The draft may be thin; labels expose it |
 | Agent validation instead of human approval | Speed without silent invention | A checklist can miss a product mistake |
 | Plan before fleet | Parallel agents need disjoint files and a complete test map | One architect step |
@@ -403,6 +462,8 @@ start at contract stage.
 ## Learn more
 
 - [`docs/vibe-spec.md`](docs/vibe-spec.md) — why the interview is not the default.
+- [`docs/spike.md`](docs/spike.md) — the 90-minute feedback loop, demo contract,
+  and graduation.
 - [`docs/poc-mode.md`](docs/poc-mode.md) — inference, assumptions, and high-risk
   facts.
 - [`docs/index.md`](docs/index.md) — when an index earns its keep.
@@ -419,3 +480,5 @@ start at contract stage.
   product is worth building.
 - Not an interview. The user describes once; the agent infers until a
   user-reserved fact or a conflict forces a question.
+- Not a delivery pipeline for a POC. Use the spike lane to learn; use the spec
+  lane to deliver.

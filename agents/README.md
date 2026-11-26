@@ -8,6 +8,7 @@ reading them.
 
 | Brief | Use it for | Reads |
 |---|---|---|
+| `spike.md` | quick feedback: one demo path, 90 minutes | `docs/spike.md`, `templates/spike.md` |
 | `orchestrator.md` | entry point; delegates and parallelizes | `AGENTS.md`, `docs/fleet.md` |
 | `spec-writer.md` | description -> draft | `SPEC.md`, `templates/system.md`, `docs/vibe-spec.md` |
 | `gap-filler.md` | infer, assume, escalate, conflict scan | `SPEC.md`, `.agents/skills/spec-gap-fill/` |
@@ -20,15 +21,18 @@ reading them.
 ## Handoff
 
 ```text
-orchestrator -> writer -> gap-filler -> validator -> architect
-                                                        |
-                                                        v
-                                      implementer + verifier (fleet)
-                                                        |
-                                     contract stage -> spec-reviewer
+quick feedback:  spike -> demo -> feedback -> kill | iterate | graduate
+spec delivery:   orchestrator -> writer -> gap-filler -> validator -> architect
+                                                              |
+                                                              v
+                                            implementer + verifier (fleet)
+                                                              |
+                                             contract stage -> spec-reviewer
 ```
 
-- **orchestrator** is the default entry: it delegates one spec sequentially, then
+- **spike** is the fast lane: one hypothesis, one demo path, fake boundaries, no
+  validator/architect/fleet. It ends with a decision.
+- **orchestrator** is the spec-lane entry: it delegates one spec sequentially, then
   plans before implementing.
 - **writer** captures the description and writes the traceable draft.
 - **gap-filler** reads the repo and the user's global skills, infers, labels, and
