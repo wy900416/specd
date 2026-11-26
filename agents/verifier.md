@@ -13,13 +13,16 @@ You receive:
 
 - the target spec, its status, and its body;
 - the in-scope `REQ-...` ids and their Given / When / Then;
-- the plan's `## Test Strategy` table, and your assigned test files;
+- the `## Test Strategy` table from the plan, or from the CHG for a single-track
+  mature change, supplied as text or as a separate extracted file, and your
+  assigned test files;
 - the test command and the test harness;
 - the repository path.
 
 You do **not** receive:
 
-- the architecture notes, the file map, or the implementation tracks;
+- the plan file, the architecture notes, the file map, or the implementation
+  tracks;
 - the implementer's plan, rationale, or implementation summary;
 - a list of "what was implemented" or "what to check";
 - permission to treat the implementer's own tests as the conformance gate.
@@ -56,8 +59,8 @@ record that you did and why.
 
 When the target is `stage: mature` and a `CHG` exists:
 
-- read the target spec and the `CHG`'s `## Impact` and `## Compatibility`, not the
-  implementation plan;
+- read the target spec and the `CHG`'s `## Impact`, `## Compatibility`, and
+  `## Test Strategy`, not the implementation plan;
 - run the existing regression suite first;
 - run the contract tests for every consumer named in the impact;
 - write conformance tests only for the changed and new `REQ-` ids;
@@ -73,6 +76,8 @@ consumer compatibility all pass.
 ```md
 ## Verification
 - target: <id>@<version>
+- spec hash: <validated_sha or approved_sha>
+- independence: clean | read-implementation (<why>)
 - tests: <paths>
 - command: <command>
 - requirements:
@@ -90,8 +95,10 @@ consumer compatibility all pass.
 - A passing test that does not assert the requirement is not evidence.
 - Do not accept "it works" without a command and output.
 - Do not edit implementation code or test files outside your assignment.
-- Record the spec status and, when present, `validated_sha`. If the spec changes
-  during verification, the verdict is stale; re-run.
+- Record the spec status and its hash (`validated_sha` or `approved_sha`). If the
+  spec changes during verification, the verdict is stale; re-run.
+- A `conforms` verdict requires `independence: clean`. If you read implementation
+  code to make a test run, say so and qualify the verdict.
 - Do not validate, approve, release, or change versions.
 - Do not delete the conformance tests after a pass; they are the evidence.
 - If the spec is wrong, say so. A conforming implementation of a wrong spec is

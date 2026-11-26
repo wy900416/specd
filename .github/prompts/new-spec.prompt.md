@@ -20,7 +20,8 @@ Follow `AGENTS.md`, `SPEC.md`, and `.agents/skills/spec-draft/SKILL.md`.
 5. Validate in a **separate** `spec-validator` run: invoke the agent with only the
    spec path and `checklists/validate.md`. Do not pass your draft summary. If the
    runner cannot spawn a subagent, stop and tell the user to run
-   `/validate-spec`.
+   `/validate-spec` in a fresh session, or give a fresh agent only the spec path
+   and `checklists/validate.md`.
 6. If validation blocks, fix the blocking findings and re-run the validator once.
    Do not fake a pass.
 7. Report: spec path, 3-5 key requirements, assumptions, fenced high-risk facts,

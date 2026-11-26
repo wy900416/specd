@@ -1,6 +1,7 @@
 # POC mode: infer, label, escalate
 
-A POC stalls when every unknown becomes a question. The alternative is not silent
+The pre-baseline (`stage: poc`) spec stalls when every unknown becomes a question.
+This is the bootstrap spec stage, not the spike lane. The alternative is not silent
 invention: it is **aggressive, labelled inference**. The agent chooses a default,
 writes down why, and moves on. The user reacts to the product instead of
 pre-answering it.
@@ -57,6 +58,9 @@ Product or external guesses:
 | # | Assumption | Basis | Risk | Confirmed | Revisit |
 |---|---|---|---|---|---|
 | 1 | Links are internal-only | no public sharing in the description | medium | no | first user feedback |
+
+`Confirmed: no` is valid for a low/medium inference the user has not confirmed.
+A high-risk fact must use `agent (POC)` and be fenced; `needs-human` blocks.
 | 2 | Users sign in with the company SSO | company convention | high | agent (POC) | before production |
 ```
 

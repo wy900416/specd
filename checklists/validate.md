@@ -1,7 +1,7 @@
 # Validation checklist
 
 The `spec-validator` agent applies this checklist before setting
-`status: validated`. There is no linter: read the files, open the evidence, and
+`status: validated`. There is no required linter: read the files, open the evidence, and
 record findings. A finding without a file and line is not a finding.
 
 Mark every item `pass`, `warning`, or `block`.
@@ -26,10 +26,13 @@ Mark every item `pass`, `warning`, or `block`.
       `deprecated`. **block**
 - [ ] In `stage: mature`, `version` is semver; a draft may be `0.1.0`, an
       approved baseline is at least `1.0.0`. **block**
-- [ ] `draft` and `validated` have no `approved_by` or `approved_at`. **block**
-- [ ] `status: approved` has `approved_by` and `approved_at`. **block**
+- [ ] `draft` and `validated` have no `approved_by`, `approved_at`, or
+      `approved_sha`. **block**
+- [ ] `status: approved` has `approved_by`, `approved_at`, and `approved_sha`.
+      **block**
 - [ ] `status: approved` has no `validated_by`, `validated_at`, or
       `validated_sha`; approval clears the bootstrap validation. **block**
+- [ ] `status: approved` has no validation block. **block**
 - [ ] `validated` has `validated_by`, `validated_at`, and `validated_sha`.
       **block**
 - [ ] `decision_mode` is `human` or `agent-assisted`. If either `## Assumptions`
@@ -48,6 +51,7 @@ Mark every item `pass`, `warning`, or `block`.
 
 ## 3. Requirements
 
+- [ ] At least one requirement exists. **block**
 - [ ] Every `### REQ-...` has a title after the colon. **block**
 - [ ] Ids match `REQ-[A-Z][A-Z0-9]*-[0-9]{3,}`. **block**
 - [ ] Ids are unique across the repository. **block**
@@ -68,6 +72,8 @@ Mark every item `pass`, `warning`, or `block`.
       a `Confirmed` value, and a revisit trigger. **block**
 - [ ] Every `## Agent Decisions` row has a question, a choice, a why,
       alternatives, reversibility, and a revisit trigger. **block**
+- [ ] Every `Confirmed` value is `agent (POC)`, `user, <date>`, `needs-human`,
+      or `no`. **block**
 - [ ] A `Confirmed: needs-human` assumption is a user-reserved fact and blocks.
       **block**
 - [ ] A `Risk: high` assumption is `Confirmed: agent (POC)`, has
@@ -98,8 +104,17 @@ Mark every item `pass`, `warning`, or `block`.
 - [ ] A validated spec does not link to a `draft` or `deprecated` spec.
       **warning**
 - [ ] Contract kind has `type` and a `path` that exists. **block**
-- [ ] `nfr` has `applies_to`. **block**
-- [ ] `standard` with `pinned: true` has `applies_to`. **block**
+- [ ] `nfr` has a non-empty `applies_to`. **block**
+- [ ] `standard` has a non-empty `applies_to`; `pinned: true` also requires it.
+      **block**
+- [ ] Kind-required edges are present:
+      - `domain`: at least one `part-of` to a `system`;
+      - `service`: exactly one `implements` to a `domain`, and at least one
+        `exposes` / `publishes` / `consumes` to a `contract`;
+      - `contract`: at least one `part-of` to a `service`;
+      - `flow`: at least two `part-of` / `relates-to` to `service` specs;
+      - `adr`: at least one incoming `decided-by` from another spec.
+      **block**
 
 ## 7. Repository evidence
 
@@ -126,6 +141,10 @@ Search the spec for:
 ## 9. Scope
 
 - [ ] `## Context` states the problem, the user, and the boundary. **block**
+- [ ] Required sections are present: `## Source`, `## Repo Profile`,
+      `## Context`, `## Requirements`, `## Assumptions`, `## Agent Decisions`,
+      `## Conflicts`. **block**
+- [ ] `## Open Questions` has no unchecked item (`- [ ]`). **block**
 - [ ] `## Non-goals` has at least one entry. **warning**
 - [ ] The spec is POC-sized: it does not enumerate services that do not exist.
       **block**
@@ -137,7 +156,15 @@ Search the spec for:
 
 - [ ] If `status: validated`, `validated_sha` matches the canonical hash
       (command in `SPEC.md` §9). **block**
-- [ ] `## Validation` is the last section in the file. **block**
+- [ ] If `status: approved`, `approved_sha` matches the canonical hash.
+      **block**
+- [ ] If `status: validated`, the record is wrapped by
+      `<!-- BEGIN VALIDATION -->` and `<!-- END VALIDATION -->`. **block**
+- [ ] The `<!-- END VALIDATION -->` marker is the last line of the file; nothing
+      follows it. **block**
+- [ ] `## Validation` is the last section inside the block. **block**
+- [ ] The validation block contains the record only: no requirements, no
+      assumptions, no source text. **block**
 - [ ] If `status: validated`, `validated_at` is later than or equal to `updated`.
       **block**
 - [ ] `## Validation` exists and has one row per check, a result, and a note.
@@ -158,14 +185,14 @@ Only when `specs/INDEX.md` exists:
 Only when `stage: mature`:
 
 - [ ] `status` is `draft`, `validated`, `approved`, or `deprecated`. **block**
-- [ ] `status: approved` has `approved_by` and `approved_at`. **block**
+- [ ] `status: approved` has `approved_by`, `approved_at`, and `approved_sha`.
+      **block**
 - [ ] `status: approved` has no `validated_by`, `validated_at`, or
       `validated_sha`; approval clears the bootstrap validation. **block**
+- [ ] `status: approved` has no validation block. **block**
 - [ ] `version` is semver; an approved baseline is at least `1.0.0`. **block**
-- [ ] A draft or validated baseline has no `approved_by` or `approved_at`.
-      **block**
-- [ ] For a change, `checklists/change.md` passes and the target spec is not
-      edited in place. **block**
+- [ ] A draft or validated baseline has no `approved_by`, `approved_at`, or
+      `approved_sha`. **block**
 - [ ] The service or contract kind rules in `SPEC.md` are satisfied. **block**
 
 ## Output
@@ -173,13 +200,14 @@ Only when `stage: mature`:
 Write this into the spec:
 
 ```md
+<!-- BEGIN VALIDATION -->
 ## Validation
 
 - Validated by: agent:spec-validator
 - At: <ISO-8601>
 - Result: pass | blocked
 - Checklist: checklists/validate.md
-- Hash: <hash>
+- Hash: <canonical hash>
 
 | # | Check | Result | Note |
 |---|---|---|---|
@@ -195,6 +223,7 @@ Write this into the spec:
 | 10 | Freshness | pass | hash matches |
 | 11 | Index | pass | absent |
 | 12 | Mature stage | n/a | stage: poc |
+<!-- END VALIDATION -->
 ```
 
 Blocking findings go in a short list under the table:

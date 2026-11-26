@@ -49,6 +49,9 @@ choose. Do not silently change the bump.
 
 ## 4. Consistency checks that lint cannot do
 
+- [ ] `base_sha` matches the target's `approved_sha`.
+- [ ] `proposal_sha` matches the proposed body.
+- [ ] `## Proposal validation` records a pass, and `## Review` is present.
 - [ ] Every direct consumer of the target is named with its owner.
 - [ ] Contract tests exist or are updated for every consumer.
 - [ ] The data migration is reversible, or the rollback is a restore.
@@ -75,6 +78,9 @@ choose. Do not silently change the bump.
       decisions.
 
 ## 6. Review packet
+
+Write this into the CHG's `## Review` section. A review that exists only in chat
+does not satisfy the change checklist.
 
 ```md
 ## Review

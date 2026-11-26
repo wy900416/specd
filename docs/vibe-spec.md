@@ -79,9 +79,10 @@ simplifications without asking.
 to guess around. It goes to `## Conflicts`, with options, and the user chooses. An
 open conflict blocks validation.
 
-**The fence: high-risk facts.** Security, privacy, data ownership, pricing, legal,
-compliance, and breaking public contracts may be inferred for a POC, but they must
-be marked `Risk: high`, `Confirmed: agent (POC)`, and `Revisit: before production`.
+**The fence: high-risk facts.** Security, privacy, data ownership/PII,
+authentication, retention, pricing, legal, compliance, breaking contracts, and
+irreversible migrations may be inferred for a POC, but they must be marked `Risk: high`, `Confirmed: agent (POC)`, and
+`Revisit: before production`.
 Build against them only with fake data, a local provider, and no real users, money,
 or PII. The validator records them as warnings; they do not block the POC, and they
 must be confirmed before contract promotion.
@@ -121,5 +122,6 @@ Then version, approval, and proposals start to pay for themselves. See
 |---|---|
 | Plausible fiction | Every guess is labelled; evidence is required; the validator reports fenced high-risk facts |
 | Validation theater | Validator is a separate run; checklist output is in the file; hash binds it |
-| Spec drifts from code | Validate before handoff; verifier tests from the spec, not the code || Global skills leak or override | Read-only, cite only, never copy content, never treat as requirements |
+| Spec drifts from code | Validate before handoff; verifier tests from the spec, not the code |
+| Global skills leak or override | Read-only, cite only, never copy content, never treat as requirements |
 | The user never reads the spec | Keep it to one page; report 3-5 requirements, not the whole file |

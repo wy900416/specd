@@ -29,17 +29,18 @@ There is no runtime. You create and edit files directly.
 5. **Write traceable requirements.** Every `REQ-` must trace to a sentence in
    `## Source`; use `Source: user` and one observable behaviour per id. Do not
    invent requirements.
-6. **Hand off.** Run `spec-gap-fill`, then hand the file to `spec-validator` in a
-   separate run. If the runner supports subagents, invoke the validator with only
-   the spec path; do not pass your rationale. Show a short summary; do not ask for
-   approval.
+6. **Hand off.** Hand the file to the `gap-filler`; after gap-fill, hand the
+   result to `spec-validator` in a separate run. If the runner supports subagents,
+   invoke the validator with only the spec path; do not pass your rationale. Show
+   a short summary; do not ask for approval.
 
 ## Manual mature baseline
 
 For a mature project with no specs, use the same flow with `stage: mature`,
 `status: draft`, `version: 0.1.0`; validate the draft; a human approves it as the
-`1.0.0` baseline and clears the `validated_*` fields. Do not set `approved`
-yourself. See `docs/adoption.md`.
+`1.0.0` baseline, clears the `validated_*` fields, removes the validation block,
+and writes `approved_sha`. Do not set `approved` yourself. See
+[`docs/adoption.md`](../docs/adoption.md).
 
 ## Interview rule
 

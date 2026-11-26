@@ -1,0 +1,177 @@
+{
+  "cases": [
+    {
+      "name": "valid-poc",
+      "type": "workspace",
+      "dir": "fixtures/cases/valid-poc",
+      "expect": "pass"
+    },
+    {
+      "name": "missing-source",
+      "type": "workspace",
+      "dir": "fixtures/cases/missing-source",
+      "expect": "block",
+      "codes": [
+        "REQ_SOURCE"
+      ]
+    },
+    {
+      "name": "open-conflict",
+      "type": "workspace",
+      "dir": "fixtures/cases/open-conflict",
+      "expect": "block",
+      "codes": [
+        "CONFLICT_OPEN"
+      ]
+    },
+    {
+      "name": "validation-tamper",
+      "type": "workspace",
+      "dir": "fixtures/cases/validation-tamper",
+      "expect": "block",
+      "codes": [
+        "VALIDATION_TRAILING",
+        "VALIDATION_HASH"
+      ]
+    },
+    {
+      "name": "approved-tamper",
+      "type": "workspace",
+      "dir": "fixtures/cases/approved-tamper",
+      "expect": "block",
+      "codes": [
+        "APPROVED_HASH"
+      ]
+    },
+    {
+      "name": "valid-change",
+      "type": "workspace",
+      "dir": "fixtures/cases/valid-change",
+      "expect": "pass"
+    },
+    {
+      "name": "change-tamper",
+      "type": "workspace",
+      "dir": "fixtures/cases/change-tamper",
+      "expect": "block",
+      "codes": [
+        "CHANGE_PROPOSAL_SHA"
+      ]
+    },
+    {
+      "name": "change-missing-review",
+      "type": "workspace",
+      "dir": "fixtures/cases/change-missing-review",
+      "expect": "block",
+      "codes": [
+        "CHANGE_REVIEW_MISSING"
+      ]
+    },
+    {
+      "name": "wrappers",
+      "type": "static",
+      "expect": "pass",
+      "files": [
+        {
+          "path": ".github/agents/architect.agent.md",
+          "brief": true,
+          "includes": [
+            "'execute'",
+            "approved"
+          ]
+        },
+        {
+          "path": ".github/agents/specd.agent.md",
+          "brief": true,
+          "includes": [
+            "'execute'"
+          ]
+        },
+        {
+          "path": ".github/agents/change-analyst.agent.md",
+          "brief": true,
+          "includes": [
+            "'execute'",
+            "base_sha"
+          ]
+        },
+        {
+          "path": ".github/agents/spec-reviewer.agent.md",
+          "brief": true,
+          "includes": [
+            "'execute'",
+            "proposal_sha"
+          ]
+        },
+        {
+          "path": ".github/agents/spec-validator.agent.md",
+          "brief": true,
+          "includes": [
+            "canonical",
+            "validate-proposal"
+          ]
+        },
+        {
+          "path": ".github/agents/implementer.agent.md",
+          "brief": true,
+          "includes": [
+            "single-track"
+          ]
+        },
+        {
+          "path": ".github/agents/verifier.agent.md",
+          "brief": true,
+          "includes": [
+            "independence",
+            "Do not open"
+          ]
+        },
+        {
+          "path": "agents/spec-writer.md",
+          "excludes": [
+            "Run `spec-gap-fill`"
+          ]
+        },
+        {
+          "path": ".agents/skills/spec-draft/SKILL.md",
+          "excludes": [
+            "then run the gap-fill procedure"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "missing-context",
+      "type": "workspace",
+      "dir": "fixtures/cases/missing-context",
+      "expect": "block",
+      "codes": [
+        "SECTION_MISSING"
+      ]
+    },
+    {
+      "name": "open-question",
+      "type": "workspace",
+      "dir": "fixtures/cases/open-question",
+      "expect": "block",
+      "codes": [
+        "OPEN_QUESTION"
+      ]
+    },
+    {
+      "name": "service-no-contract",
+      "type": "workspace",
+      "dir": "fixtures/cases/service-no-contract",
+      "expect": "block",
+      "codes": [
+        "KIND_EDGE"
+      ]
+    },
+    {
+      "name": "current-example",
+      "type": "workspace",
+      "dir": "examples/poc-url-shortener",
+      "expect": "pass"
+    }
+  ]
+}

@@ -28,9 +28,10 @@ buildable spec, not a complete one.
 6. **Record provenance.** Product guesses in `## Assumptions` (basis, risk,
    confirmed, revisit). Implementation choices in `## Agent Decisions` (why,
    alternatives, reversible, revisit).
-7. **Fence high-risk facts.** Security, privacy, data ownership, pricing, legal,
-   compliance, breaking contracts, irreversible migrations: `Risk: high`,
-   `Confirmed: agent (POC)`, `Revisit: before production`. Build them only with
+7. **Fence high-risk facts.** Security, privacy, data ownership/PII,
+   authentication, retention, pricing, legal, compliance, breaking contracts, and
+   irreversible migrations: `Risk: high`, `Confirmed: agent (POC)`,
+   `Revisit: before production`. Build them only with
    fake data and no real users, money, or PII. They are warnings, not blocks. A
    user-reserved fact is `Confirmed: needs-human` and blocks.
 8. **Scan for conflicts.** Compare ownership, write authority, contracts, state

@@ -26,7 +26,8 @@ manifest.
    first, then the target, boundary contracts, constraints, structure,
    dependencies, decisions, related specs, and incoming references.
 3. **Write it** to `.context/<target>.md` using the format in the checklist. Put
-   the manifest at the bottom.
+   the manifest at the bottom. A review may use `.context/<target>.review.md` so it
+   does not overwrite the implementation pack.
 4. **Check the warnings.** A `draft` spec is a hypothesis: buildable, but it may
    change. A `validated` spec is the current truth for the POC. An `approved`
    `stage: mature` spec is the baseline; a pending `CHG` means it is about to

@@ -9,6 +9,8 @@ applyTo: 'specs/**/*.md'
 - In `stage: poc`, `version` MUST stay `0.1.0`. Do not bump it.
 - Never write `status: validated` or the `validated_*` fields by hand. Only the
   `spec-validator` agent sets them, and only on a passing run.
+- Never write `status: approved`, `approved_by`, `approved_at`, or `approved_sha`
+  by hand. A human promotion or release sets them.
 - Any semantic edit by a writer, gap-filler, or human MUST set `status: draft` and
   clear `validated_by`, `validated_at`, and `validated_sha`. The validator's own
   validation update is the exception.

@@ -46,6 +46,7 @@ and tracks, then run `/implement` when you are ready.
   from the spec while the implementer writes code.
 - **Discovery scans** for a spec, one artifact each under `.context/<id>/`:
   repo profile, global skills preferences, conflict scan, contract impact.
+  One writer merges them into `.context/<id>.md` before implementation.
 - **One spec per agent** for a multi-spec POC, with disjoint paths.
 - **Contract impact scans** across different consumer groups.
 
@@ -59,6 +60,10 @@ and tracks, then run `/implement` when you are ready.
 - Running tests before the implementation tracks finish.
 - Generating `specs/INDEX.md` while specs are being added.
 - Two agents appending to the same `## Conflicts` section without a merge step.
+- Two agents writing the same `.context/<id>.md`; the discovery fragments are
+  inputs, and one merge step produces the pack.
+- Two change-analysts preparing a CHG for the same `target` and `base_version`,
+  or two architects re-planning the same spec in place.
 
 ## Patterns
 
@@ -77,10 +82,16 @@ Tracks from the plan:
    Use @verifier.agent.md. Write from the spec and the Test Strategy table.
    Do not read T1/T2 implementation before writing assertions.
 
+Each track gets .context/url-shortener.md and its plan row.
+
 Run T1, T2, V1 in parallel. The files are disjoint.
 If the plan has a setup track (dependencies, tsconfig, test config), run it first.
 After all three finish, run `pnpm test` and report each REQ as pass/fail/blocked.
 ```
+
+Pass the `## Test Strategy` table to the verifier as text, not the plan file.
+The plan also contains the architecture notes and file map the verifier must not
+see.
 
 Why it works: the tests are written from the spec, in parallel with the code, and
 executed only after both land. The verifier never grades the implementer's own
@@ -96,6 +107,8 @@ tests.
 3. .context/url-shortener/conflicts.md — conflicts with existing specs
 
 Read-only subagents. Do not edit the spec. Report each artifact separately.
+Then merge the three artifacts into `.context/url-shortener.md`; do not dispatch
+implementation from the fragments.
 ```
 
 ### Pattern 3: several independent specs
@@ -157,7 +170,8 @@ Do not use it when:
 The verifier must run in a context that did not write the draft or the
 implementation. In a fleet:
 
-- give it the spec and the `## Test Strategy` table, not the architecture notes;
+- give it the spec and the `## Test Strategy` table as text, not the plan file or
+  the architecture notes;
 - give it its own test files;
 - run it after the implementation lands.
 

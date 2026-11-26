@@ -82,9 +82,13 @@ Do **not** split because:
    `superseded-by` if the whole spec is replaced.
 6. Version both specs. The big spec changes because its content moved; the new spec
    starts at `0.1.0`.
-7. Update `GRAPH.md` and any `id@version#REQ` references.
+7. Update `GRAPH.md` (format: [`../templates/graph.md`](../templates/graph.md)) and
+   any `id@version#REQ` references.
 
-A split is a change proposal, not a rewrite. Review it like any other change.
+In the POC stage, steps 2-6 are a normal edit plus re-validation. At mature
+stage, create and approve the new spec(s) through the manual-baseline path, then
+send one `CHG` on the old spec with `result_status: deprecated` and the outgoing
+links. A mature split is a sequence of changes, not a rewrite.
 
 ## How this fits the framework
 

@@ -17,6 +17,9 @@ source: chat
 validated_by: ""
 validated_at: ""
 validated_sha: ""
+approved_by: ""
+approved_at: ""
+approved_sha: ""
 conflicts_with: []
 links: []
 ---
@@ -99,7 +102,10 @@ what is inside and what is explicitly outside.
 |---|---|---|---|---|
 | | | | | |
 
+<!-- BEGIN VALIDATION -->
 ## Validation
 
-<!-- Keep this section last. The canonical hash excludes it. -->
+<!-- The validator replaces this block. Keep END as the last line of the file.
+     The canonical hash excludes everything between the two markers. -->
 - Not run yet. The validator writes this section.
+<!-- END VALIDATION -->

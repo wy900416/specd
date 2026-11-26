@@ -39,9 +39,10 @@ cheap hypothesis that the gap-filler and the validator will improve.
 7. **List the gaps as gaps.** Do not pre-fill `## Assumptions` or
    `## Agent Decisions`; the gap-filler owns those. Leave the sections with their
    headers and an empty table.
-8. **Write the file, then hand off.** Show a three-line summary, then run the
-   gap-fill procedure, then hand the file to a separate validator run. Do not
-   validate it yourself and do not ask for approval.
+8. **Write the file, then hand off.** Show a three-line summary, then hand the file
+   to the gap-filler. After gap-fill, hand it to a separate validator run. Do not
+   run the gap-fill procedure yourself, do not validate it yourself, and do not ask
+   for approval.
 
 ## No-interview rule
 

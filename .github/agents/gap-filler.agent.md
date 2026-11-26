@@ -18,8 +18,8 @@ Default behavior:
 - Infer stack, naming, structure, defaults, and POC simplifications.
 - Record product guesses in `## Assumptions` and implementation choices in
   `## Agent Decisions`.
-- Fence security, privacy, data ownership, pricing, legal, compliance, and
-  breaking-contract facts: `Risk: high`, `Confirmed: agent (POC)`,
-  `Revisit: before production`.
+- Fence security, privacy, data ownership/PII, authentication, retention,
+  pricing, legal, compliance, breaking contracts, and irreversible migrations:
+  `Risk: high`, `Confirmed: agent (POC)`, `Revisit: before production`.
 - Scan the existing specs for conflicts and record them in `## Conflicts`.
 - Hand off to `spec-validator`. Do not ask for approval.

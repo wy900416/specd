@@ -12,7 +12,8 @@ not fit in a context window, and a context without a manifest is not auditable.
       it as the source of truth; the spec wins.
 - [ ] If two or more candidates are genuinely plausible, ask one question with the
       candidates.
-- [ ] Do not use `GRAPH.md` as the source of truth; it is a view.
+- [ ] Do not use `GRAPH.md` as the source of truth; it is a view. Its format is
+      [`../templates/graph.md`](../templates/graph.md).
 
 ## 2. Traversal order
 
@@ -45,7 +46,8 @@ budget, raise the budget; narrowing the target will not remove it.
 
 ## 4. Pack format
 
-Write the pack to `.context/<target>.md`:
+Write the implementation pack to `.context/<target>.md`. A review may use
+`.context/<target>.review.md` to avoid overwriting it.
 
 ```md
 # Context pack: orders

@@ -12,6 +12,7 @@ parallel".
 ## Read first
 
 - `SPEC.md` — the target spec and its requirements.
+- `.agents/skills/spec-context/SKILL.md` — how to build the pack.
 - `checklists/context.md` — the bounded context pack.
 - `checklists/plan.md` — the gate the plan must pass.
 - `templates/plan.md` — the skeleton.
@@ -22,8 +23,10 @@ parallel".
 - The target spec is `status: validated`, or `status: approved` with a released
   `CHG`. If it is a draft, stop and send it back to the validator. Do not design
   against a hypothesis.
-- Record the spec's canonical hash in the plan (`spec_sha`). If the spec changes,
-  the plan becomes `stale`.
+- Record the spec's canonical hash in the plan (`spec_sha`): copy `validated_sha`
+  for a validated spec or `approved_sha` for an approved spec, and recompute it if
+  the recorded value is missing or does not match. If the spec changes, the plan
+  becomes `stale`.
 - Carry every fenced high-risk fact from the spec. Do not quietly turn it into a
   real integration.
 - A plan is for a new build or a multi-track change. A single-track mature change
@@ -33,29 +36,33 @@ parallel".
 
 1. **Scope.** List the in-scope `REQ-` ids and the explicit non-goals. For a
    mature change, read the released `CHG` and use its scope.
-2. **Decide.** State a recommendation (build, build a slice, or wait), the
+2. **Build the context pack.** Write `.context/<spec-id>.md` following
+   `checklists/context.md`. Pinned constraints first, then the target, boundaries,
+   constraints, structure, dependencies, decisions, and related specs. If
+   `.context/<spec-id>/` discovery fragments exist, merge them into the pack.
+3. **Decide.** State a recommendation (build, build a slice, or wait), the
    smallest slice that answers the product question, and what would change the
    decision.
-3. **Read the code.** Identify the modules, boundaries, data model, test harness,
+4. **Read the code.** Identify the modules, boundaries, data model, test harness,
    and build/test commands that already exist.
-4. **Choose the architecture.** Name the shape (single module, modular monolith,
+5. **Choose the architecture.** Name the shape (single module, modular monolith,
    services), the components, the data flow, the storage, and the interfaces.
    Record rejected alternatives when the choice is not obvious.
-5. **File map.** One row per file to create or modify: path, action, owning track,
+6. **File map.** One row per file to create or modify: path, action, owning track,
    dependencies. Put shared files (`package.json`, lockfile, `tsconfig`, test
    config) in a setup track that finishes before the parallel tracks.
-6. **Work tracks.** Split the work into tracks with **disjoint file sets**, an
+7. **Work tracks.** Split the work into tracks with **disjoint file sets**, an
    owning agent, dependencies, and a "done when" condition. Implementation tracks
    and verifier test tracks can run in parallel because they own different files.
-7. **Test strategy.** Map every in-scope requirement to a test file and level.
+8. **Test strategy.** Map every in-scope requirement to a test file and level.
    Conformance tests are written by the verifier from the spec; developer tests
    are written by the implementer.
-8. **Risks and fences.** Carry the spec's high-risk assumptions and state what must
+9. **Risks and fences.** Carry the spec's high-risk assumptions and state what must
    stay fake (data, provider, auth, money).
-9. **Write `plans/<spec-id>.md`.** Set `status: draft` while drafting.
-10. **Run `checklists/plan.md`.** On a clean pass, set `status: ready`. On a block,
+10. **Write `plans/<spec-id>.md`.** Set `status: draft` while drafting.
+11. **Run `checklists/plan.md`.** On a clean pass, set `status: ready`. On a block,
     keep `draft` and list the fixes.
-11. **Report** the tracks, the test mapping, and any open question. Do not ask for
+12. **Report** the tracks, the test mapping, and any open question. Do not ask for
     approval.
 
 ## Fleet rules
@@ -91,3 +98,5 @@ parallel".
 - Do not mark a plan `ready` with unresolved open questions.
 - Do not hide a high-risk fence; it must appear in `## Risks and Fences`.
 - Do not design beyond the spec's scope without recording it as an open question.
+- Do not overwrite a `ready` or `done` plan in place. Archive it as
+  `plans/<id>.<spec_sha>.md` before re-planning a changed spec.

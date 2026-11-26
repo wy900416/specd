@@ -53,7 +53,7 @@ baseline. A human turns your draft into the baseline.
 
 ## Boundaries
 
-- Do not set `status: approved` or `approved_by`.
+- Do not set `status: approved`, `approved_by`, `approved_at`, or `approved_sha`.
 - Do not describe desired behaviour as current behaviour.
 - Do not backfill more than one boundary per run.
 - Do not invent a contract that the code does not expose.

@@ -14,12 +14,14 @@ The seed starts with **one kind**: `system`.
 | `standard.md` | A cross-cutting rule. `pinned: true` only when every matching context must receive it. |
 | `nfr.md` | A measurable constraint. |
 | `adr.md` | A decision and its alternatives. |
-| `change.md` | A mature change: impact, compatibility, rollout, rollback, approvals, and the proposed body. |
+| `change.md` | A mature change: impact, test strategy, compatibility, rollout, rollback, proposal validation, review, and the proposed body. |
+| `graph.md` | A derived graph view: Mermaid edges and a front-matter table. Never the source of truth. |
 
-`system.md` carries the v2 sections (`## Source`, `## Repo Profile`,
-`## Assumptions`, `## Conflicts`, `## Validation`). The older templates are
-mature-stage skeletons; when you use one, add those sections and set
-`stage: mature` before promoting it.
+Every spec template carries `## Source`, `## Repo Profile`, `## Context`,
+`## Assumptions`, `## Agent Decisions`, `## Conflicts`, and the marker-delimited
+`## Validation` block. The mature templates set `stage: mature` and add their
+kind-specific sections. Add `## Goals`, `## Non-goals`, and `## Actors` to a
+`system` spec.
 
 See `SPEC.md` for the required sections, `docs/adoption.md` for the baseline, and
 `docs/change-mode.md` for promotion and release.

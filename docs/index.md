@@ -1,7 +1,7 @@
 # When to introduce an index
 
-The seed ships without an index. `specs/**/*.md` is the source of truth, and the
-front-matter `summary` is enough to scan a small graph.
+The spec graph ships without an index. `specs/**/*.md` is the source of truth, and
+the front-matter `summary` is enough to scan a small graph.
 
 An index is a **derived view**. It is useful when reading every spec has become
 more expensive than maintaining a list. It is harmful when it becomes a second

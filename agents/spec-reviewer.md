@@ -26,8 +26,9 @@ There is no runtime. You read files, search links, and write a review.
 
 1. **Resolve the target and the change.** The task names a `CHG` and a target spec.
    If not, read the change record's `target` and `base_version`.
-2. **Build context.** Write a pack to `.context/<id>.md` following
-   `checklists/context.md`. Pinned constraints first, then the target, boundaries,
+2. **Build context.** Write a review pack to `.context/<id>.review.md` following
+   `checklists/context.md`. Do not overwrite the implementation pack at
+   `.context/<id>.md`. Pinned constraints first, then the target, boundaries,
    constraints, structure, dependencies, decisions, and related specs.
 3. **Map the impact.** Search every spec for links whose `target` is the id.
    Separate direct consumers from transitive noise. For each direct consumer, check
@@ -38,40 +39,41 @@ There is no runtime. You read files, search links, and write a review.
    - every consumer is named;
    - major changes have consumer sign-off, migration, and rollback;
    - high-risk changes have security/data sign-off;
+   - `base_sha` matches the target and `proposal_sha` matches the body;
    - the proposed body contains only the intended change.
 5. **Decide.** Answer: is this change safe for every consumer, and what must change
-   before release? Do not edit the target or the proposal.
+   before release? Write the review packet into the CHG's `## Review` section. Do
+   not edit the target or the proposed body.
 
 ## Output contract
 
-```md
-## Decision
-<ready to release | revise | reject> — one paragraph.
+Replace the CHG's `## Review` placeholder with this block:
 
-## Evidence
+```md
+## Review
+- target: <id>@<version> (<status>)
+- change: <CHG id>
+- decision: ready to release | revise | reject
+- compatibility: backward | additive | breaking
+- base_sha: match | mismatch
+- proposal_sha: match | mismatch
+- approvals: owner / consumers / security-data
+- risks: <count and the highest severity>
+- next action: <one concrete step>
+
+### Evidence
 - <spec-id>@<version>#<REQ-ID>: <what it says>
 - <file>:<line>: <what it shows>
 - <consumer>: <impact>
 
-## Compatibility
-- backward / additive / breaking
-- consumer tests: pass | fail | not run
-
-## Approvals
-- owner: <yes/no>
-- consumers: <yes/no>
-- security/data: <yes/no/n/a>
-
-## Risks
-- <risk, affected specs, severity>
-
-## Next action
-<one concrete step: fix the proposal, add a consumer test, update the migration, or release>
+### Why
+<one paragraph: is this safe for every consumer, and what must change before release?>
 ```
 
 ## Boundaries
 
-- Do not edit approved specs or the proposal. Report findings.
+- Do not edit approved specs or the proposed body. Write only the CHG's
+  `## Review` section.
 - Do not approve, release, or change versions.
 - Do not review style before checking consumer impact.
 - Do not accept a `major` change without consumer sign-off and a migration.

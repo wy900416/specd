@@ -1,8 +1,8 @@
 # Spec graph
 
 This is a **view**, not the source of truth. The source of truth is the
-front-matter and body of each spec. Update this file when a spec is added,
-validated, promoted, released, or deprecated; if it is stale, say so.
+front-matter and body of each spec. This copy is frozen with the legacy v1
+example; do not update it.
 
 ## Demo graph
 

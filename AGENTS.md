@@ -31,8 +31,11 @@ Then:
    - `approved` -> `/change` (`change-analyst`), then release;
    - `draft` / `validated` -> edit the bootstrap spec and re-validate;
    - no specs -> `/backfill` or the manual baseline in `docs/adoption.md`.
-5. Otherwise use the `specd` orchestrator when available, or run the draft ->
-   gap-fill -> validate loop yourself. Report the result; do not ask for approval.
+5. Otherwise use the `specd` orchestrator when available. If it cannot spawn
+   subagents, run the draft -> gap-fill steps, then validate in a fresh
+   session/context with only the spec path and the checklist. Never validate the
+   draft in the same pass that wrote it. Report the result; do not ask for
+   approval.
 
 ## Pick a skill
 
@@ -96,17 +99,20 @@ the implementer's summary.
   is in `## Assumptions` or `## Agent Decisions` with basis, risk, and revisit.
 - **Infer aggressively.** Stack, naming, structure, defaults, and POC
   simplifications are yours to choose. Label them; do not agonize.
-- **Fence high-risk facts, do not stop on them.** Security, privacy, data
-  ownership, pricing, legal, compliance, and breaking public contracts may be
-  inferred for a POC, but must be marked `Risk: high`, `Confirmed: agent (POC)`,
+- **Fence high-risk facts, do not stop on them.** Security, privacy,
+  data ownership/PII, authentication, retention, pricing, legal, compliance,
+  breaking contracts, and irreversible migrations may be inferred for a POC, but
+  must be marked `Risk: high`, `Confirmed: agent (POC)`,
   and `Revisit: before production`. Build them only with fake data, a local
-  provider, and no real users, money, or PII. Confirm before promotion.
+  provider, and no real users, money, or PII. Confirm before promotion; the full
+  list is in SPEC §7.
 - **In the bootstrap/POC stage, only two things need a human:** an unresolved
   conflict, or a fact the user explicitly reserved (`Confirmed: needs-human`).
   Mechanical findings still block validation. Mature changes add the approval tier
   below.
 - **Approved specs are read-only.** A change to a `stage: mature`, `status:
-  approved` spec is a `CHG` in `changes/`, never an in-place edit.
+  approved` spec is a `CHG` in `changes/`, never an in-place edit. The target's
+  `approved_sha` binds the baseline; a mismatch blocks every change to it.
 - **Mature changes are tiered.** Owner for patch/minor, consumers for major,
   security/data for high risk. Agents prepare; humans approve and release.
 - **Backfill never approves.** A backfilled baseline is a draft until a human
@@ -146,13 +152,15 @@ AGENTS.md             this file
 .github/              Copilot instructions, agents, prompts
 .agents/skills/       skills
 agents/               role briefs
-checklists/           validate, context, review, plan, change, spike
+checklists/           validate, validate-proposal, context, review, plan,
+                      change, spike
 templates/            skeletons
-docs/                 vibe-spec, index, POC mode, change mode, adoption, fleet, spike
+docs/                 manual index (docs/README.md), lane guides, reference
 specs/                active specs; empty in a fresh seed
 spikes/               timeboxed spike logs
 plans/                implementation plans (architect)
 examples/             reference specs, outside validation
+fixtures/, scripts/   framework self-check; not user specs
 changes/              mature-stage proposals only
 ```
 

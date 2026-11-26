@@ -21,8 +21,9 @@ or bump the wrong version.
 
 ## Procedure
 
-1. **Apply `checklists/validate.md`** to the proposed body. Record every finding
-   with a file and line.
+1. **Apply `checklists/validate-proposal.md`** to the effective spec (target
+   front-matter, `spec` overrides, and the proposed body). Record every finding
+   with a file and line. Confirm `base_sha` and `proposal_sha`.
 2. **Apply `checklists/change.md` and `checklists/review.md`.** Focus on impact,
    compatibility, contract, data, NFR, traceability, security, approvals, rollout,
    and versioning.
@@ -36,7 +37,8 @@ or bump the wrong version.
 6. **Check version hygiene.** `none` for editorial, `patch` for clarification,
    `minor` for additive, `major` for breaking. If the diff and the bump disagree,
    say so.
-7. **Produce the review packet** in the format from `checklists/review.md`.
+7. **Write the review packet** into the CHG's `## Review` section, in the format
+   from `checklists/review.md`.
 
 ## Output
 

@@ -6,9 +6,10 @@ whenToUse: "A draft has been gap-filled, or a validated spec was edited and need
 
 # Spec validation
 
-> For a mature change, validate the proposed body as a **review**. Do not set an
-> approved target to `status: validated`; release readiness is
-> `checklists/change.md` plus the reviewer and the approval tier.
+> For a mature change, apply `checklists/validate-proposal.md` to the effective
+> spec and write `## Proposal validation` into the CHG. Do not edit the approved
+> target; release readiness is `checklists/change.md` plus the recorded review and
+> the approval tier.
 
 Validation is the gate that replaces human approval in the POC stage. It is a
 checklist, not a taste exercise. Report what the checklist can see; name what it
@@ -21,8 +22,10 @@ cannot.
 - Read the spec, its `## Source`, the repository evidence it cites, and
   `checklists/validate.md`. Do **not** read the writer's rationale or chat
   summary; judge the file.
-- You may edit only the `## Validation` section and the `validated_*` fields.
-  Never edit requirements, assumptions, decisions, or source text.
+- You may edit only the marker-delimited `## Validation` block and the
+  `validated_*` fields, or only the CHG's `## Proposal validation` for a mature
+  change. Never edit requirements, assumptions, decisions, source text, or an
+  approved target.
 
 ## Procedure
 
@@ -30,21 +33,28 @@ cannot.
    decisions, conflicts.
 2. **Check the evidence.** Open the `repo:<path>:<line>` citations. A missing path
    or a line that does not support the claim is a finding.
-3. **Apply every check** in `checklists/validate.md`. Record pass, warning, or
+3. **Apply every check** in `checklists/validate.md` (bootstrap) or
+   `checklists/validate-proposal.md` (mature change). Record pass, warning, or
    block with `file:line`.
 4. **Decide.**
    - Any blocking finding: write `Result: blocked`, keep `status: draft`, clear
      `validated_by`, `validated_at`, `validated_sha`.
    - No blocking finding: write `Result: pass`, set `status: validated`,
      `validated_by: "agent:spec-validator"`, `validated_at`, and `validated_sha`.
+   - Mature change: write `Result` into the CHG's `## Proposal validation`; never
+     edit the target.
 5. **Hash the spec canonically.** Use the command in `SPEC.md` §9: remove the
-   `## Validation` section and the three `validated_*` lines, then hash. The
-   section must be last. This keeps the hash stable while the record changes.
+   marker-delimited validation block, the three `validated_*` lines, and the
+   `approved_sha` line, then hash.
+   The `<!-- END VALIDATION -->` marker must be the last line. This keeps the hash
+   stable while the record changes.
 6. **Report** the result in one short paragraph plus the blocking list.
 
 ## Blocking conditions
 
-- Missing or paraphrased `## Source`.
+- Missing or paraphrased `## Source`, or a missing required body section.
+- A missing kind-required edge, or an empty `applies_to` on an NFR/standard.
+- An unchecked item under `## Open Questions`.
 - A requirement without `Source`, or a `Source: assumption` not listed in
   `## Assumptions`.
 - `Normative: true` without Given/When/Then, or a Then clause that is not
@@ -59,7 +69,11 @@ cannot.
   phrase.
 - A stale validation: `validated_sha` does not match, or `validated_at` is older
   than `updated`.
+- Content after `<!-- END VALIDATION -->`, or a requirement inside the validation
+  block.
 - `version` is not `0.1.0` in `stage: poc`.
+- For a mature change: `base_sha` or `proposal_sha` does not match, or the target
+  is not an approved baseline.
 
 ## Warnings
 
@@ -75,13 +89,14 @@ A warning is allowed with a one-line reason:
 ## Output
 
 ```md
+<!-- BEGIN VALIDATION -->
 ## Validation
 
 - Validated by: agent:spec-validator
 - At: <ISO-8601>
 - Result: pass | blocked
 - Checklist: checklists/validate.md
-- Hash: <hash>
+- Hash: <canonical hash>
 
 | # | Check | Result | Note |
 |---|---|---|---|
@@ -101,6 +116,7 @@ A warning is allowed with a one-line reason:
 ### POC risks
 
 - `<file>:<line>` — `<fenced high-risk fact>`; confirm before production
+<!-- END VALIDATION -->
 ```
 
 ## Rules

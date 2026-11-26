@@ -36,10 +36,12 @@ change:
 
 1. Hand the target and the request to the `change-analyst` agent.
 2. It writes `changes/CHG-...-<target>.md` with impact, compatibility, rollout,
-   rollback, and the proposed body.
-3. The `spec-validator` checks the proposed body; the `spec-reviewer` checks the
-   graph, consumers, and bump.
-4. Report the approvals needed by tier. A human approves and releases.
+   rollback, `base_sha`, `proposal_sha`, and the proposed body.
+3. The `spec-validator` applies `checklists/validate-proposal.md` to the effective
+   spec and writes `## Proposal validation` into the CHG; the `spec-reviewer`
+   writes `## Review`.
+4. Report the approvals needed by tier. A human verifies `base_sha` and
+   `proposal_sha`, releases, and writes `approved_sha`.
 5. After release, a single-track change goes to the implementer plus regression; a
    multi-track change uses the architect plan and fleet.
 
@@ -73,27 +75,33 @@ Use `/fleet` (Copilot CLI/app) or parallel subagents only when the work items ha
    `specs/<kind>/<id>.md`; no two agents touch the same file.
 3. **Gap-fill in parallel, one file per agent.** The discovery files are inputs;
    each gap-filler writes only its own spec.
-4. **Validate sequentially, after all writes stop.** One `spec-validator` per file,
-   each with only the spec path. Do not validate while a writer is active.
-5. **Merge.** You read the outputs and produce one report. Subagents cannot talk to
-   each other; only you can reconcile them.
+4. **Validate sequentially, after all writes stop.** One `spec-validator` per
+   file, each with only the spec path. Do not validate while a writer is active.
+5. **Merge the report.** Read the outputs and produce one report. Subagents cannot
+   talk to each other; only you can reconcile them.
 
 ### Implementation after validation (fleet)
 
 When the user says implement, build, or code it:
 
-1. **Gate on validation.** The target spec must be `status: validated`. If it is
-   `draft`, run the validator first.
-2. **Plan first.** Hand the spec to the `architect` agent. Require
-   `plans/<spec-id>.md` with `status: ready` and a matching `spec_sha`. If the hash
-   differs, set the plan to `stale` and re-plan. If the plan is blocked, report the
-   open questions and stop.
+1. **Gate on the baseline.** The target must be `status: validated`, or
+   `status: approved` with a released `CHG`. If it is a draft, run the validator
+   first.
+2. **Plan and context.** Hand the spec to the `architect` agent. Require
+   `plans/<spec-id>.md` with `status: ready` and a `spec_sha` matching the spec's
+   `validated_sha` (or `approved_sha`). If the hash differs, set the plan to
+   `stale`; archive the old plan as `plans/<spec-id>.<spec_sha>.md` and re-plan. If
+   the plan is blocked, report the open questions and stop.
+   Require `.context/<spec-id>.md`, built per `checklists/context.md`; merge any
+   `.context/<spec-id>/` discovery fragments into it. It is the implementer's
+   boundary.
 3. **Dispatch the plan's tracks.**
    - Run the setup track first (dependencies, shared config, schema), if the plan
      has one.
    - Implementation tracks -> `implementer`, one file set each.
    - Test tracks -> `verifier`, one test file each. The verifier receives the spec
-     and `## Test Strategy`, not the architecture notes.
+     and the `## Test Strategy` table as text or a separate extracted file, never
+     the plan file itself.
    - Writing implementation and tests may run in parallel because they own
      disjoint files. Do not run two agents on the same file.
 4. **Execute after all writes stop.** Run the plan's verification command. Route
@@ -138,8 +146,8 @@ When the user says implement, build, or code it:
 - Do not edit an approved spec; a mature change is a `CHG`.
 - Do not let a spike become the implementation. Graduating means the bootstrap lane.
 - Do not start implementation without a `status: ready` plan.
-- Do not let the verifier read the architecture notes or the implementation plan's
-  file map.
+- Do not let the verifier read the architecture notes, the file map, or the plan
+  file itself.
 - Do not resolve a conflict; present the options to the user.
 - Do not parallelize writes to one file.
 - Do not fleet the spec draft. For implementation, a fleet is allowed for one

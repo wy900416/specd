@@ -1,7 +1,8 @@
 # Demo shop
 
 These specs are a reference graph from the first version of specd. They are
-**examples**, not active specs: the validator does not scan `examples/`.
+**frozen legacy**: they predate v2 provenance and do not conform to the current
+format. The validator does not scan `examples/`.
 
 They are still useful for:
 
@@ -11,4 +12,5 @@ They are still useful for:
 
 The graph view is in [`GRAPH.md`](GRAPH.md).
 
-To start your own POC, ignore this directory and write `specs/system/<id>.md`.
+For the current format, use [`../../poc-url-shortener/`](../../poc-url-shortener/).
+To start your own POC, write `specs/system/<id>.md`.

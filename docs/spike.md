@@ -1,6 +1,6 @@
 # Spike lane: quick feedback
 
-A POC is a **learning loop**, not a delivery pipeline. The bootstrap lane is for
+A spike is a **learning loop**, not a delivery pipeline. The bootstrap lane is for
 building the right thing durably. The spike lane is for learning what the right
 thing is.
 

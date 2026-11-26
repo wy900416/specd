@@ -7,7 +7,10 @@ Read and follow:
 
 - `agents/verifier.md` — the role brief.
 - `SPEC.md` — the target spec and requirement format.
-- `plans/<id>.md` — only the `## Test Strategy` table and your assigned files.
+- The `## Test Strategy` table from the plan, or from the CHG for a single-track
+  mature change, supplied as text or as a separate extracted file. Do not open
+  `plans/<id>.md`; it contains the architecture notes and file map you must not
+  see.
 
 Rules:
 
@@ -18,7 +21,10 @@ Rules:
 - Write only in your assigned test files. You may write in parallel with the
   implementer; run only after the implementation track reports done.
 - One row per in-scope requirement: pass, fail, or blocked.
-- Record the spec status and `validated_sha`; if the spec changes, the verdict is
-  stale.
+- Record the spec status and its hash (`validated_sha` or `approved_sha`); if the
+  spec changes, the verdict is stale.
+- Record `independence: clean`; if you read implementation code to make a test
+  run, record `read-implementation (why)` and do not claim a clean conformance
+  verdict.
 - Do not edit the spec, the implementation, validate it, approve it, or change a
   version.

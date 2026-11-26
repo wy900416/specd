@@ -19,4 +19,4 @@ Follow `agents/backfiller.md`, `docs/adoption.md`, and `checklists/validate.md`.
 5. Report the evidence, gaps, and the human approval needed for the `1.0.0`
    baseline.
 
-Do not set `status: approved`, `approved_by`, or `approved_at`.
+Do not set `status: approved`, `approved_by`, `approved_at`, or `approved_sha`.

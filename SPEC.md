@@ -1,9 +1,10 @@
 # Spec format and rules
 
 This is the **specd seed**: a spec-driven development framework made of Markdown
-and YAML files. There is no runtime, build step, or linter. `SPEC.md` is
-normative; the checklists in `checklists/` are the operational form of these
-rules.
+and YAML files. There is no runtime, build step, or linter in the specd flow;
+`SPEC.md` is normative, and the checklists in `checklists/` are the operational
+form of these rules. The optional maintainer self-check in `scripts/` is not part
+of the format.
 
 The default flow is **describe -> draft -> infer -> validate**. The user spends
 time describing the product, not answering a questionnaire. An agent fills the
@@ -44,17 +45,20 @@ plans/<spec-id>.md                implementation plans from the architect
 spikes/<id>.md                    timeboxed spike logs; never validated
 agents/                           role briefs
 .agents/skills/                   skills (Copilot auto-discovers this path)
-checklists/                       validation, context, review, plan
+checklists/                       validation, validate-proposal, context, review,
+                                  plan, change, spike
 templates/                        skeletons
 docs/                             rationale and operating notes
-examples/                         reference specs; not validated
+examples/                         current and legacy reference specs; not validated
 changes/                          mature-stage proposals only
+fixtures/                         maintainer conformance cases; not user specs
+scripts/                          optional maintainer self-check
 ```
 
 `specs/` contains only active specs. `examples/` contains reference material and
 is outside validation. `spikes/` contains timeboxed spike logs: a spike is not a
 spec, is never validated, and is throwaway unless it graduates. `GRAPH.md` is a
-view, not the source of truth.
+view, not the source of truth; its format is `templates/graph.md`.
 
 ## 3. Front-matter
 
@@ -80,6 +84,9 @@ source: chat
 validated_by: ""
 validated_at: ""
 validated_sha: ""
+approved_by: ""
+approved_at: ""
+approved_sha: ""
 links: []
 ---
 ```
@@ -95,7 +102,7 @@ links: []
 | `stage` | recommended | `poc` (default) or `mature` |
 | `owner` | yes | team or person |
 | `domain` | recommended | owning domain id |
-| `level` | optional | `L0` / `L1` / `L2` |
+| `level` | optional | `L0` system, `L1` domain/service, `L2` contract/flow/detail; informational |
 | `created`, `updated` | recommended | `YYYY-MM-DD` |
 | `tags` | optional | list |
 | `decision_mode` | recommended | `human` or `agent-assisted` |
@@ -105,7 +112,8 @@ links: []
 | `validated_sha` | when `validated` | canonical content hash (see §9) |
 | `conflicts_with` | optional | list of spec ids with an open or resolved conflict |
 | `links` | optional | typed edges |
-| `approved_by`, `approved_at` | mature only | human approval |
+| `approved_by`, `approved_at` | when `approved` | human approval |
+| `approved_sha` | when `approved` | canonical content hash of the approved baseline (see §9) |
 
 Kind-specific fields:
 
@@ -114,7 +122,11 @@ Kind-specific fields:
 | contract | `type` (openapi / asyncapi / schema / proto / graphql / grpc / other), `path` |
 | nfr | `applies_to` (kinds and/or tags) |
 | standard | `pinned` (boolean), `applies_to` |
-| proposal | `target`, `base_version`, `bump`, `risk`, `compatibility`, `owner`, `consumers`, `approvals`, `spec`, `released_as`, `released_at` |
+| change | `target`, `base_version`, `base_sha`, `bump`, `risk`, `compatibility`, `result_status`, `owner`, `consumers`, `approvals`, `proposal_sha`, `spec`, `released_as`, `released_at`, `released_by`, `release_commit` |
+
+A `change` record lives in `changes/` and is **not a spec**. It is exempt from the
+`kind` enum above and from spec validation; `checklists/validate-proposal.md`
+applies to its proposed body.
 
 Rules:
 
@@ -122,22 +134,50 @@ Rules:
   changes it.
 - In `stage: mature`, `version` is semver. A backfilled or promoted baseline
   starts at `0.1.0` while it is a draft, and becomes `1.0.0` on approval.
-- `status: approved` requires `stage: mature`, `approved_by`, and `approved_at`.
-  In `stage: poc`, `approved` is invalid. Approval clears `validated_by`,
-  `validated_at`, and `validated_sha`: validation is the bootstrap gate, approval
-  is the baseline.
+- `status: approved` requires `stage: mature`, `approved_by`, `approved_at`, and
+  `approved_sha`. In `stage: poc`, `approved` is invalid. Approval clears
+  `validated_by`, `validated_at`, and `validated_sha`, and removes the validation
+  block: validation is the bootstrap gate, approval is the baseline.
 - In `stage: mature`, `draft` and `validated` are allowed for a backfill or a
   promotion candidate.
-- `draft` and `validated` MUST NOT carry `approved_by` or `approved_at`.
+- `draft` and `validated` MUST NOT carry `approved_by`, `approved_at`, or
+  `approved_sha`.
 - `status: validated` requires `validated_by`, `validated_at`, `validated_sha`,
-  and a `## Validation` section whose `Result` is `pass`.
+  and a marker-delimited `## Validation` block whose `Result` is `pass`.
+- The validation record MUST be wrapped by `<!-- BEGIN VALIDATION -->` and
+  `<!-- END VALIDATION -->`. The `END` marker MUST be the last line of the file;
+  nothing may follow it. `## Validation` remains the last section.
 - `validated_at` MUST be later than or equal to `updated`, and `validated_sha`
   MUST match the canonical content (§9). Either mismatch demotes the spec to
   `draft` until it is re-validated.
+- `approved_sha` MUST match the canonical content (§9). A mismatch on an approved
+  spec blocks every change to it and requires re-approval; it is never fixed by
+  editing the spec in place.
 - Any semantic edit to a validated spec MUST set `status: draft` and clear the
   three `validated_*` fields in the same edit.
 - `decision_mode: agent-assisted` is REQUIRED when the spec has a `## Assumptions`
   row or an `## Agent Decisions` row. `human` is only valid when it has neither.
+
+### Required body sections
+
+Every spec contains these sections. A table may be empty in a draft, but the
+heading must be present.
+
+| Section | Rule |
+|---|---|
+| `## Source` | The user's description, quoted verbatim and dated |
+| `## Repo Profile` | Evidence from the repository; "not applicable" is allowed when there is no repo |
+| `## Context` | The problem, the user, and the boundary |
+| `## Requirements` | At least one `REQ-` once the spec is validated |
+| `## Assumptions` | Table; may be empty |
+| `## Agent Decisions` | Table; may be empty |
+| `## Conflicts` | Table; may be empty |
+| `## Open Questions` | Optional; if present, no unchecked item may remain |
+| `## Validation` | Required for `validated`; forbidden for `approved` |
+
+Kind templates may add sections. A missing required section blocks validation.
+`## Goals`, `## Non-goals`, and `## Actors` are recommended for a `system` spec;
+`## Non-goals` is a warning when missing.
 
 ## 4. Kinds and required edges
 
@@ -275,10 +315,16 @@ Product or external facts the agent guessed:
 | 2 | Users authenticate with SSO | company convention | high | agent (POC) | before production |
 ```
 
-`Risk` is `low`, `medium`, or `high`. `Confirmed` is `agent (POC)` for a POC
-inference, `user, 2026-11-25` once a human confirms it, or `needs-human` when the
-user explicitly reserved the fact. A `needs-human` fact blocks validation; a
-high-risk `agent (POC)` fact is a warning and must be fenced.
+`Risk` is `low`, `medium`, or `high`. `Confirmed` is one of:
+
+- `agent (POC)` — an inferred fact, fenced; required for every high-risk fact;
+- `user, 2026-11-25` — a human confirmed it on that date;
+- `needs-human` — the user explicitly reserved it; it blocks validation;
+- `no` — a low/medium inference the user has not confirmed yet. It is allowed,
+  but it is still a guess and needs a revisit trigger.
+
+A `needs-human` fact blocks validation; a high-risk `agent (POC)` fact is a
+warning and must be fenced.
 
 ### Agent Decisions
 
@@ -332,8 +378,11 @@ For a POC, the agent MAY infer these:
 Mark them `Risk: high`, `Confirmed: agent (POC)`, and
 `Revisit: before production`. A fenced fact may be built against only with fake
 data, a local provider, and no real users, money, or PII. Validation records every
-fenced fact as a warning; it does not block the POC. Contract promotion MUST
-confirm it.
+fenced fact as a warning; it does not block the POC. Promotion MUST confirm it
+before the fact enters a mature baseline; production is the latest point.
+
+This list is canonical. Summaries in the README, `AGENTS.md`, and the docs point
+here rather than maintaining a second list.
 
 A fact the user explicitly reserved is different: it is `Confirmed: needs-human`
 and blocks validation until the user answers. So does an unresolved conflict.
@@ -378,16 +427,32 @@ validated_at: "2026-11-25T09:00:00+08:00"
 validated_sha: "<canonical hash>"
 ```
 
-and writes a `## Validation` section with `Result: pass`. A validated spec is the
-current truth for the POC: the implementer and the verifier may rely on it.
+and writes a marker-delimited `## Validation` block with `Result: pass`. A
+validated spec is the current truth for the POC: the implementer and the verifier
+may rely on it.
 
-The hash is **canonical**: it covers the spec with the `## Validation` section
-removed and the three `validated_*` lines removed. `## Validation` MUST be the last
-section. Recompute it with:
+The hash is **canonical**: it covers the spec with the marker-delimited validation
+block removed, the three `validated_*` lines removed, and the `approved_sha` line
+removed. The block is wrapped by `<!-- BEGIN VALIDATION -->` and
+`<!-- END VALIDATION -->`; the END marker MUST be the last line of the file.
+Anything after END is included in the hash, so appended content invalidates the
+validation instead of hiding inside the excluded tail.
+
+Compute it with:
 
 ```bash
-awk '/^## Validation[[:space:]]*$/ { skip=1 } skip { next } /^validated_(by|at|sha):/ { next } { print }' <file> | sha256sum
+awk '
+  /^<!-- BEGIN VALIDATION -->[[:space:]]*$/ { skip=1; next }
+  /^<!-- END VALIDATION -->[[:space:]]*$/ { skip=0; next }
+  /^(validated_(by|at|sha)|approved_sha):/ { next }
+  !skip { print }
+' <file> | sha256sum
+# macOS: replace sha256sum with: shasum -a 256
 ```
+
+An approved spec has no validation block; the same command returns the hash of the
+whole body, including `approved_by` and `approved_at` but excluding `approved_sha`
+itself. `validated_sha` and `approved_sha` use this one definition.
 
 This makes the hash stable when the validation record itself changes, and
 sensitive to any change in the source, requirements, assumptions, decisions, or
@@ -401,7 +466,7 @@ by saying so.
 
 Any semantic edit by a writer, gap-filler, or human MUST demote the spec to
 `draft` and clear `validated_by` / `validated_at` / `validated_sha`. The
-validator's own update of `## Validation` and the `validated_*` fields is the
+validator's own update of the validation block and the `validated_*` fields is the
 exception. Run the validator again after the edit. The validator checks the
 canonical hash, so a stale validation cannot hide.
 
@@ -428,6 +493,12 @@ the same files.
 Set `status: deprecated`; add `superseded-by` where applicable; update incoming
 links. A deprecated spec remains readable for history.
 
+Retiring an approved spec is a change: a `CHG` with `result_status: deprecated`,
+`superseded-by` where a replacement exists, consumer migration, and the normal
+approval tier. A split is a sequence: create and approve the new spec(s) through
+the manual-baseline path, then one `CHG` on the old target sets
+`result_status: deprecated` and the outgoing links. There is no multi-target CHG.
+
 ### Mature stage: evolution
 
 A mature spec is an **approved baseline**. Other specs, teams, and consumers depend
@@ -442,9 +513,11 @@ Promotion steps:
 1. Confirm every high-risk assumption and every agent decision with the user.
 2. Resolve conflicts and open questions.
 3. Set `stage: mature`, `status: approved`, `approved_by`, `approved_at`, and
-   `version: 1.0.0`; clear `validated_by`, `validated_at`, and `validated_sha`.
+   `version: 1.0.0`; clear `validated_by`, `validated_at`, and `validated_sha`,
+   and remove the validation block.
 4. Add the links the kind requires.
-5. Keep the `id` and `REQ-` ids stable.
+5. Compute `approved_sha` from the resulting file (§9) and write it.
+6. Keep the `id` and `REQ-` ids stable.
 
 From that point:
 
@@ -457,22 +530,38 @@ From that point:
 
 The change loop:
 
-1. **Request.** A `CHG` names the target, `base_version`, bump, risk, motivation,
-   consumers, and proposed compatibility.
+1. **Request.** A `CHG` names the target, `base_version`, `base_sha`, bump, risk,
+   motivation, consumers, `proposal_sha`, and proposed compatibility.
 2. **Impact.** Name every consumer, contract, test, doc, data change, and ops step
    with a path or spec id.
 3. **Proposal.** Copy the full target body between the markers and apply only the
-   intended change. Keep `REQ-` ids stable. Remove or mark stale the old
-   `## Validation` section; an approved baseline does not carry a current bootstrap
-   validation.
-4. **Review.** Agent validation plus the tiered approval below.
-5. **Release.** A human applies the body, bumps the version, approves, and archives
-   the change.
+   intended change. Keep `REQ-` ids stable. Remove the validation block; an
+   approved baseline does not carry a current bootstrap validation.
+4. **Review.** The validator applies `checklists/validate-proposal.md` to the
+   effective spec (target front-matter + `spec` overrides + proposed body) and
+   records `## Proposal validation` in the CHG. The `spec-reviewer` records
+   `## Review`. Then the tiered approval below applies.
+5. **Release.** A human verifies `base_sha` and `proposal_sha`, applies the body,
+   bumps the version, sets `approved_sha`, approves, and archives the change.
 6. **Implement.** A single-track change goes straight to the implementer; a
    multi-track change uses an architect plan and the fleet.
 7. **Verify.** Regression, conformance for changed `REQ-` ids, and contract
    compatibility for every consumer.
 8. **Rollout.** Flag, canary, migration, deprecation window, and a tested rollback.
+
+`base_sha` is the target's `approved_sha` at proposal time. `proposal_sha` is the
+SHA-256 of the exact lines between `<!-- BEGIN PROPOSED BODY -->` and
+`<!-- END PROPOSED BODY -->`, excluding the marker lines:
+
+```bash
+awk '/^<!-- BEGIN PROPOSED BODY -->[[:space:]]*$/ { p=1; next }
+     /^<!-- END PROPOSED BODY -->[[:space:]]*$/ { p=0 }
+     p' <chg> | sha256sum
+# macOS: replace sha256sum with: shasum -a 256
+```
+
+A change whose `proposal_sha` does not match the body is not reviewable. Keep one
+active proposed CHG per `target` and `base_version`.
 
 Approval tiers:
 
@@ -484,18 +573,31 @@ Approval tiers:
 | any | high (security, privacy, data ownership, payments) | owner + security/data owner |
 
 Agents prepare the request, impact, proposal, and checklist. They never approve or
-release. Approvals are recorded in `approvals` with role, name, and date.
+release. Approvals are recorded in the front-matter `approvals` array; each entry
+has `role`, `name`, `date`, and `scope`. The change body has no separate approvals
+table, and only a human writes an approval entry. The release records a human
+`released_by` and, when available, a `release_commit`; that commit or PR is the
+external evidence the framework itself cannot verify.
+
+A change is ready to release only when the CHG has a `## Proposal validation`
+block with `Result: pass` and a `## Review` block whose recommendation is
+`ready to release`.
 
 Release steps:
 
-1. Verify `base_version` equals the target's current `version`.
-2. Apply the proposed body and the `spec` overrides.
-3. Set the new `version` according to `bump`.
-4. Set `status: approved`, `approved_by`, `approved_at`, `updated`; clear
-   `validated_by`, `validated_at`, and `validated_sha`.
-5. Move the change to `changes/archive/` with `status: released`,
-   `released_as`, `released_at`.
-6. Update the index and any graph view.
+1. Verify `base_version` equals the target's current `version`, and `base_sha`
+   equals the target's `approved_sha`.
+2. Verify `proposal_sha` matches the proposed body between the markers.
+3. Apply the proposed body and the `spec` overrides.
+4. Set the new `version` according to `bump`.
+5. Set `status: result_status` (default `approved`; `deprecated` for a retirement),
+   `approved_by`, `approved_at`, `updated`; clear `validated_by`, `validated_at`,
+   and `validated_sha`, and remove the validation block.
+6. Compute `approved_sha` from the resulting target file (§9) and write it.
+7. Move the change to `changes/archive/` with `status: released`,
+   `released_as`, `released_at`, `released_by`, and `release_commit`; keep the
+   recorded reviews and approvals.
+8. Update the index and any graph view.
 
 A mature project usually starts without specs. Backfill a baseline from code,
 contracts, and tests, then use this mode. See
@@ -505,32 +607,41 @@ contracts, and tests, then use this mode. See
 
 - **Who.** The `spec-validator` agent, in a context separate from the writer. Do
   not validate the draft you just wrote in the same pass.
-- **How.** Apply every check in `checklists/validate.md`; cite a file and line for
+- **How.** Apply every check in `checklists/validate.md` for a bootstrap spec, or
+  `checklists/validate-proposal.md` for a mature change; cite a file and line for
   every finding.
-- **Output.** Write `## Validation` into the spec and update the three
-  `validated_*` fields only on pass. Do not edit requirements, assumptions, or
-  decisions.
+- **Output.** Write the marker-delimited `## Validation` block into the spec and
+  update the three `validated_*` fields only on pass. For a mature change, write
+  `## Proposal validation` into the CHG and never edit the target. Do not edit
+  requirements, assumptions, or decisions.
 - **Blocking.** Missing source, untestable Then, internal contradiction, an
   unresolved conflict, a user-reserved fact still `needs-human`, a security
-  finding, a duplicate or broken id/link, or a stale hash.
+  finding, a duplicate or broken id/link, a stale hash, content after the validation
+  block's END marker, or a target/`base_sha`/`proposal_sha` mismatch.
 - **Warnings.** A high-risk POC assumption fenced for production, a thin non-goals
   list, a stale index, or a one-line justification for an allowed warning.
 - **Independence.** The validator may read the `## Source`, the spec, the
   repository, and the checklists. It must not read the writer's chat summary or
   rationale; it judges the file.
-- **Mature change.** Validate the proposed body mechanically as a review. Do not
-  set an approved target to `status: validated`. Release readiness is
-  `checklists/change.md` plus the reviewer and the approval tier.
+- **Mature change.** Apply `checklists/validate-proposal.md` to the effective spec
+  (target front-matter + `spec` overrides + proposed body) and write the result
+  into the CHG's `## Proposal validation`. Do not edit the target and do not set it
+  to `status: validated`. Release readiness is `checklists/change.md`, the recorded
+  review, and the approval tier.
+- **Approved baselines** carry no validation block. If one is present, it is stale
+  and blocks the review.
 
 A `## Validation` section looks like this:
 
 ```md
+<!-- BEGIN VALIDATION -->
 ## Validation
 
 - Validated by: agent:spec-validator
 - At: 2026-11-25T09:00:00+08:00
 - Result: pass
 - Checklist: checklists/validate.md
+- Hash: <canonical hash>
 
 | # | Check | Result | Note |
 |---|---|---|---|
@@ -550,6 +661,7 @@ A `## Validation` section looks like this:
 ### POC risks
 
 - `specs/system/url-shortener.md:62` — auth assumed as company SSO; fenced; confirm before production
+<!-- END VALIDATION -->
 ```
 
 ## 10. Versioning
@@ -618,7 +730,8 @@ Specs are inputs to agents. Treat them as untrusted:
 ## 14. What this is not
 
 - Not a formal language. Prose is allowed; structure exists to expose gaps.
-- Not a build system. There is no parser, generator, or CI requirement.
+- Not a build system. The specd flow has no parser, generator, or CI requirement;
+  the optional self-check in `scripts/` is for maintaining the seed.
 - Not a guarantee. Validation catches gaps the checklist can name; it cannot prove
   the product is right.
 - Not an interview. The user describes once; the agent infers until a

@@ -1,6 +1,6 @@
 ---
 description: 'Default specd entry point: spike, bootstrap, mature change, or backfill. Routes to the specialists and keeps writes disjoint.'
-tools: ['read', 'search', 'edit', 'agent']
+tools: ['read', 'search', 'edit', 'execute', 'agent']
 ---
 
 Read and follow:
@@ -18,7 +18,11 @@ Default behavior:
 - New spec: run the sequence and delegate each step to its specialist agent. Do
   not fleet the spec draft.
 - Mature target (`stage: mature`, `status: approved`): use the `change-analyst`
-  and `/change`; never edit the approved target. Report the approvals needed.
+  and `/change`; never edit the approved target. The validator records
+  `## Proposal validation` and the reviewer records `## Review` in the CHG. Report
+  the approvals needed.
+- Release verifies `base_sha` and `proposal_sha`, then writes `approved_sha` on
+  the target.
 - After a mature change is released, implement its scope: a single-track change
   goes straight to the implementer plus regression; a multi-track change uses the
   architect plan and fleet.

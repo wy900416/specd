@@ -20,7 +20,8 @@ Use it when the behaviour is discoverable from the repository.
    every uncertainty in `## Assumptions`.
 4. Run `/validate-spec`. Fix mechanical findings.
 5. A human reviews and approves the baseline: `stage: mature`, `status: approved`,
-   `version: 1.0.0`; clear the `validated_*` fields.
+   `approved_by`, `approved_at`, `version: 1.0.0`; clear the `validated_*` fields,
+   remove the validation block, and write `approved_sha`.
 6. Repeat for the next boundary, highest churn first.
 
 The backfiller never approves. A backfilled spec is a hypothesis about the
@@ -36,7 +37,8 @@ source of truth.
 3. Fill `## Source`, `## Repo Profile`, requirements, assumptions, and decisions.
 4. Validate it.
 5. A human approves: `status: approved`, `approved_by`, `approved_at`,
-   `version: 1.0.0`; clear the `validated_*` fields.
+   `approved_sha`, `version: 1.0.0`; clear the `validated_*` fields and remove the
+   validation block.
 6. Treat it as the baseline; changes go through `changes/`.
 
 Manual is slower but better when the team knows the intended behaviour and the

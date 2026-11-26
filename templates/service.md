@@ -5,13 +5,17 @@ title: "{{title}}"
 summary: "{{summary}}"
 version: {{version}}
 status: draft
+stage: mature
+decision_mode: agent-assisted
+validated_by: ""
+validated_at: ""
+validated_sha: ""
 owner: "{{owner}}"
 domain: "{{domain}}"
 level: "{{level}}"
 created: {{date}}
 updated: {{date}}
 tags: []
-decision_mode: human
 links: []
 ---
 
@@ -57,13 +61,51 @@ compensation, and what the caller observes.
 
 Link standards and NFRs with `constrained-by`.
 
+## Source
+
+> <the user's description or backfill request, verbatim, with a date>
+
+## Repo Profile
+
+| Area | Finding | Evidence |
+|---|---|---|
+| Language | | `repo:<path>:<line>` |
+| Framework | | `repo:<path>:<line>` |
+| Tests | | `repo:<path>:<line>` |
+| Conventions | | `repo:<path>:<line>` |
+
+## Context
+
+What problem does this boundary solve, for whom, and why now? State the boundary.
+
+## Assumptions
+
+| # | Assumption | Basis | Risk | Confirmed | Revisit |
+|---|---|---|---|---|---|
+| | | | | | |
+
+## Conflicts
+
+| # | Other spec | Conflict | Options | Resolution |
+|---|---|---|---|---|
+| | | | | |
+
+
+## Agent Decisions
+
+<!-- One row per decision. Leave the table empty if there are none. -->
+| # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+
 ## Open Questions
 
 - [ ] <question>
 
-## Agent Decisions
+<!-- BEGIN VALIDATION -->
+## Validation
 
-<!-- Optional. Remove this section if every decision is human. One row per decision. -->
-| # | Question | Chosen | Why | Alternatives | Reversible | Revisit after |
-|---|---|---|---|---|---|---|
-| | | | | | | |
+<!-- The validator replaces this block. Keep END as the last line of the file.
+     The canonical hash excludes everything between the two markers. -->
+- Not run yet. The validator writes this section.
+<!-- END VALIDATION -->

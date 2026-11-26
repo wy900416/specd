@@ -49,13 +49,17 @@ Promotion from bootstrap:
 1. Confirm every high-risk assumption and every agent decision with the user.
 2. Resolve conflicts and open questions.
 3. Set `stage: mature`, `status: approved`, `approved_by`, `approved_at`,
-   `version: 1.0.0`; clear `validated_by`, `validated_at`, and `validated_sha`.
+   `version: 1.0.0`; clear `validated_by`, `validated_at`, and `validated_sha`,
+   and remove the validation block.
 4. Add the links the kind requires.
-5. Record the promotion in the change log. From now on, use this mode.
+5. Compute `approved_sha` from the resulting file and write it.
+6. Record the promotion in the change log. From now on, use this mode.
 
 ## Change request
 
-A change request is `changes/CHG-<YYYYMMDD>-<nnn>-<target>.md`. Its front-matter:
+A change request is `changes/CHG-<YYYYMMDD>-<nnn>-<target>.md`. Allocate the
+next `nnn` by scanning `changes/`, and keep one active proposed CHG per `target`
+and `base_version`. Its front-matter:
 
 ```yaml
 ---
@@ -64,14 +68,22 @@ kind: change
 title: "Add idempotent order creation"
 target: orders
 base_version: 1.4.2
+base_sha: "<target approved_sha>"
 bump: minor
 risk: medium
 compatibility: additive
+result_status: approved
 status: proposed
 author: "agent"
 owner: "orders-team"
 consumers: [checkout, admin]
+# Canonical approvals array. Each entry: role, name, date, scope.
 approvals: []
+proposal_sha: "<hash of the proposed body>"
+released_as: ""
+released_at: ""
+released_by: ""
+release_commit: ""
 created: 2026-11-26
 updated: 2026-11-26
 summary: "Make order creation idempotent."
@@ -90,19 +102,24 @@ The body is a **change record** followed by the proposed target body:
 ### Docs
 ### Data
 ### Ops
+## Test Strategy
 ## Compatibility
 ## Rollout
 ## Rollback
 ## Migration / deprecation
-## Approvals
+## Proposal validation
+## Review
+## Notes
 
 <!-- BEGIN PROPOSED BODY -->
 <the full proposed body of the target spec>
 <!-- END PROPOSED BODY -->
+
+## Verification
 ```
 
-Release applies only the content between the markers. Impact, rollout, and
-approvals stay in the record and are archived with it.
+Release applies only the content between the markers. Impact, rollout, and the
+recorded reviews stay in the record and are archived with it.
 
 ## Impact analysis
 
@@ -127,12 +144,16 @@ derived by reading the target and the proposal side by side. `spec` holds
 front-matter overrides (title, summary, owner, links, `applies_to`, `pinned`);
 leave it `{}` when only the body changes.
 
-The proposed body drops or marks stale the old `## Validation` section: an
-approved baseline does not carry a current bootstrap validation.
+The proposed body drops the validation block: an approved baseline does not carry
+a current bootstrap validation.
 
-The validator checks the proposed body mechanically, as a review. It does not flip
-the approved target to `status: validated`; release readiness is the change
-checklist plus the reviewer.
+`base_sha` is the target's `approved_sha` at proposal time; `proposal_sha` binds
+the proposed body. The validator applies
+[`checklists/validate-proposal.md`](../checklists/validate-proposal.md) to the
+effective spec and writes `## Proposal validation` into the CHG. The
+`spec-reviewer` writes `## Review`. Neither flips the approved target to
+`status: validated`; release readiness is the change checklist plus the recorded
+review.
 
 ## Tiered approval
 
@@ -150,7 +171,8 @@ Rules:
 
 - The agent prepares the request, impact, proposal, and checklist. It never
   approves or releases.
-- Approvals are recorded in `approvals` with role, name, and date.
+- Approvals are recorded only in the front-matter `approvals` array; each entry
+  has `role`, `name`, `date`, and `scope`. There is no separate body table.
 - A `major` change without consumer sign-off is not ready to release.
 - A high-risk change without the security/data owner is not ready to release.
 - If the change is small and single-track, skip the architect plan and fleet; run
@@ -158,18 +180,30 @@ Rules:
 
 ## Release
 
+A human releases only after `## Proposal validation` records `Result: pass` and
+`## Review` recommends `ready to release`.
+
 A human releases:
 
-1. Verify `base_version` equals the target's current `version`.
-2. Apply the proposed body (between the markers) and the `spec` overrides.
+1. Verify `base_version` equals the target's current `version`, and `base_sha`
+   equals the target's `approved_sha`.
+2. Verify `proposal_sha` matches the proposed body, then apply the body and the
+   `spec` overrides.
 3. Set the new `version` according to `bump`.
-4. Set `status: approved`, `approved_by`, `approved_at`, `updated`; clear
-   `validated_by`, `validated_at`, and `validated_sha`.
-5. Move the change to `changes/archive/` with `status: released`,
-   `released_as`, `released_at`.
-6. Update the index and any graph view.
+4. Set `status: result_status` (default `approved`), `approved_by`,
+   `approved_at`, `updated`; clear `validated_by`, `validated_at`, and
+   `validated_sha`, and remove the validation block.
+5. Compute `approved_sha` and write it into the target.
+6. Move the change to `changes/archive/` with `status: released`,
+   `released_as`, `released_at`, `released_by`, and `release_commit`; preserve the
+   reviews and approvals.
+7. Update the index and any graph view.
 
-An agent may prepare steps 1-3 and present the diff. It must not execute 4-6.
+An agent may prepare steps 1-2 and present the diff. It must not execute the
+approval, `approved_sha`, archive, or index steps.
+
+The release commit or PR is the external evidence that a human approved. The
+Markdown record cannot prove identity; it records the human and the commit.
 
 ## Implementation
 
@@ -187,6 +221,15 @@ The plan is optional for small changes. Do not add a fleet to a one-file fix.
 - **Conformance:** the changed and new `REQ-` ids have tests from the spec.
 - **Contract compatibility:** consumers still pass their contract tests.
 - **Rollout:** the flag/canary path is exercised; the rollback is tested.
+
+## Retirement and split
+
+- **Deprecate:** a `CHG` with `result_status: deprecated`, a proposed body that sets
+  `status: deprecated`, `superseded-by` where a replacement exists, and the normal
+  approvals. The release keeps the spec readable and updates incoming links.
+- **Split:** create and approve the new spec(s) through the manual-baseline path,
+  then a `CHG` on the old target with `result_status: deprecated` and the outgoing
+  links. A split is a sequence of changes, not one multi-target record.
 
 ## Rollout and deprecation
 

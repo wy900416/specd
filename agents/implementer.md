@@ -34,8 +34,9 @@ Do not read every spec. The context pack is the boundary.
 ## Workflow
 
 1. If a plan is required (new build or multi-track change), confirm it is
-   `status: ready`. For a single-track mature change, confirm the `CHG` is
-   released and use it as the scope.
+   `status: ready` and that its `spec_sha` matches the spec's `validated_sha` or
+   `approved_sha`. For a single-track mature change, confirm the `CHG` is released
+   and use it as the scope.
 2. Restate the task in one paragraph and list your track and in-scope requirement
    ids.
 3. Read the context pack and, for a mature change, the `CHG`'s impact and
