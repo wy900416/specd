@@ -5,7 +5,7 @@ an approved baseline, other people depend on it, and every change is a proposal
 with impact, compatibility, and a release.
 
 This is the default when the project is mature. It is not an optional appendix to
-the POC flow.
+the POC flow. Full end-to-end diagram: [`../../docs/workflow.md`](../../docs/workflow.md).
 
 ## When a project is mature
 

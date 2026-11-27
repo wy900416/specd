@@ -23,6 +23,8 @@ Start with a spike when you are unsure. Bootstrap creates the first baseline.
 Evolution changes an approved baseline; it is opt-in under `mature/` and is the
 default once the project is mature.
 
+The end-to-end loop, including gates and artifacts: [`docs/workflow.md`](docs/workflow.md).
+
 ## How it works
 
 - **Describe, don't interview.** One paragraph in, one draft spec out. The first

@@ -2,7 +2,7 @@
 
 The spike answered "would this be useful?". The bootstrap lane builds the first
 spec and the first implementation. When the spec is approved as a baseline, the
-project moves to evolution.
+project moves to evolution. Full end-to-end diagram: [`workflow.md`](workflow.md).
 
 ## The loop
 

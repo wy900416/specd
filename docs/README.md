@@ -20,6 +20,7 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 
 | You want to... | Read |
 |---|---|
+| See the whole loop | [`workflow.md`](workflow.md) — one end-to-end diagram |
 | See a demo today | [`spike.md`](spike.md) — one hypothesis, one fake path, 90 minutes |
 | Start a new project | [`getting-started.md`](getting-started.md) → [`bootstrap-mode.md`](bootstrap-mode.md) → [`implementation.md`](implementation.md) |
 | Change an approved baseline | [`../mature/README.md`](../mature/README.md) — the opt-in mature lane |
@@ -35,6 +36,7 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 
 | Document | What it covers |
 |---|---|
+| [`workflow.md`](workflow.md) | The complete loop: spike, bootstrap, evolution, and human gates |
 | [`getting-started.md`](getting-started.md) | Prerequisites, clone, open an agent, first spec, first build |
 | [`repo-layout.md`](repo-layout.md) | The seed's directory tree, annotated |
 | [`agents.md`](agents.md) | Copilot surfaces, file layout, which agent, slash commands, global skills |
