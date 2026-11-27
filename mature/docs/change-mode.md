@@ -148,7 +148,8 @@ The proposed body drops the validation block: an approved baseline does not carr
 a current bootstrap validation.
 
 `base_sha` is the target's `approved_sha` at proposal time; `proposal_sha` binds
-the proposed body. The validator applies
+the proposed body. The target's `## Acceptance` travels in the proposed body; the
+change's `## Test Strategy` maps changed criteria to tests. The validator applies
 [`checklists/validate-proposal.md`](../checklists/validate-proposal.md) to the
 effective spec and writes `## Proposal validation` into the CHG. The
 `spec-reviewer` writes `## Review`. Neither flips the approved target to
@@ -219,6 +220,8 @@ The plan is optional for small changes. Do not add a fleet to a one-file fix.
 
 - **Regression:** the existing suite still passes.
 - **Conformance:** the changed and new `REQ-` ids have tests from the spec.
+- **Acceptance:** the changed and new `## Acceptance` criteria have user-facing
+  tests; the human accepts the outcome at rollout.
 - **Contract compatibility:** consumers still pass their contract tests.
 - **Rollout:** the flag/canary path is exercised; the rollback is tested.
 

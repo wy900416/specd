@@ -18,6 +18,8 @@ Default behavior:
 - Capture the description verbatim in `## Source`.
 - Write only requirements that trace to the user's words; leave gaps for the
   gap-filler.
+- Write `## Goals` with `GOAL-` ids and a draft `## Acceptance`: the scenarios the
+  user will try, mapped to a goal or `REQ-`. This is not a conformance test.
 - After the draft, hand off to the `gap-filler` agent, then the `spec-validator`
   agent. Pass only the spec path and the checklist; do not summarize your draft to
   the validator. If the runner cannot spawn subagents, stop and tell the user to

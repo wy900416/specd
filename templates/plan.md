@@ -54,11 +54,20 @@ parallel; execution happens after both land.
 
 ## Test Strategy
 
+Conformance:
+
 | REQ | Test file | Level | Owner |
 |---|---|---|---|
 | `REQ-...` | `tests/...` | unit / integration / black-box | implementer or verifier |
 
+Acceptance:
+
+| GOAL / criterion | Test file | Level | Owner |
+|---|---|---|---|
+| `GOAL-...` / <criterion> | `tests/...` | black-box | verifier |
+
 - Conformance gate: the verifier owns the black-box tests written from the spec.
+- Acceptance gate: the verifier owns the tests for `## Acceptance`; the user accepts.
 - Developer tests: the implementer owns unit/integration tests.
 - The verifier receives this table, not the architecture notes.
 

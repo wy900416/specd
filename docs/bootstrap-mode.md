@@ -17,7 +17,9 @@ flowchart LR
   P --> T["Write tests<br/>fleet"]
   I --> R["Run conformance<br/>verifier"]
   T --> R
-  R --> G["React, revise<br/>back to draft"]
+  R --> AC{"User accepts<br/>the outcome?"}
+  AC -- no --> G["Revise<br/>back to draft"]
+  AC -- yes --> HB["Human approves<br/>the baseline"]
 ```
 
 | Step | Who | Output |
@@ -28,9 +30,12 @@ flowchart LR
 | Validate | `spec-validator` | `## Validation`, `status: validated` |
 | Plan | `architect` | `plans/<id>.md` with file map, tracks, test strategy |
 | Implement + write tests | `implementer` + `verifier` (fleet) | code and conformance tests, disjoint files |
-| Run conformance | `verifier` | pass / fail / blocked per `REQ-` |
+| Run conformance | `verifier` | pass / fail / blocked per `REQ-`, plus acceptance tests |
+| Accept | user | uses the result against `## Acceptance`; accept or revise |
 
-One paragraph in, one validated spec out. No interview, no approval meeting.
+One paragraph in, one validated spec out. No interview, no approval meeting; the
+user accepts the outcome before promotion. A green validator and a green
+conformance suite are not acceptance: `## Acceptance` is the user-facing check.
 
 ## What a spec looks like
 

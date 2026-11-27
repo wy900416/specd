@@ -16,6 +16,9 @@ applyTo: 'specs/**/*.md'
   validation update is the exception.
 - Every requirement keeps its stable `REQ-<PREFIX>-<NNN>` id and a
   `- **Source:** ...` line. New ids are never reused.
+- A `system` spec has `## Goals` with unique `GOAL-` ids and `## Acceptance`
+  rows mapped to a goal or `REQ-`. Acceptance is user-facing; a conformance test
+  is not acceptance.
 - Put guessed product facts in `## Assumptions`; put implementation choices in
   `## Agent Decisions`. Both need a basis and a revisit trigger.
 - High-risk POC assumptions use `Risk: high`, `Confirmed: agent (POC)`, and

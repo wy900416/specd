@@ -53,6 +53,8 @@ cannot.
 ## Blocking conditions
 
 - Missing or paraphrased `## Source`, or a missing required body section.
+- A `system` spec without `## Goals` / `## Acceptance`, or an acceptance row that
+  maps to no goal or requirement.
 - A missing kind-required edge, or an empty `applies_to` on an NFR/standard.
 - An unchecked item under `## Open Questions`.
 - A requirement without `Source`, or a `Source: assumption` not listed in

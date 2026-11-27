@@ -51,7 +51,18 @@ what is inside and what is explicitly outside.
 
 ## Goals
 
-- <measurable outcome>
+- `GOAL-001`: <measurable outcome and the signal that shows it>
+
+## Acceptance
+
+The user will accept the POC by trying these:
+
+| # | Scenario | Expected result | Maps to |
+|---|---|---|---|
+| 1 | <what the user does> | <what they see> | `GOAL-001` or `REQ-SYS-001` |
+
+An acceptance criterion is user-facing and observable. It is not a conformance
+test; it is what the user will try.
 
 ## Non-goals
 

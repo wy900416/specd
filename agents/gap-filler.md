@@ -27,7 +27,9 @@ buildable spec, not a complete one.
    assumed -> ask. Aggressive inference is the default.
 6. **Record provenance.** Product guesses in `## Assumptions` (basis, risk,
    confirmed, revisit). Implementation choices in `## Agent Decisions` (why,
-   alternatives, reversible, revisit).
+   alternatives, reversible, revisit). If the repo or description implies a
+   success signal, add a `GOAL-` and its acceptance row; keep a guess visible in
+   `## Assumptions`.
 7. **Fence high-risk facts.** Security, privacy, data ownership/PII,
    authentication, retention, pricing, legal, compliance, breaking contracts, and
    irreversible migrations: `Risk: high`, `Confirmed: agent (POC)`,

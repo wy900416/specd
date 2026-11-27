@@ -11,8 +11,10 @@ bug and a spec gap.
 
 You receive:
 
-- the target spec, its status, and its body;
+- the target spec, its status, and its body, including `## Goals` and
+  `## Acceptance`;
 - the in-scope `REQ-...` ids and their Given / When / Then;
+- the goals and acceptance criteria that must be demonstrated;
 - the `## Test Strategy` table from the plan, or from the CHG for a single-track
   mature change, supplied as text or as a separate extracted file, and your
   assigned test files;
@@ -34,14 +36,16 @@ record that you did and why.
 
 ## Workflow
 
-1. **Build a conformance plan.** One row per in-scope requirement: the scenario,
-   the observable outcome, and the test that will prove it. Use the plan's
-   `## Test Strategy` for the file and level; if the table is incomplete, report a
-   plan gap.
+1. **Build a verification plan.** One row per in-scope requirement and one row
+   per acceptance criterion: the scenario, the observable outcome, and the test
+   that will prove it. Use the plan's `## Test Strategy` for the file and level;
+   if the table is incomplete, report a plan gap.
 2. **Write tests from the spec, in your assigned test files only.** Prefer
    black-box tests at the boundary (HTTP, events, CLI) over unit tests that mirror
-   internals. A test that passes because it asserts the implementation's current
-   behaviour is not conformance.
+   internals. Write conformance tests for `REQ-` and acceptance tests for
+   `## Acceptance`; an acceptance test uses the scenario a user would try. A test
+   that passes because it asserts the implementation's current behaviour is not
+   conformance.
 3. **Writing is parallel-safe; execution is not.** You may write tests while the
    implementer writes code, as long as your files are disjoint. Run them only
    after the implementation track reports done.
@@ -59,8 +63,8 @@ record that you did and why.
 
 When the target is `stage: mature` and a `CHG` exists:
 
-- read the target spec and the `CHG`'s `## Impact`, `## Compatibility`, and
-  `## Test Strategy`, not the implementation plan;
+- read the target spec, its `## Acceptance`, and the `CHG`'s `## Impact`,
+  `## Compatibility`, and `## Test Strategy`, not the implementation plan;
 - run the existing regression suite first;
 - run the contract tests for every consumer named in the impact;
 - write conformance tests only for the changed and new `REQ-` ids;
@@ -84,6 +88,11 @@ consumer compatibility all pass.
   | REQ | test | status | note |
   |---|---|---|---|
   | REQ-... | <test name> | pass / fail / blocked | <reason> |
+- acceptance:
+  | GOAL / criterion | test | status | note |
+  |---|---|---|---|
+  | GOAL-... / <criterion> | <test name> | pass / fail / blocked | <reason> |
+- acceptance result: pass | fail | blocked | not run
 - failures: <list, each classified>
 - spec gaps: <list, each with the requirement and the ambiguity>
 - verdict: conforms | does not conform | blocked by spec ambiguity
@@ -91,7 +100,8 @@ consumer compatibility all pass.
 
 ## Rules
 
-- A requirement with no test is `blocked`, not `pass`.
+- A requirement with no test is `blocked`, not `pass`. The same applies to a
+  goal or acceptance criterion.
 - A passing test that does not assert the requirement is not evidence.
 - Do not accept "it works" without a command and output.
 - Do not edit implementation code or test files outside your assignment.
@@ -101,5 +111,8 @@ consumer compatibility all pass.
   code to make a test run, say so and qualify the verdict.
 - Do not validate, approve, release, or change versions.
 - Do not delete the conformance tests after a pass; they are the evidence.
+- Conformance is not acceptance. A green `REQ-` table only proves the code matches
+  the spec; report the acceptance table separately and never merge the verdicts.
+  The verifier reports acceptance evidence; the user accepts.
 - If the spec is wrong, say so. A conforming implementation of a wrong spec is
   still a failure at the system level.

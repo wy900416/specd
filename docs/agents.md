@@ -33,7 +33,7 @@ same files.
 | Validate only | `spec-validator` | independent gate; sets `validated` |
 | Plan implementation | `architect` | architecture, file map, tracks, test strategy |
 | Implement a planned track | `implementer` | one disjoint file set |
-| Conformance tests | `verifier` | tests from the spec, not the code |
+| Conformance + acceptance tests | `verifier` | tests from the spec, not the code |
 | Several independent specs | `/fleet` + `specd` or `spec-writer` per file | disjoint files only |
 | Implementation + tests | `/fleet` + `implementer` / `verifier` per track | plan must be ready first |
 

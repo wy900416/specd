@@ -29,8 +29,8 @@ Do not read these for a new POC. See [`../mature/README.md`](../mature/README.md
 
 Every spec template carries `## Source`, `## Repo Profile`, `## Context`,
 `## Assumptions`, `## Agent Decisions`, `## Conflicts`, and the marker-delimited
-`## Validation` block. Add `## Goals`, `## Non-goals`, and `## Actors` to a
-`system` spec.
+`## Validation` block. The `system` template also carries `## Goals`,
+`## Acceptance`, `## Non-goals`, and `## Actors`; fill them from the description.
 
 See `SPEC.md` for the required sections and `../mature/README.md` for the baseline
 and promotion rules.

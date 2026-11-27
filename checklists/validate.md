@@ -65,6 +65,12 @@ Mark every item `pass`, `warning`, or `block`.
       user-visible result. **block**
 - [ ] One requirement per observable behaviour. **warning**
 - [ ] No two requirements contradict each other. **block**
+- [ ] A `system` spec has `## Goals` and `## Acceptance`. **block**
+- [ ] Every `GOAL-` id is unique and names an observable signal. **block**
+- [ ] Every `## Acceptance` row maps to an existing `GOAL-` or `REQ-`. **block**
+- [ ] Every goal has at least one acceptance row. **block**
+- [ ] Acceptance criteria are user-facing; a conformance test is not acceptance.
+      **block**
 
 ## 4. Provenance
 

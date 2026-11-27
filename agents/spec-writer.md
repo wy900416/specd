@@ -29,7 +29,13 @@ There is no runtime. You create and edit files directly.
 5. **Write traceable requirements.** Every `REQ-` must trace to a sentence in
    `## Source`; use `Source: user` and one observable behaviour per id. Do not
    invent requirements.
-6. **Hand off.** Hand the file to the `gap-filler`; after gap-fill, hand the
+6. **Write Goals and draft Acceptance.** Give each goal a `GOAL-` id and an
+   observable signal. In `## Acceptance`, write the scenarios the user will
+   actually try, the result they expect, and the goal or `REQ-` each maps to.
+   This is the user's acceptance, not a conformance test. If the description does
+   not state a success signal, draft the obvious scenario and record it as an
+   assumption; do not invent a metric.
+7. **Hand off.** Hand the file to the `gap-filler`; after gap-fill, hand the
    result to `spec-validator` in a separate run. If the runner supports subagents,
    invoke the validator with only the spec path; do not pass your rationale. Show
    a short summary; do not ask for approval.
@@ -56,6 +62,8 @@ interview; it is optional (`references/deep-interview.md`).
 - path: specs/system/<slug>.md
 - kind: system
 - requirements: REQ-SYS-001, ...
+- goals: GOAL-001, ...
+- acceptance: <n> criteria
 - gaps left for gap-fill: <list>
 - next: gap-fill, then validate
 ```

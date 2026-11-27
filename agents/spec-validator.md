@@ -64,6 +64,8 @@ When the task is a `CHG`:
 
 - Missing or paraphrased source; a missing required body section; a requirement
   with no `Source`, or an `assumption` source not listed in `## Assumptions`.
+- A `system` spec without `## Goals` / `## Acceptance`, a goal without an
+  acceptance row, or an acceptance row that maps to nothing.
 - An unchecked item under `## Open Questions`.
 - A normative requirement without Given/When/Then, or with an unobservable Then.
 - Contradictory requirements, or a contradiction within the assumptions.

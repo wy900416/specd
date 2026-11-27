@@ -34,8 +34,10 @@ cheap hypothesis that the gap-filler and the validator will improve.
    sentence in `## Source`. Use one observable behaviour per id, with
    Given/When/Then and `Source: user`. Do not invent requirements here; that is
    the gap-filler's job.
-6. **Sketch the shape.** Fill `## Context`, `## Goals`, `## Non-goals`, and
-   `## Actors` from the description. Leave a section thin rather than plausible.
+6. **Sketch the shape.** Fill `## Context`, `## Goals`, `## Acceptance`,
+   `## Non-goals`, and `## Actors` from the description. Goals get `GOAL-` ids and
+   a signal; acceptance rows are scenarios the user will try, each mapped to a
+   goal or `REQ-`. Leave a section thin rather than plausible.
 7. **List the gaps as gaps.** Do not pre-fill `## Assumptions` or
    `## Agent Decisions`; the gap-filler owns those. Leave the sections with their
    headers and an empty table.

@@ -164,6 +164,8 @@ heading must be present.
 | `## Source` | The user's description, quoted verbatim and dated |
 | `## Repo Profile` | Evidence from the repository; "not applicable" is allowed when there is no repo |
 | `## Context` | The problem, the user, and the boundary |
+| `## Goals` | Required for a `system` spec; each goal has a `GOAL-` id and a signal |
+| `## Acceptance` | Required for a `system` spec; the user-facing criteria used to accept it |
 | `## Requirements` | At least one `REQ-` once the spec is validated |
 | `## Assumptions` | Table; may be empty |
 | `## Agent Decisions` | Table; may be empty |
@@ -172,8 +174,8 @@ heading must be present.
 | `## Validation` | Required for `validated`; forbidden for `approved` |
 
 Kind templates may add sections. A missing required section blocks validation.
-`## Goals`, `## Non-goals`, and `## Actors` are recommended for a `system` spec;
-`## Non-goals` is a warning when missing.
+`## Goals` and `## Acceptance` are required for a `system` spec. `## Non-goals`
+and `## Actors` are recommended; `## Non-goals` is a warning when missing.
 
 ## 4. Kinds and required edges
 
@@ -252,6 +254,34 @@ Rules:
   one id.
 - `Traces` is optional; when present, paths SHOULD exist in the implementation
   repository.
+
+### Goals and acceptance
+
+A `system` spec states what the user will accept, not only what the code must
+pass:
+
+```md
+## Goals
+
+- `GOAL-001`: a team member can shorten and resolve a link in under 30 seconds.
+
+## Acceptance
+
+| # | Scenario | Expected result | Maps to |
+|---|---|---|---|
+| 1 | A team member shortens a URL and opens the short link. | The original page opens. | `GOAL-001`, `REQ-SYS-001` |
+```
+
+Rules:
+
+- `GOAL-` ids are unique within the spec and each goal names an observable signal.
+- An acceptance row is user-facing and observable. `Maps to` references a
+  `GOAL-` id or a `REQ-` id.
+- Every goal has at least one acceptance row.
+- Acceptance is not conformance. A passing conformance test proves the
+  implementation matches the spec; it does not prove the user accepts the result.
+- The user accepts the outcome at promotion (the first baseline) or at the demo
+  that precedes it.
 
 ## 7. Provenance and inference
 
@@ -610,7 +640,8 @@ contracts, and tests, then use this mode. See
   update the three `validated_*` fields only on pass. For a mature change, write
   `## Proposal validation` into the CHG and never edit the target. Do not edit
   requirements, assumptions, or decisions.
-- **Blocking.** Missing source, untestable Then, internal contradiction, an
+- **Blocking.** Missing source, untestable Then, a `system` spec without
+  `## Goals` / `## Acceptance`, an acceptance row that maps to nothing, an
   unresolved conflict, a user-reserved fact still `needs-human`, a security
   finding, a duplicate or broken id/link, a stale hash, content after the validation
   block's END marker, or a target/`base_sha`/`proposal_sha` mismatch.

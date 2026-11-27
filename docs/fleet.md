@@ -79,7 +79,8 @@ Tracks from the plan:
 2. T2 HTTP API — src/api/**, tests/api/**
    Use @implementer.agent.md.
 3. V1 conformance — tests/conformance/shorten.test.ts
-   Use @verifier.agent.md. Write from the spec and the Test Strategy table.
+   Use @verifier.agent.md. Write from the spec, its `## Acceptance`, and the
+   Test Strategy table.
    Do not read T1/T2 implementation before writing assertions.
 
 Each track gets .context/url-shortener.md and its plan row.
@@ -170,8 +171,8 @@ Do not use it when:
 The verifier must run in a context that did not write the draft or the
 implementation. In a fleet:
 
-- give it the spec and the `## Test Strategy` table as text, not the plan file or
-  the architecture notes;
+- give it the spec, its `## Acceptance`, and the `## Test Strategy` table as text,
+  not the plan file or the architecture notes;
 - give it its own test files;
 - run it after the implementation lands.
 

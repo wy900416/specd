@@ -15,7 +15,7 @@ reading them.
 | `spec-validator.md` | independent gate; sets `status: validated` | `SPEC.md`, `checklists/validate.md` |
 | `architect.md` | validated spec -> fleet-ready plan | `SPEC.md`, `templates/plan.md`, `checklists/plan.md` |
 | `implementer.md` | implement a planned track | `SPEC.md`, `plans/<id>.md`, `.context/<id>.md` |
-| `verifier.md` | conformance tests written from the spec | `SPEC.md`, the target spec, the test strategy |
+| `verifier.md` | conformance + acceptance tests from the spec | `SPEC.md`, the target spec, the test strategy |
 
 ## Mature only
 
@@ -58,8 +58,9 @@ evolution:       change-analyst -> validator + spec-reviewer -> human release
   map, work tracks, and test strategy. It writes no code.
 - **implementer** gets the spec, its ready plan track, and a context pack. If a
   requirement is ambiguous, it stops and reports a spec gap.
-- **verifier** gets the spec, the `## Test Strategy`, and the test harness. It
-  does **not** get the architecture notes, file map, or the implementer's summary.
+- **verifier** gets the spec, its `## Acceptance`, the `## Test Strategy`, and the
+  test harness. It does **not** get the architecture notes, file map, or the
+  implementer's summary.
 - **spec-reviewer** is mature-stage only: cross-service consistency, impact, and
   version hygiene.
 

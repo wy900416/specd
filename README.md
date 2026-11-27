@@ -38,6 +38,9 @@ The end-to-end loop, including gates and artifacts: [`docs/workflow.md`](docs/wo
 - **Validate, don't approve.** A separate `spec-validator` applies the checklist
   and binds the result to the file hash. Humans approve only when the project is
   mature.
+- **Acceptance is not conformance.** The spec has a `## Acceptance` table; green
+  tests prove the code matches the spec, not that the user wants it. The user
+  accepts the outcome at the first baseline.
 - **Record every gate.** Validation lives in a marker-delimited block; a mature
   change records `## Proposal validation` and `## Review`, and release binds the
   new baseline with `approved_sha`.
@@ -52,9 +55,9 @@ Most of the flow is agent-run. A human is in the loop at exactly these points:
 |---|---|---|
 | POC spec | Nothing. `spec-validator` plus the content hash is the gate. | The draft is a cheap hypothesis; speed beats approval. |
 | POC exceptions | Resolves an open conflict, answers a `Confirmed: needs-human` fact, or confirms a high-risk fence before promotion. | The agent cannot make a value or fact decision for the user. |
-| First baseline | Approves a promotion or a backfill as the `1.0.0` baseline. | This is where a hypothesis becomes a contract. |
-| Mature change | Releases after tiered approval: owner for patch/minor, consumers for major, security/data for high risk. | Consumers, contracts, data, and irreversible operations are now involved. |
 | Implementation | The verifier is the gate. A human steps in only for an ambiguous requirement or an irreversible rollout. | Tests decide conformance; approval is not a substitute for them. |
+| First baseline | Accepts the outcome and approves a promotion or a backfill as the `1.0.0` baseline. | This is where a hypothesis becomes a contract. |
+| Mature change | Approves and releases after tiered approval: owner for patch/minor, consumers for major, security/data for high risk. Accepts the changed outcome at rollout. | Consumers, contracts, data, and irreversible operations are now involved. |
 
 The point is not "no humans". It is that the human is asked for the things an
 agent cannot decide, and only when the cost of being wrong is real.
@@ -167,8 +170,8 @@ demo, a new project, a mature change, an adoption, and reference work.
 
 - Not a formal language. Prose is allowed; structure exists to expose gaps.
 - Not a build system. There is no parser, generator, or CI requirement.
-- Not a guarantee. Validation catches what the checklist can name, not whether the
-  product is worth building.
+- Not a guarantee. Validation catches what the checklist can name; conformance
+  proves the code matches the spec. Neither proves the user accepts the result.
 - Not an interview. The user describes once; the agent infers until a
   user-reserved fact or a conflict forces a question.
 - Not POC-only. The evolution lane is the long-term mode: approved baselines,

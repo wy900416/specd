@@ -24,12 +24,13 @@ Follow `agents/orchestrator.md` and `docs/fleet.md`.
 2. Dispatch the implementation tracks and the verifier test tracks in parallel.
    Each track owns disjoint files and receives its track row, the file scope, and
    the context pack.
-3. Verifier tracks receive the spec and the `## Test Strategy` table as text, not
-   the architecture notes, file map, or plan file.
+3. Verifier tracks receive the spec, its `## Acceptance`, and the `## Test
+   Strategy` table as text, not the architecture notes, file map, or plan file.
 4. After all write tracks finish, run the verification command.
 5. Classify failures: code bug, spec ambiguity, harness issue. Route code bugs to
    the implementer; spec questions to the writer; harness issues to the plan.
-6. Set the plan to `done` only when every in-scope `REQ-` has a passing test.
+6. Set the plan to `done` only when every in-scope `REQ-` and every acceptance
+   criterion has a passing test. Report conformance and acceptance separately.
 7. Report tracks, test results, and any spec gap.
 
 Never run two agents that write the same file. Implementation and tests may be

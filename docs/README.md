@@ -15,6 +15,7 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 | **bootstrap** | The lane that writes the first spec and the first implementation. |
 | **evolution** | The lane for changing an approved (`stage: mature`) baseline. |
 | **mature** | An approved baseline with consumers, a version, and tiered approvals. |
+| **acceptance** | The user-facing criteria in `## Acceptance`; a green conformance test is not acceptance. |
 
 ## Reading paths
 

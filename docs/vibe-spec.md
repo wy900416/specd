@@ -100,7 +100,8 @@ the checklist, but not the writer's rationale. A validation is bound to the file
 hash, so an edit invalidates it.
 
 Validation is not a proof. It catches what the checklist can name. The user is
-still the only one who can say the product is worth building.
+still the only one who can say the product is worth building, and acceptance is a
+separate human decision (`## Acceptance`), not a green checklist.
 
 ## When vibe mode ends
 

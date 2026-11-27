@@ -56,6 +56,8 @@ Mark every item `pass`, `warning`, or `block`.
 ## 6. Test strategy
 
 - [ ] Every in-scope `REQ-` maps to at least one test file. **block**
+- [ ] Every acceptance criterion maps to at least one test file. **block**
+- [ ] Every goal is covered by at least one acceptance test. **block**
 - [ ] The map names the level (unit / integration / black-box). **warning**
 - [ ] The verifier owns the conformance tests; the implementer owns developer
       tests. **block**

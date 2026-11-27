@@ -38,6 +38,8 @@ for release.
       version skew. **block**
 - [ ] Every affected conformance/contract/regression test is named. **block**
 - [ ] `## Test Strategy` maps every changed and new `REQ-` to a test file. **block**
+- [ ] Changed or new acceptance criteria map to a test file in the proposed
+      body. **block**
 - [ ] Docs that describe the old behaviour are named. **warning**
 - [ ] Data changes have a migration/backfill/retention plan. **block** when data
       changes
@@ -108,6 +110,8 @@ Apply this section after the release, not before it.
 - [ ] Regression tests pass. **block**
 - [ ] Contract tests pass for every consumer. **block** for contract changes
 - [ ] Conformance tests for the changed and new `REQ-` ids pass. **block**
+- [ ] Acceptance tests for the changed and new `## Acceptance` criteria pass.
+      **block**
 - [ ] The rollout flag/canary was exercised. **warning**
 - [ ] Rollback was exercised or is trivially reversible. **warning**
 - [ ] Failures are classified: code bug, spec ambiguity, or harness issue.

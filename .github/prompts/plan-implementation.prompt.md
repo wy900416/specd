@@ -19,7 +19,8 @@ Follow `agents/architect.md`, `templates/plan.md`, and `checklists/plan.md`.
    - architecture and data flow;
    - a file map with one track per file set;
    - work tracks with disjoint files and dependencies;
-   - a test strategy mapping every in-scope `REQ-` to a test file;
+   - a test strategy mapping every in-scope `REQ-` and every acceptance
+     criterion to a test file;
    - the fenced high-risk assumptions;
    - `spec_sha` copied from `validated_sha` or `approved_sha`.
 4. Run `checklists/plan.md`. On a clean pass, set `status: ready`; otherwise keep

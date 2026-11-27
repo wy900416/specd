@@ -19,7 +19,8 @@ Default behavior:
   `.context/<spec-id>/` discovery fragments. Read the spec, the pack, and the
   repository.
 - Write `plans/<spec-id>.md` with architecture, a disjoint file map, work tracks,
-  and a test strategy that maps every in-scope `REQ-`.
+  and a test strategy that maps every in-scope `REQ-` and every acceptance
+  criterion.
 - Carry every fenced high-risk assumption.
 - Set `status: ready` only after `checklists/plan.md` passes.
 - Do not write code, tests, or migrations. Do not edit the spec.

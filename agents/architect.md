@@ -54,9 +54,10 @@ parallel".
 7. **Work tracks.** Split the work into tracks with **disjoint file sets**, an
    owning agent, dependencies, and a "done when" condition. Implementation tracks
    and verifier test tracks can run in parallel because they own different files.
-8. **Test strategy.** Map every in-scope requirement to a test file and level.
-   Conformance tests are written by the verifier from the spec; developer tests
-   are written by the implementer.
+8. **Test strategy.** Map every in-scope requirement and every acceptance
+   criterion to a test file and level. Conformance and acceptance tests are
+   written by the verifier from the spec; developer tests are written by the
+   implementer.
 9. **Risks and fences.** Carry the spec's high-risk assumptions and state what must
    stay fake (data, provider, auth, money).
 10. **Write `plans/<spec-id>.md`.** Set `status: draft` while drafting.

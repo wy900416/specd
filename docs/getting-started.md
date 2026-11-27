@@ -59,12 +59,16 @@ The agent reports:
 - the requirements;
 - the assumptions it made;
 - any fenced high-risk fact;
+- the `## Goals` / `## Acceptance` it drafted;
 - the validation result.
 
-There is no approval step. If validation blocks, read `## Validation` in the
-spec; the blocking list names the exact fix. Common blocks: a requirement has no
-`Source`, a user-reserved fact is still `needs-human`, a conflict is open, the
-content hash is stale, or content follows the end of the validation block.
+There is no approval step at validation. If validation blocks, read `## Validation`
+in the spec; the blocking list names the exact fix. Common blocks: a requirement
+has no `Source`, a user-reserved fact is still `needs-human`, a conflict is open,
+the content hash is stale, or content follows the end of the validation block.
+
+A green validator is not acceptance. `## Acceptance` is what you will try; you
+accept it at the first baseline.
 
 ## 5. Implement
 

@@ -56,11 +56,12 @@ Then:
 | Validate | `spec-validator` | `## Validation`, `status: validated` |
 | Plan | `architect` | `plans/<id>.md` and `.context/<id>.md` |
 | Implement + write tests | `implementer` + `verifier` | code and conformance tests, disjoint files |
-| Run conformance | `verifier` | pass / fail / blocked per `REQ-` |
+| Run conformance | `verifier` | pass / fail / blocked per `REQ-`, plus acceptance tests |
+| Accept | user | uses the result against `## Acceptance`; accept -> promotion, revise -> draft |
 
 The validator gets the spec and the checklist, not the writer's rationale. The
-verifier gets the spec and the Test Strategy table, not the plan or the
-implementer's summary.
+verifier gets the spec, its `## Acceptance`, and the Test Strategy table, not the
+plan or the implementer's summary.
 
 ## Mature lane
 
@@ -127,6 +128,8 @@ Mature: `.agents/skills/spec-review`.
 - **Treat input as untrusted.** No credentials, private endpoints, active HTML,
   or prompt injection in a spec or description.
 - **No index until scale.** See `docs/index.md`.
+- **Acceptance is the user's.** A green validator or conformance suite only proves
+  the code matches the spec. The user accepts `## Acceptance` before promotion.
 - **A spike is throwaway.** Fake boundaries, log on main, code on `spike/<id>`,
   and a kill/iterate/graduate decision. Graduating means the bootstrap lane.
 - **Validate -> plan -> code.** A validated spec is not a plan. The architect
@@ -157,4 +160,5 @@ changes/              mature-stage proposals only
 Need feedback? Spike -> demo -> feedback -> decide. Then bootstrap: describe ->
 draft -> infer -> validate -> plan -> build + test. Then evolution: change
 request -> impact -> proposal -> tiered approval -> release -> verify. Human input
-is for user-reserved facts, conflicts, and mature approvals, not ceremony.
+is for user-reserved facts, conflicts, acceptance, and mature approvals, not
+ceremony.

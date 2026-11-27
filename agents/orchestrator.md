@@ -115,16 +115,17 @@ When the user says implement, build, or code it:
    - Run the setup track first (dependencies, shared config, schema), if the plan
      has one.
    - Implementation tracks -> `implementer`, one file set each.
-   - Test tracks -> `verifier`, one test file each. The verifier receives the spec
-     and the `## Test Strategy` table as text or a separate extracted file, never
-     the plan file itself.
+   - Test tracks -> `verifier`, one test file each. The verifier receives the
+     spec, its `## Acceptance`, and the `## Test Strategy` table as text or a
+     separate extracted file, never the plan file itself.
    - Writing implementation and tests may run in parallel because they own
      disjoint files. Do not run two agents on the same file.
 4. **Execute after all writes stop.** Run the plan's verification command. Route
    failures: code bug -> implementer; spec ambiguity -> writer; harness issue ->
    plan.
-5. **Close.** Set the plan to `done` only when every in-scope `REQ-` has a passing
-   test. Report tracks, test results, and spec gaps.
+5. **Close.** Set the plan to `done` only when every in-scope `REQ-` and every
+   acceptance criterion has a passing test. Report tracks, test results, spec
+   gaps, and the acceptance result separately.
 
 ## Delegation rules
 

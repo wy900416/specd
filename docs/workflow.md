@@ -4,9 +4,9 @@ One end-to-end view of the three lanes and the gates. The short version:
 
 ```text
 spike:      hypothesis -> demo -> feedback -> kill | iterate | graduate
-bootstrap:  describe -> draft -> gap-fill -> validate -> plan -> implement + tests -> conformance
+bootstrap:  describe -> draft -> gap-fill -> validate -> plan -> implement + tests -> conformance -> accept
 evolution:  approved baseline -> CHG -> impact -> proposal -> validate -> review -> approvals
-            -> release -> implement -> verify -> rollout
+            -> release -> implement -> verify -> accept -> rollout
 ```
 
 ## The loop
@@ -33,17 +33,17 @@ flowchart TD
 
   V --> P["Plan + context<br/>architect"]
   P --> I["Implement tracks<br/>implementer"]
-  P --> T["Conformance tests<br/>verifier"]
-  I --> C{"Run conformance"}
+  P --> T["Conformance + acceptance tests<br/>verifier"]
+  I --> C{"Run conformance<br/>+ acceptance"}
   T --> C
   C -- code bug --> I
   C -- spec ambiguity --> B0
   C -- harness issue --> P
   C -- pass --> R["Use / react"]
-  R -- revise --> B0
+  R --> HA{"Human accepts<br/>the outcome?"}
+  HA -- no --> B0
+  HA -- yes --> H1{"Promote?<br/>human approves baseline"}
 
-  V --> H1{"Promote?<br/>human approves baseline"}
-  R --> H1
   H1 -- no --> V
   H1 -- yes --> A["Approved baseline<br/>approved_sha, semver"]
 
@@ -64,14 +64,14 @@ flowchart TD
   classDef human fill:#fff3cd,stroke:#b7791f,color:#000
   classDef gate fill:#e8f5e9,stroke:#2f855a
   classDef artifact fill:#eef2ff,stroke:#4c51bf
-  class HU,H1,AP,REL human
+  class HU,HA,H1,AP,REL human
   class Q,EX,B2,PV,RV,C gate
   class V,A,CHG artifact
 ```
 
 **Amber** is a human decision. **Green** is an agent gate. **Blue** is an artifact.
-The only POC human input is the `EX` branch; everything else is the validator or
-the implementation loop.
+The POC human inputs are `EX` (a conflict or reserved fact), `HA` (acceptance),
+and `H1` (promotion). Everything else is the validator or the implementation loop.
 
 ## Loops
 
@@ -82,6 +82,7 @@ the implementation loop.
 | Conformance | A code bug | `implementer` |
 | Conformance | A spec ambiguity | `spec-writer` |
 | Conformance | A harness issue | `architect` / plan |
+| Acceptance | The user does not get the expected result | `spec-writer` / draft; the plan becomes `stale` |
 | Proposal validation | A blocked effective spec | `change-analyst` |
 | Review / approval | A required change to the proposal | `change-analyst` |
 | Rollout | A failed canary or rollback | Previous baseline; human decision |
@@ -97,6 +98,13 @@ the implementation loop.
 | Change | `changes/CHG-*.md` | `base_sha` and `proposal_sha` |
 | Released change | `changes/archive/` | `released_as`, `released_at`, `released_by`, `release_commit` |
 | Approved baseline | `specs/<kind>/<id>.md` | `approved_sha` |
+
+## Acceptance is not conformance
+
+A green validator and a green conformance suite only prove that the code matches
+the spec. They do not prove the user accepts the result. `## Acceptance` is the
+user-facing check; the `HA` node above is the human decision. Until that node is
+yes, the application is not accepted, even if every `REQ-` test passes.
 
 ## Human guard
 

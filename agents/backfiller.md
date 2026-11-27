@@ -28,7 +28,9 @@ baseline. A human turns your draft into the baseline.
    configuration, runbooks, and recent changes.
 3. **Describe current behaviour.** Write requirements that match what the system
    does today, not what it should do. Every requirement gets
-   `Source: repo:<path>:<line>`.
+   `Source: repo:<path>:<line>`. For a `system` baseline, record the current
+   success signals and user-facing checks in `## Goals` / `## Acceptance`; they
+   describe today, not the desired product.
 4. **Record uncertainty.** Gaps and guesses go in `## Assumptions` with risk and a
    revisit trigger. Do not invent.
 5. **Write the draft baseline.** `specs/<kind>/<id>.md` with `stage: mature`,

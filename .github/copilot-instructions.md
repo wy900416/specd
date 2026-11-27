@@ -46,6 +46,9 @@ Only read `mature/` here. A new build never does.
   records `## Review` in the CHG.
 - A human release verifies `base_sha` and `proposal_sha`, then writes
   `approved_sha`. Agents never approve, release, or write `approved_sha`.
+- Acceptance is not conformance: a green validator or conformance suite does not
+  mean the user accepts the result. The user accepts `## Acceptance` at the first
+  baseline.
 - Tiered approval: owner for patch/minor, affected consumers for major,
   security/data for high risk. Prepare the change; never approve or release.
 - If a mature project has no specs, use `/backfill` or the manual baseline in

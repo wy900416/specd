@@ -68,9 +68,17 @@ What problem does this change solve, and what outcome proves it worked?
 
 ## Test Strategy
 
+Conformance:
+
 | REQ | Test file | Level | Owner |
 |---|---|---|---|
 | `REQ-...` | `tests/...` | unit / integration / black-box | implementer or verifier |
+
+Acceptance:
+
+| GOAL / criterion | Test file | Level | Owner |
+|---|---|---|---|
+| `GOAL-...` / <criterion> | `tests/...` | black-box | verifier |
 
 ## Compatibility
 

@@ -17,7 +17,8 @@ The plan lives at `plans/url-shortener.md` and contains:
 - **Architecture** and data flow;
 - **File map:** one owner per file;
 - **Work tracks:** disjoint files, dependencies, done when;
-- **Test strategy:** every in-scope `REQ-` mapped to a test file;
+- **Test strategy:** every in-scope `REQ-` and every acceptance criterion mapped
+  to a test file;
 - **Risks and fences** carried from the spec.
 
 The plan is bound to the spec's canonical hash (`spec_sha`): copy `validated_sha`
@@ -61,9 +62,11 @@ gets the `## Test Strategy` table as text, not the plan file.
 
 ## 4. Read the result
 
-The verifier reports one row per in-scope `REQ-`: pass, fail, or blocked. Each
-failure is classified as a **code bug**, a **spec ambiguity**, or a **harness
-issue**. The plan is `done` only when every in-scope `REQ-` passes.
+The verifier reports one row per in-scope `REQ-` and one row per acceptance
+criterion: pass, fail, or blocked. Each failure is classified as a **code bug**,
+a **spec ambiguity**, or a **harness issue**. The plan is `done` only when every
+in-scope `REQ-` and acceptance test passes. That is still not user acceptance;
+the user accepts the outcome at the first baseline.
 
 ## 5. When not to fleet
 
