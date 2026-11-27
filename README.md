@@ -42,6 +42,21 @@ default once the project is mature.
 - **Plan before parallel code.** The architect writes `plans/<id>.md`; then
   implementers and the verifier write disjoint files.
 
+## Where the human guard is
+
+Most of the flow is agent-run. A human is in the loop at exactly these points:
+
+| Point | What the human does | Why here |
+|---|---|---|
+| POC spec | Nothing. `spec-validator` plus the content hash is the gate. | The draft is a cheap hypothesis; speed beats approval. |
+| POC exceptions | Resolves an open conflict, answers a `Confirmed: needs-human` fact, or confirms a high-risk fence before promotion. | The agent cannot make a value or fact decision for the user. |
+| First baseline | Approves a promotion or a backfill as the `1.0.0` baseline. | This is where a hypothesis becomes a contract. |
+| Mature change | Releases after tiered approval: owner for patch/minor, consumers for major, security/data for high risk. | Consumers, contracts, data, and irreversible operations are now involved. |
+| Implementation | The verifier is the gate. A human steps in only for an ambiguous requirement or an irreversible rollout. | Tests decide conformance; approval is not a substitute for them. |
+
+The point is not "no humans". It is that the human is asked for the things an
+agent cannot decide, and only when the cost of being wrong is real.
+
 ## Quick start
 
 `/spike`, `/new-spec`, `/plan-implementation`, `/implement`, and `/change` below
