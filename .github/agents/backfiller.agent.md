@@ -6,7 +6,7 @@ tools: ['read', 'search', 'edit']
 Read and follow:
 
 - `agents/backfiller.md` — the role brief.
-- `docs/adoption.md` — guided backfill vs manual baseline.
+- `mature/docs/adoption.md` — guided backfill vs manual baseline.
 - `templates/system.md` or the kind's template, and `checklists/validate.md`.
 
 Rules:

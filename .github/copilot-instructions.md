@@ -7,7 +7,9 @@ project (evolution).
 For bootstrap, prefer the `specd` orchestrator and keep the flow sequential. For
 a mature change, use the `change-analyst` and `changes/`. Use `/fleet` or parallel
 subagents only for disjoint files; parallelize reads and serialize writes. See
-`docs/fleet.md`, `docs/change-mode.md`, and `docs/adoption.md`.
+`docs/fleet.md` for implementation. A mature change additionally reads
+`mature/README.md`, `mature/docs/change-mode.md`, and `mature/docs/adoption.md`;
+a new build does not read the mature pack.
 
 ## When the user wants quick feedback
 
@@ -34,10 +36,12 @@ promoted.
 
 ## When the project is mature
 
+Only read `mature/` here. A new build never does.
+
 - If the target spec is `stage: mature`, `status: approved`, any change is a
   `CHG` in `changes/`. Use the `change-analyst` agent or `/change`. Do not edit the
   target.
-- Run `checklists/change.md`: impact, compatibility, rollout, rollback, and the
+- Run `mature/checklists/change.md`: impact, compatibility, rollout, rollback, and the
   approval tier. The validator records `## Proposal validation` and the reviewer
   records `## Review` in the CHG.
 - A human release verifies `base_sha` and `proposal_sha`, then writes
@@ -45,7 +49,7 @@ promoted.
 - Tiered approval: owner for patch/minor, affected consumers for major,
   security/data for high risk. Prepare the change; never approve or release.
 - If a mature project has no specs, use `/backfill` or the manual baseline in
-  `docs/adoption.md`. Never approve a backfilled baseline.
+  `mature/docs/adoption.md`. Never approve a backfilled baseline.
 
 ## When the user says implement
 

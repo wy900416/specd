@@ -6,8 +6,8 @@ tools: ['read', 'search', 'edit', 'execute']
 Read and follow:
 
 - `agents/change-analyst.md` — the role brief.
-- `docs/change-mode.md` — the evolution loop and approval tiers.
-- `checklists/change.md` and `templates/change.md`.
+- `mature/docs/change-mode.md` — the evolution loop and approval tiers.
+- `mature/checklists/change.md` and `mature/templates/change.md`.
 
 Rules:
 

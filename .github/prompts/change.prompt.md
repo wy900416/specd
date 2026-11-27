@@ -13,8 +13,8 @@ Requested change:
 
 ${input:change}
 
-Follow `agents/change-analyst.md`, `docs/change-mode.md`,
-`checklists/change.md`, and `templates/change.md`.
+Follow `agents/change-analyst.md`, `mature/docs/change-mode.md`,
+`mature/checklists/change.md`, and `mature/templates/change.md`.
 
 1. Confirm the target is `stage: mature`, `status: approved`. Record its `version`
    as `base_version` and its `approved_sha` as `base_sha`. Refuse if another
@@ -29,7 +29,7 @@ Follow `agents/change-analyst.md`, `docs/change-mode.md`,
    - `status: proposed`, never approved.
 5. List the approvals needed by tier: owner, consumers, security/data. Approvals
    live only in the front-matter `approvals` array.
-6. Run sections 1-6 of `checklists/change.md`; leave `## Proposal validation` and
+6. Run sections 1-6 of `mature/checklists/change.md`; leave `## Proposal validation` and
    `## Review` for the validator and reviewer, and report blocking findings.
 
 Do not approve, release, edit the target, or bump the version.

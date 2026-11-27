@@ -94,7 +94,7 @@ For breaking changes only: consumer migration steps and the deprecation window.
 ## Proposal validation
 
 <!-- The spec-validator writes this block after applying
-     checklists/validate-proposal.md. Keep it outside the proposed-body markers.
+     mature/checklists/validate-proposal.md. Keep it outside the proposed-body markers.
      It records base_sha, proposal_sha, Result, and one row per section. -->
 
 ## Review

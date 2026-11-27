@@ -8,12 +8,28 @@ and the merge; you do not write every section yourself.
 
 ## Read first
 
+Always:
+
 - `AGENTS.md` — routing and hard rules.
 - `SPEC.md` — the format and lifecycle.
-- `docs/fleet.md` — when parallel subagents help and when they corrupt the work.
-- `docs/change-mode.md` — mature changes, impact, approval tiers, release.
-- `agents/spec-writer.md`, `agents/gap-filler.md`, `agents/spec-validator.md`,
-  `agents/architect.md`, `agents/change-analyst.md`, `agents/spec-reviewer.md`.
+
+For a new POC, read only the core path:
+
+- `agents/spec-writer.md`, `agents/gap-filler.md`, `agents/spec-validator.md`.
+
+After validation, for implementation:
+
+- `agents/architect.md`, `agents/implementer.md`, `agents/verifier.md`,
+  `docs/fleet.md`, `docs/implementation.md`.
+
+Only when the target is `stage: mature`, `status: approved`:
+
+- `mature/README.md`, `mature/docs/change-mode.md`,
+  `mature/checklists/change.md`, `mature/checklists/validate-proposal.md`,
+  `agents/change-analyst.md`, `agents/spec-reviewer.md`.
+
+Do not read `mature/` or the rationale docs for a new build; it biases the first
+spec without changing what to write.
 
 ## Five paths
 
@@ -37,7 +53,7 @@ change:
 1. Hand the target and the request to the `change-analyst` agent.
 2. It writes `changes/CHG-...-<target>.md` with impact, compatibility, rollout,
    rollback, `base_sha`, `proposal_sha`, and the proposed body.
-3. The `spec-validator` applies `checklists/validate-proposal.md` to the effective
+3. The `spec-validator` applies `mature/checklists/validate-proposal.md` to the effective
    spec and writes `## Proposal validation` into the CHG; the `spec-reviewer`
    writes `## Review`.
 4. Report the approvals needed by tier. A human verifies `base_sha` and
@@ -153,3 +169,4 @@ When the user says implement, build, or code it:
 - Do not fleet the spec draft. For implementation, a fleet is allowed for one
   spec when the plan has two or more file-disjoint tracks.
 - Do not hide a blocked validation behind a summary.
+- Do not read or dispatch the `mature/` pack for a new build.

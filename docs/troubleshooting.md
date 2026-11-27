@@ -15,9 +15,9 @@
 | Validation blocks a `service` or `contract` | A kind-required edge is missing. Check SPEC §4 and the front-matter `links`. |
 | Validation blocks `## Open Questions` | Resolve each unchecked item, or move it to `## Assumptions` as `Confirmed: needs-human`; revalidate. |
 | The version is still `0.1.0` | Intentional in `stage: poc`. Semver starts when the spec is approved as a mature baseline. |
-| I need to change an approved spec | Never edit it. Run `/change`, review impact and approvals, and let a human release. See [`change-mode.md`](change-mode.md). |
-| A mature project has no specs | Backfill one boundary with `/backfill`, or write the manual baseline in [`adoption.md`](adoption.md). |
-| A mature change is blocked | Check [`../checklists/change.md`](../checklists/change.md): missing consumer, major without sign-off, no migration/rollback, or a high-risk change without the security/data owner. |
+| I need to change an approved spec | Never edit it. Run `/change`, review impact and approvals, and let a human release. See [`change-mode.md`](../mature/docs/change-mode.md). |
+| A mature project has no specs | Backfill one boundary with `/backfill`, or write the manual baseline in [`adoption.md`](../mature/docs/adoption.md). |
+| A mature change is blocked | Check [`../mature/checklists/change.md`](../mature/checklists/change.md): missing consumer, major without sign-off, no migration/rollback, or a high-risk change without the security/data owner. |
 | The plan says `stale` | The spec changed. Re-run `/plan-implementation`; do not reuse the old file map. |
 | Two agents overwrote each other | The plan assigned one file to two tracks. Fix the file map, then re-run. |
 | The spec is too large | Keep one system spec; split only on evidence. See [`one-big-spec.md`](one-big-spec.md). |

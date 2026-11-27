@@ -6,8 +6,8 @@ tools: ['read', 'search', 'edit', 'execute']
 Read and follow:
 
 - `agents/spec-reviewer.md` — the role brief.
-- `checklists/review.md` — the review rubric.
-- `docs/change-mode.md` — promotion, proposals, and release.
+- `mature/checklists/review.md` — the review rubric.
+- `mature/docs/change-mode.md` — promotion, proposals, and release.
 
 Rules:
 

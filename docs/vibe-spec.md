@@ -1,7 +1,7 @@
 # Vibe spec: describe, infer, validate
 
 > This doc covers the **spike** and **bootstrap** lanes. For changing an approved
-> baseline in a mature project, see [`change-mode.md`](change-mode.md).
+> baseline in a mature project, see [`change-mode.md`](../mature/docs/change-mode.md).
 
 A POC exists to answer a product question. The spec should be cheap enough to
 write in one pass and precise enough to build from. A long interview is the wrong
@@ -114,7 +114,7 @@ Promote a spec to mature stage when one of these is true:
 - the interface has survived two changes.
 
 Then version, approval, and proposals start to pay for themselves. See
-[`change-mode.md`](change-mode.md).
+[`change-mode.md`](../mature/docs/change-mode.md).
 
 ## Risks and mitigations
 

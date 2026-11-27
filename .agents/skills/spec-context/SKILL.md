@@ -47,7 +47,7 @@ manifest.
 - Do not silently use a `draft` spec as if it were validated.
 - If non-required entries are truncated, narrow the target. If pinned/required
   content alone exceeds the budget, raise the budget: it is never truncated.
-- For a mature-stage review, pair the pack with `checklists/review.md` and a
+- For a mature-stage review, pair the pack with `mature/checklists/review.md` and a
   reverse link scan for impact.
 - For implementation work, pair the pack with the code and tests; do not read
   every spec in the repository.

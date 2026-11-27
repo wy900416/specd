@@ -9,21 +9,20 @@ SPEC.md                   format and lifecycle, normative
 .github/
   copilot-instructions.md always-on rules
   instructions/           path-scoped rules (specs/**)
-  agents/                 specd orchestrator + role specialists
-  prompts/                spike, new-spec, fill-gaps, validate-spec,
+  agents/                 core orchestrator + role specialists; mature wrappers
+  prompts/                core: spike, new-spec, fill-gaps, validate-spec,
                           check-conflicts, plan-implementation, implement,
-                          build-index, change, backfill
+                          build-index; mature: change, backfill
 agents/                   role briefs (source of truth)
 .agents/skills/           spec-draft, spec-gap-fill, spec-validate,
                           spec-context, spec-review, spike
-checklists/               validate, validate-proposal, context, review, plan,
-                          change, spike
-templates/                system + plan + spike + change + graph + mature-stage kinds
+checklists/               validate, context, plan, spike (core)
+templates/                system, plan, spike (core)
 docs/                     this manual
+mature/                   opt-in: docs, checklists, and kind/change templates
 specs/                    empty; your specs land here
 spikes/                   timeboxed spike logs
 plans/                    implementation plans from the architect
-examples/poc-url-shortener/ current POC example, outside validation
 changes/                  mature-stage proposals only
 changes/archive/          released proposals
 ```
@@ -38,17 +37,20 @@ changes/archive/          released proposals
 | `.context/<id>.md` | `architect` | Bounded implementation pack; `.context/<id>.review.md` for review. Gitignored. |
 | `spikes/<id>.md` | `spike` | Log on main; code on `spike/<id>` |
 | `changes/CHG-*.md` | `change-analyst` | Only for `stage: mature`, `status: approved` targets |
-| `examples/poc-url-shortener/` | maintainers | Current POC example; never validated |
+| `mature/docs/` | maintainers | Opt-in mature lane: change mode and adoption |
+| `mature/checklists/` | maintainers | Opt-in mature gates: change, review, validate-proposal |
+| `mature/templates/` | maintainers | Opt-in kind and change templates |
 
 ## Adding specd to an existing repository
 
 Copy `AGENTS.md`, `SPEC.md`, `.github/`, `agents/`, `.agents/skills/`,
 `checklists/`, `templates/`, and `docs/` into your repository. Create `specs/`,
-`plans/`, and `changes/archive/`.
+`plans/`, and `changes/archive/`. Copy `mature/` only if you need the mature
+lane, and point `AGENTS.md` at it.
 
 **Merge, do not overwrite.** Keep your existing `README`, `AGENTS.md`,
 `.github/copilot-instructions.md`, CI, and test config; add the specd sections to
 them.
 
-Then follow [`adoption.md`](adoption.md). Do not backfill the whole system; start
+Then follow [`adoption.md`](../mature/docs/adoption.md). Do not backfill the whole system; start
 with the highest-churn or highest-blast-radius boundary.

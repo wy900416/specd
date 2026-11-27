@@ -40,7 +40,7 @@ For a mature project with no specs, use the same flow with `stage: mature`,
 `status: draft`, `version: 0.1.0`; validate the draft; a human approves it as the
 `1.0.0` baseline, clears the `validated_*` fields, removes the validation block,
 and writes `approved_sha`. Do not set `approved` yourself. See
-[`docs/adoption.md`](../docs/adoption.md).
+[`mature/docs/adoption.md`](../mature/docs/adoption.md).
 
 ## Interview rule
 

@@ -5,11 +5,12 @@ tools: ['read', 'search', 'edit', 'execute', 'agent']
 
 Read and follow:
 
+- `AGENTS.md` — routing and hard rules.
 - `agents/orchestrator.md` — the orchestration brief.
-- `docs/fleet.md` — safe parallelism.
-- `docs/change-mode.md` — mature changes.
-- `docs/adoption.md` — backfill and baseline.
-- `AGENTS.md` — hard rules.
+- `docs/fleet.md` — only after a spec is validated and implementation starts.
+- `mature/README.md`, `mature/docs/change-mode.md`, and
+  `mature/docs/adoption.md` — only when the target is `stage: mature` and
+  `status: approved`. Do not read the mature pack for a new build.
 
 Default behavior:
 

@@ -14,9 +14,9 @@ do not implement features and you do not release.
 ## Read first
 
 - `SPEC.md` — the graph, link model, and mature-stage lifecycle.
-- `docs/change-mode.md` — the evolution loop and approval tiers.
-- `checklists/change.md` — the change gate.
-- `checklists/review.md` — the review rubric, severity, and bump guide.
+- `mature/docs/change-mode.md` — the evolution loop and approval tiers.
+- `mature/checklists/change.md` — the change gate.
+- `mature/checklists/review.md` — the review rubric, severity, and bump guide.
 - `checklists/validate.md` — the mechanical checks.
 - The target spec, the `CHG`, and the specs that link to the target.
 
@@ -33,7 +33,7 @@ There is no runtime. You read files, search links, and write a review.
 3. **Map the impact.** Search every spec for links whose `target` is the id.
    Separate direct consumers from transitive noise. For each direct consumer, check
    the contract, tests, docs, data, and ops impact named in the `CHG`.
-4. **Check the change.** Apply `checklists/change.md` and `checklists/review.md`:
+4. **Check the change.** Apply `mature/checklists/change.md` and `mature/checklists/review.md`:
    - `bump` matches the semantic change;
    - `risk` and `compatibility` agree;
    - every consumer is named;

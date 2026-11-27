@@ -6,9 +6,9 @@ whenToUse: "A draft has been gap-filled, or a validated spec was edited and need
 
 # Spec validation
 
-> For a mature change, apply `checklists/validate-proposal.md` to the effective
+> For a mature change, apply `mature/checklists/validate-proposal.md` to the effective
 > spec and write `## Proposal validation` into the CHG. Do not edit the approved
-> target; release readiness is `checklists/change.md` plus the recorded review and
+> target; release readiness is `mature/checklists/change.md` plus the recorded review and
 > the approval tier.
 
 Validation is the gate that replaces human approval in the POC stage. It is a
@@ -34,7 +34,7 @@ cannot.
 2. **Check the evidence.** Open the `repo:<path>:<line>` citations. A missing path
    or a line that does not support the claim is a finding.
 3. **Apply every check** in `checklists/validate.md` (bootstrap) or
-   `checklists/validate-proposal.md` (mature change). Record pass, warning, or
+   `mature/checklists/validate-proposal.md` (mature change). Record pass, warning, or
    block with `file:line`.
 4. **Decide.**
    - Any blocking finding: write `Result: blocked`, keep `status: draft`, clear

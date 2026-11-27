@@ -4,7 +4,7 @@ These are **role briefs**, not presets. They are plain Markdown so they work wit
 any agent runner: Copilot, Claude Code, Cursor, DSH, a custom loop, or a human
 reading them.
 
-## Available
+## Core
 
 | Brief | Use it for | Reads |
 |---|---|---|
@@ -13,12 +13,19 @@ reading them.
 | `spec-writer.md` | description -> draft | `SPEC.md`, `templates/system.md`, `docs/vibe-spec.md` |
 | `gap-filler.md` | infer, assume, escalate, conflict scan | `SPEC.md`, `.agents/skills/spec-gap-fill/` |
 | `spec-validator.md` | independent gate; sets `status: validated` | `SPEC.md`, `checklists/validate.md` |
-| `change-analyst.md` | mature change -> impact + proposal | `SPEC.md`, `docs/change-mode.md`, `checklists/change.md` |
-| `backfiller.md` | existing boundary -> draft baseline | `SPEC.md`, `docs/adoption.md` |
 | `architect.md` | validated spec -> fleet-ready plan | `SPEC.md`, `templates/plan.md`, `checklists/plan.md` |
 | `implementer.md` | implement a planned track | `SPEC.md`, `plans/<id>.md`, `.context/<id>.md` |
 | `verifier.md` | conformance tests written from the spec | `SPEC.md`, the target spec, the test strategy |
-| `spec-reviewer.md` | mature-stage consistency and impact | `SPEC.md`, `checklists/review.md` |
+
+## Mature only
+
+Do not read these for a new build. They assume an approved baseline.
+
+| Brief | Use it for | Reads |
+|---|---|---|
+| `change-analyst.md` | mature change -> impact + proposal | `SPEC.md`, `mature/docs/change-mode.md`, `mature/checklists/change.md` |
+| `backfiller.md` | existing boundary -> draft baseline | `SPEC.md`, `mature/docs/adoption.md` |
+| `spec-reviewer.md` | mature-stage consistency and impact | `SPEC.md`, `mature/checklists/review.md` |
 
 ## Handoff
 
@@ -69,7 +76,8 @@ Read AGENTS.md. Follow agents/gap-filler.md and
 ```
 
 Copilot entry points live in `.github/agents/`. Each is a thin wrapper that points
-at one of these briefs, so there is one source of truth.
+at one of these briefs. The `change-analyst`, `backfiller`, and `spec-reviewer`
+wrappers are mature-only; the core path does not use them.
 
 ## Why not a preset?
 

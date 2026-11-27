@@ -44,18 +44,17 @@ plans/<spec-id>.md                implementation plans from the architect
 spikes/<id>.md                    timeboxed spike logs; never validated
 agents/                           role briefs
 .agents/skills/                   skills (Copilot auto-discovers this path)
-checklists/                       validation, validate-proposal, context, review,
-                                  plan, change, spike
-templates/                        skeletons
+checklists/                       core: validate, context, plan, spike
+templates/                        core: system, plan, spike
 docs/                             rationale and operating notes
-examples/                         current reference specs; not validated
+mature/                           opt-in: mature docs, checklists, templates
 changes/                          mature-stage proposals only
 ```
 
-`specs/` contains only active specs. `examples/` contains reference material and
-is outside validation. `spikes/` contains timeboxed spike logs: a spike is not a
+`specs/` contains only active specs. `mature/` is the opt-in mature pack; a new
+POC does not read it. `spikes/` contains timeboxed spike logs: a spike is not a
 spec, is never validated, and is throwaway unless it graduates. `GRAPH.md` is a
-view, not the source of truth; its format is `templates/graph.md`.
+view, not the source of truth; its format is `mature/templates/graph.md`.
 
 ## 3. Front-matter
 
@@ -122,7 +121,7 @@ Kind-specific fields:
 | change | `target`, `base_version`, `base_sha`, `bump`, `risk`, `compatibility`, `result_status`, `owner`, `consumers`, `approvals`, `proposal_sha`, `spec`, `released_as`, `released_at`, `released_by`, `release_commit` |
 
 A `change` record lives in `changes/` and is **not a spec**. It is exempt from the
-`kind` enum above and from spec validation; `checklists/validate-proposal.md`
+`kind` enum above and from spec validation; `mature/checklists/validate-proposal.md`
 applies to its proposed body.
 
 Rules:
@@ -534,7 +533,7 @@ The change loop:
 3. **Proposal.** Copy the full target body between the markers and apply only the
    intended change. Keep `REQ-` ids stable. Remove the validation block; an
    approved baseline does not carry a current bootstrap validation.
-4. **Review.** The validator applies `checklists/validate-proposal.md` to the
+4. **Review.** The validator applies `mature/checklists/validate-proposal.md` to the
    effective spec (target front-matter + `spec` overrides + proposed body) and
    records `## Proposal validation` in the CHG. The `spec-reviewer` records
    `## Review`. Then the tiered approval below applies.
@@ -598,14 +597,14 @@ Release steps:
 
 A mature project usually starts without specs. Backfill a baseline from code,
 contracts, and tests, then use this mode. See
-[`docs/adoption.md`](docs/adoption.md) and [`docs/change-mode.md`](docs/change-mode.md).
+[`mature/docs/adoption.md`](mature/docs/adoption.md) and [`mature/docs/change-mode.md`](mature/docs/change-mode.md).
 
 ## 9. Validation
 
 - **Who.** The `spec-validator` agent, in a context separate from the writer. Do
   not validate the draft you just wrote in the same pass.
 - **How.** Apply every check in `checklists/validate.md` for a bootstrap spec, or
-  `checklists/validate-proposal.md` for a mature change; cite a file and line for
+  `mature/checklists/validate-proposal.md` for a mature change; cite a file and line for
   every finding.
 - **Output.** Write the marker-delimited `## Validation` block into the spec and
   update the three `validated_*` fields only on pass. For a mature change, write
@@ -620,10 +619,10 @@ contracts, and tests, then use this mode. See
 - **Independence.** The validator may read the `## Source`, the spec, the
   repository, and the checklists. It must not read the writer's chat summary or
   rationale; it judges the file.
-- **Mature change.** Apply `checklists/validate-proposal.md` to the effective spec
+- **Mature change.** Apply `mature/checklists/validate-proposal.md` to the effective spec
   (target front-matter + `spec` overrides + proposed body) and write the result
   into the CHG's `## Proposal validation`. Do not edit the target and do not set it
-  to `status: validated`. Release readiness is `checklists/change.md`, the recorded
+  to `status: validated`. Release readiness is `mature/checklists/change.md`, the recorded
   review, and the approval tier.
 - **Approved baselines** carry no validation block. If one is present, it is stale
   and blocks the review.

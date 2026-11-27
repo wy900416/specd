@@ -22,6 +22,8 @@ same files.
 
 ## Which agent?
 
+### Core
+
 | Task | Agent | Why |
 |---|---|---|
 | Quick feedback / a demo | `spike` | one path, fake data, 90 minutes |
@@ -32,11 +34,18 @@ same files.
 | Plan implementation | `architect` | architecture, file map, tracks, test strategy |
 | Implement a planned track | `implementer` | one disjoint file set |
 | Conformance tests | `verifier` | tests from the spec, not the code |
+| Several independent specs | `/fleet` + `specd` or `spec-writer` per file | disjoint files only |
+| Implementation + tests | `/fleet` + `implementer` / `verifier` per track | plan must be ready first |
+
+### Mature only
+
+Do not pick these for a new build. See [`mature/README.md`](../mature/README.md).
+
+| Task | Agent | Why |
+|---|---|---|
 | Change a mature spec | `change-analyst` | impact, compatibility, proposal, approvals |
 | Adopt a mature project | `backfiller` | draft baseline from code and tests |
 | Change review | `spec-reviewer` | graph consistency, impact, version hygiene |
-| Several independent specs | `/fleet` + `specd` or `spec-writer` per file | disjoint files only |
-| Implementation + tests | `/fleet` + `implementer` / `verifier` per track | plan must be ready first |
 
 You do not need to switch agents for the normal flow: select `specd` once, or run
 `/new-spec`. Switch manually when you want to force a role, such as a second
@@ -48,18 +57,26 @@ Prompt files live in `.github/prompts/` and work in VS Code, Visual Studio, and
 JetBrains. In Copilot CLI/app, describe the same step in natural language and name
 the agent.
 
+Core:
+
 | Command | Input | What it does |
 |---|---|---|
 | `/spike` | a description | 90-minute demo, feedback, decision |
 | `/new-spec` | a description | draft, gap-fill, validate |
-| `/change` | target + change | impact, proposal, approvals for a mature spec |
-| `/backfill` | a boundary | draft baseline from existing code |
 | `/fill-gaps` | spec path | repo profile, assumptions, decisions, conflicts |
-| `/validate-spec` | spec or CHG path | bootstrap validation, or a mature proposal review recorded in the CHG |
+| `/validate-spec` | spec path | bootstrap validation, sets `status: validated` |
 | `/check-conflicts` | spec path | writes `## Conflicts` for the user to resolve |
 | `/plan-implementation` | spec path | `plans/<id>.md` with architecture, tracks, tests |
 | `/implement` | spec path | fleet implementation and conformance tests |
 | `/build-index` | none | `specs/INDEX.md` when the trigger is met |
+
+Mature only:
+
+| Command | Input | What it does |
+|---|---|---|
+| `/change` | target + change | impact, proposal, approvals for a mature spec |
+| `/backfill` | a boundary | draft baseline from existing code |
+| `/validate-spec <CHG>` | CHG path | proposal review recorded in the CHG |
 
 ## Global skills
 
@@ -84,4 +101,5 @@ in `## Repo Profile` and continues.
 | [`../SPEC.md`](../SPEC.md) | Normative format and lifecycle |
 | [`../agents/`](../agents/) | Role briefs (source of truth) |
 | [`../checklists/`](../checklists/) | Pass/fail gates |
-| [`../templates/`](../templates/) | Spec and plan skeletons |
+| [`../templates/`](../templates/) | Core spec and plan skeletons |
+| [`../mature/`](../mature/) | Opt-in mature docs, checklists, and templates |

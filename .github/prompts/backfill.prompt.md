@@ -7,7 +7,7 @@ Backfill a baseline for this boundary:
 
 ${input:boundary}
 
-Follow `agents/backfiller.md`, `docs/adoption.md`, and `checklists/validate.md`.
+Follow `agents/backfiller.md`, `mature/docs/adoption.md`, and `checklists/validate.md`.
 
 1. Confirm one boundary: a service, a contract, or a flow.
 2. Read the code, contracts, tests, config, docs, and recent changes.

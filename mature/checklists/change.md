@@ -84,7 +84,7 @@ for release.
 ## 7. Spec release readiness
 
 - [ ] `## Proposal validation` records a pass from
-      `checklists/validate-proposal.md`; this does not set `status: validated` on
+      `mature/checklists/validate-proposal.md`; this does not set `status: validated` on
       the approved target. **block**
 - [ ] `## Review` records the `spec-reviewer` decision
       `ready to release`. **block**

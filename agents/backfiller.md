@@ -9,7 +9,7 @@ baseline. A human turns your draft into the baseline.
 ## Read first
 
 - `SPEC.md` — the format.
-- `docs/adoption.md` — the two adoption paths.
+- `mature/docs/adoption.md` — the two adoption paths.
 - `templates/system.md` (or the kind's template).
 - `checklists/validate.md`.
 

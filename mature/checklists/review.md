@@ -1,7 +1,7 @@
 # Review checklist
 
 > **Mature stage only.** In the bootstrap stage the gate is
-> [`spec-validate`](../.agents/skills/spec-validate/SKILL.md) and
+> [`spec-validate`](../../.agents/skills/spec-validate/SKILL.md) and
 > `checklists/validate.md`. Use this checklist when a baseline is being promoted,
 > a mature change is being reviewed, or a proposal is about to be released.
 

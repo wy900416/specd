@@ -24,5 +24,5 @@ Default behavior:
   run `/fill-gaps` then `/validate-spec`.
 - For a manual mature baseline, use `stage: mature`, `status: draft`,
   `version: 0.1.0`; validate, then a human approves the `1.0.0` baseline. See
-  `docs/adoption.md`.
+  `mature/docs/adoption.md`.
 - Do not ask for approval.

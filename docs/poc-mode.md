@@ -111,4 +111,4 @@ When the spec is promoted to mature stage:
 2. Turn accepted assumptions into requirements; keep the provenance.
 3. Move the rest to `## Open Questions` with an owner.
 4. Set `stage: mature`, start semver, and use the proposal flow in
-   [`change-mode.md`](change-mode.md).
+   [`change-mode.md`](../mature/docs/change-mode.md).

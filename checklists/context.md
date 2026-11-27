@@ -13,7 +13,7 @@ not fit in a context window, and a context without a manifest is not auditable.
 - [ ] If two or more candidates are genuinely plausible, ask one question with the
       candidates.
 - [ ] Do not use `GRAPH.md` as the source of truth; it is a view. Its format is
-      [`../templates/graph.md`](../templates/graph.md).
+      [`../mature/templates/graph.md`](../mature/templates/graph.md).
 
 ## 2. Traversal order
 

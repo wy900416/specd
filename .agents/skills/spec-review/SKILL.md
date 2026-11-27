@@ -15,16 +15,16 @@ or bump the wrong version.
 
 - `SPEC.md` — the normative rules.
 - `checklists/validate.md` — the mechanical checks.
-- `checklists/change.md` — the mature change gate.
-- `checklists/review.md` — the judgement checks, severity, and bump guide.
-- `docs/change-mode.md` — evolution, approval tiers, proposals, and release.
+- `mature/checklists/change.md` — the mature change gate.
+- `mature/checklists/review.md` — the judgement checks, severity, and bump guide.
+- `mature/docs/change-mode.md` — evolution, approval tiers, proposals, and release.
 
 ## Procedure
 
-1. **Apply `checklists/validate-proposal.md`** to the effective spec (target
+1. **Apply `mature/checklists/validate-proposal.md`** to the effective spec (target
    front-matter, `spec` overrides, and the proposed body). Record every finding
    with a file and line. Confirm `base_sha` and `proposal_sha`.
-2. **Apply `checklists/change.md` and `checklists/review.md`.** Focus on impact,
+2. **Apply `mature/checklists/change.md` and `mature/checklists/review.md`.** Focus on impact,
    compatibility, contract, data, NFR, traceability, security, approvals, rollout,
    and versioning.
 3. **Check the proposal.** Compare the target body with the proposed body between
@@ -38,7 +38,7 @@ or bump the wrong version.
    `minor` for additive, `major` for breaking. If the diff and the bump disagree,
    say so.
 7. **Write the review packet** into the CHG's `## Review` section, in the format
-   from `checklists/review.md`.
+   from `mature/checklists/review.md`.
 
 ## Output
 

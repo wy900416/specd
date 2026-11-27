@@ -20,8 +20,8 @@ New here? Jump to the [quick start](#quick-start) or the
 | **Evolution** | How do we change this safely? | change -> impact -> proposal -> tiered approval -> release -> verify | an approved baseline exists |
 
 Start with a spike when you are unsure. Bootstrap creates the first baseline.
-Evolution changes an approved baseline; it is the default once the project is
-mature.
+Evolution changes an approved baseline; it is opt-in under `mature/` and is the
+default once the project is mature.
 
 ## How it works
 
@@ -118,16 +118,17 @@ SPEC.md                   format and lifecycle, normative
 agents/                   role briefs (source of truth)
 .agents/skills/           spec-draft, spec-gap-fill, spec-validate,
                           spec-context, spec-review, spike
-checklists/               validate, validate-proposal, context, review, plan,
-                          change, spike
-templates/                system, plan, spike, change, graph, mature-stage kinds
+checklists/               validate, context, plan, spike (core)
+templates/                system, plan, spike (core)
 docs/                     the manual
+mature/                   opt-in: change, review, adoption, kind templates
 specs/                    your specs land here
 spikes/                   timeboxed demo logs
 plans/                    implementation plans from the architect
 changes/                  mature-stage proposals only
-examples/poc-url-shortener/ current POC example, outside validation
 ```
+
+The `mature/` pack is opt-in; a new build never needs it.
 
 Annotated layout, including what to copy into an existing repo:
 [`docs/repo-layout.md`](docs/repo-layout.md).
@@ -143,8 +144,7 @@ demo, a new project, a mature change, an adoption, and reference work.
 - [`AGENTS.md`](AGENTS.md) — the agent entry point and hard rules.
 - [`checklists/validate.md`](checklists/validate.md) — the bootstrap validation
   gate.
-- [`checklists/validate-proposal.md`](checklists/validate-proposal.md) — the mature
-  change review gate.
+- [`mature/README.md`](mature/README.md) — the opt-in mature lane.
 
 ## What this is not
 

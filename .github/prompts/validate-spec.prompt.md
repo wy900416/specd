@@ -1,6 +1,6 @@
 ---
 mode: 'agent'
-description: 'Validate a spec with checklists/validate.md, or a mature proposal with checklists/validate-proposal.md.'
+description: 'Validate a spec with checklists/validate.md, or a mature proposal with mature/checklists/validate-proposal.md.'
 ---
 
 Validate this spec or change:
@@ -11,7 +11,7 @@ Follow `agents/spec-validator.md` and `.agents/skills/spec-validate/SKILL.md`.
 
 1. Read the target and, for a mature change, the `CHG` and its proposed body.
 2. Apply every check in `checklists/validate.md` for a bootstrap spec, or
-   `checklists/validate-proposal.md` for a mature change. Record findings with
+   `mature/checklists/validate-proposal.md` for a mature change. Record findings with
    `file:line`.
 3. Write the result:
    - bootstrap: a marker-delimited `## Validation` block in the spec;

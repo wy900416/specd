@@ -118,4 +118,4 @@ When the spec is validated, the architect turns it into a plan and the fleet
 implements it: [`implementation.md`](implementation.md).
 
 When the project is approved as a mature baseline, bootstrap is over; every
-change uses [`change-mode.md`](change-mode.md).
+change uses [`change-mode.md`](../mature/docs/change-mode.md).

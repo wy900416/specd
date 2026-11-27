@@ -22,9 +22,7 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 |---|---|
 | See a demo today | [`spike.md`](spike.md) — one hypothesis, one fake path, 90 minutes |
 | Start a new project | [`getting-started.md`](getting-started.md) → [`bootstrap-mode.md`](bootstrap-mode.md) → [`implementation.md`](implementation.md) |
-| See a conformant spec | [`../examples/poc-url-shortener/`](../examples/poc-url-shortener/) |
-| Change an approved baseline | [`change-mode.md`](change-mode.md) — impact, proposal, tiered approval, release |
-| Adopt specd in an existing repo | [`adoption.md`](adoption.md) — backfill one boundary, approve the baseline |
+| Change an approved baseline | [`../mature/README.md`](../mature/README.md) — the opt-in mature lane |
 | Understand the reasoning | [`vibe-spec.md`](vibe-spec.md), [`poc-mode.md`](poc-mode.md), [`decisions.md`](decisions.md) |
 | Run parallel agents safely | [`fleet.md`](fleet.md) — disjoint files, tests after writes |
 | Fix a stuck flow | [`troubleshooting.md`](troubleshooting.md) |
@@ -41,14 +39,20 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 | [`repo-layout.md`](repo-layout.md) | The seed's directory tree, annotated |
 | [`agents.md`](agents.md) | Copilot surfaces, file layout, which agent, slash commands, global skills |
 
-### The three lanes
+### Core lanes
 
 | Document | What it covers |
 |---|---|
 | [`spike.md`](spike.md) | 90-minute demo: hypothesis, demo contract, feedback, kill/iterate/graduate |
 | [`bootstrap-mode.md`](bootstrap-mode.md) | The first spec: draft, infer, validate, what a spec looks like, changing a draft |
-| [`change-mode.md`](change-mode.md) | Evolution: baseline, change request, impact, proposal, approval tiers, release, rollout |
-| [`adoption.md`](adoption.md) | Backfilling a mature project, manual baseline, what to backfill first |
+
+### Mature lane (opt-in)
+
+| Document | What it covers |
+|---|---|
+| [`../mature/README.md`](../mature/README.md) | When and how to use the mature pack |
+| [`../mature/docs/change-mode.md`](../mature/docs/change-mode.md) | Evolution: baseline, change request, impact, proposal, approval tiers, release, rollout |
+| [`../mature/docs/adoption.md`](../mature/docs/adoption.md) | Backfilling a mature project, manual baseline, what to backfill first |
 
 ### Building
 
@@ -72,11 +76,10 @@ derived spec index and follows its own rule in [`index.md`](index.md).
 | Document | What it covers |
 |---|---|
 | [`troubleshooting.md`](troubleshooting.md) | Symptom → fix for the common stalls |
-| [`../examples/README.md`](../examples/README.md) | Current example specs |
 | [`../SPEC.md`](../SPEC.md) | Normative format and lifecycle |
 | [`../AGENTS.md`](../AGENTS.md) | Agent entry point and hard rules |
 | [`../checklists/validate.md`](../checklists/validate.md) | The bootstrap validation gate |
-| [`../checklists/validate-proposal.md`](../checklists/validate-proposal.md) | The mature-change proposal gate |
+| [`../mature/checklists/validate-proposal.md`](../mature/checklists/validate-proposal.md) | The mature-change proposal gate |
 
 ## Keeping this useful
 

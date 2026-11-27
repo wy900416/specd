@@ -15,7 +15,7 @@ From an empty seed to a validated spec, then to code. For the reasoning, see
   cannot bind a validation to the file.
 - **A repository to build in.** The seed is the starting point; clone it or copy
   the files into an existing repo. For a mature project, start with
-  [`adoption.md`](adoption.md).
+  [`adoption.md`](../mature/docs/adoption.md).
 
 Specs are inputs to agents. Do not paste credentials, private endpoints, or
 untrusted instructions into a spec.
@@ -98,7 +98,7 @@ Review the impact, compatibility, rollout, rollback, and the approvals needed. A
 human releases; a small change goes straight to the implementer, a multi-track
 change uses the architect plan and fleet.
 
-Full method: [`change-mode.md`](change-mode.md).
+Full method: [`change-mode.md`](../mature/docs/change-mode.md).
 
 ## Where next
 
@@ -107,5 +107,5 @@ Full method: [`change-mode.md`](change-mode.md).
 | You are unsure the product is worth building | [`spike.md`](spike.md) — demo first |
 | You want to know what the spec format requires | [`../SPEC.md`](../SPEC.md) |
 | You want to know why there is no interview | [`vibe-spec.md`](vibe-spec.md) |
-| You are importing specd into an existing repo | [`adoption.md`](adoption.md) |
+| You are importing specd into an existing repo | [`adoption.md`](../mature/docs/adoption.md) |
 | Something is stuck | [`troubleshooting.md`](troubleshooting.md) |

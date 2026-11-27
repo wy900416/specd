@@ -23,7 +23,7 @@ Rules:
 - On a bootstrap block: write the marker-delimited block with
   `Result: blocked` and findings. Leave `status: draft` and clear the
   `validated_*` fields.
-- On a mature change: apply `checklists/validate-proposal.md` to the effective
+- On a mature change: apply `mature/checklists/validate-proposal.md` to the effective
   spec and write `## Proposal validation` into the CHG. Never edit the approved
   target, never set it to `status: validated`, and never write `validated_*`.
 - Never edit requirements, assumptions, decisions, or source text.

@@ -9,9 +9,9 @@ for an approved target spec. You do not approve or release.
 ## Read first
 
 - `SPEC.md` — the format and lifecycle.
-- `docs/change-mode.md` — the evolution loop and approval tiers.
-- `checklists/change.md` — the readiness gate.
-- `templates/change.md` — the record skeleton.
+- `mature/docs/change-mode.md` — the evolution loop and approval tiers.
+- `mature/checklists/change.md` — the readiness gate.
+- `mature/templates/change.md` — the record skeleton.
 - The target spec and every spec that links to it.
 
 ## Preconditions
@@ -45,7 +45,7 @@ for an approved target spec. You do not approve or release.
 6. **Propose the body.** Copy the full target body between the markers and apply
    only the intended change. Keep `REQ-` ids stable. Remove the validation block
    and compute `proposal_sha` from the body between the markers.
-7. **Check.** Apply sections 1-6 of `checklists/change.md`. Keep `status:
+7. **Check.** Apply sections 1-6 of `mature/checklists/change.md`. Keep `status:
    proposed`; leave `## Proposal validation` and `## Review` for the validator and
    reviewer, and report the blocking findings.
 8. **Hand off.** The validator checks the effective spec and writes

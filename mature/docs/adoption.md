@@ -61,8 +61,8 @@ spec.
 
 1. Every change is a `CHG` with impact, compatibility, and approvals.
 2. The spec graph grows as boundaries become real.
-3. Add an index when the graph crosses the trigger in [`index.md`](index.md).
-4. Keep `examples/` separate from `specs/`.
+3. Add an index when the graph crosses the trigger in [`index.md`](../../docs/index.md).
+4. Keep reference material and mature templates out of `specs/`.
 
 ## Anti-patterns
 

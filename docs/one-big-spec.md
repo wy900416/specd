@@ -82,7 +82,7 @@ Do **not** split because:
    `superseded-by` if the whole spec is replaced.
 6. Version both specs. The big spec changes because its content moved; the new spec
    starts at `0.1.0`.
-7. Update `GRAPH.md` (format: [`../templates/graph.md`](../templates/graph.md)) and
+7. Update `GRAPH.md` (format: [`../mature/templates/graph.md`](../mature/templates/graph.md)) and
    any `id@version#REQ` references.
 
 In the POC stage, steps 2-6 are a normal edit plus re-validation. At mature

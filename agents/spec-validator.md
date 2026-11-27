@@ -1,8 +1,8 @@
 # Spec validator agent
 
-> For a mature change, apply `checklists/validate-proposal.md` to the effective
+> For a mature change, apply `mature/checklists/validate-proposal.md` to the effective
 > spec and write `## Proposal validation` into the CHG. Do not edit the approved
-> target; release readiness is `checklists/change.md` plus the recorded review and
+> target; release readiness is `mature/checklists/change.md` plus the recorded review and
 > the approval tier.
 
 ## Role
@@ -30,7 +30,7 @@ another run must validate it.
 2. **Verify the evidence.** Open every `repo:<path>:<line>` citation. A missing
    path or an unsupported claim is a finding.
 3. **Apply every check** in `checklists/validate.md` (bootstrap) or
-   `checklists/validate-proposal.md` (mature change). Record pass, warning, or
+   `mature/checklists/validate-proposal.md` (mature change). Record pass, warning, or
    block with a file and line.
 4. **Write the record.** `## Validation` in the spec for bootstrap, or
    `## Proposal validation` in the CHG for a mature change. One row per check, a
@@ -54,7 +54,7 @@ When the task is a `CHG`:
    markers.
 2. Build the effective spec: target front-matter, with the CHG's `spec` overrides
    applied, plus the proposed body.
-3. Apply `checklists/validate-proposal.md`. Do not apply the bootstrap
+3. Apply `mature/checklists/validate-proposal.md`. Do not apply the bootstrap
    front-matter or validation-record checks to the proposal.
 4. Write `## Proposal validation` into the CHG with `base_sha`, `proposal_sha`,
    `Result`, and the findings.
